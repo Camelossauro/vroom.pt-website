@@ -14,9 +14,20 @@ export default defineConfig(({mode}) => {
       },
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
+    },
+    // ADICIONEI ESTA PARTE ABAIXO PARA O VERCEL RECONHECER TODOS OS TEUS FICHEIROS
+    build: {
+      rollupOptions: {
+        input: {
+          main: './index.html',
+          planos_basico: './planos-basico.html',
+          planos_premium: './planos-premium.html',
+          corridas_basico: './corridas-basico.html',
+          corridas_premium: './corridas-premium.html',
+          evento: './evento.html',
+        },
+      },
     },
   };
 });
