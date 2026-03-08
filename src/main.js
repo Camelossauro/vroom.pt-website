@@ -1,6 +1,13 @@
 import { getSupabase } from './supabase.js';
 import { loadHeader, loadFooter } from './layout.js';
 
+// Redirecionar automaticamente para a página de deeplink se o URL tiver um eventoID
+// Apenas fazemos isto se estivermos na página inicial para evitar loops infinitos
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has('eventoID') && (window.location.pathname === '/' || window.location.pathname === '/index.html')) {
+  window.location.href = `/deeplink.html${window.location.search}`;
+}
+
 // Funções globais para garantir que o script não falha
 const body = document.body;
 let allEvents = [];
