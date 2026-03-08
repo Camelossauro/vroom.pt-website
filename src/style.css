@@ -293,6 +293,11 @@ body.light-theme .btn-como-funciona {
   height: 24px;
 }
 
+.hero-btn-store {
+  width: 210px;
+  justify-content: center;
+}
+
 .store-text {
   display: flex;
   flex-direction: column;
@@ -1130,4 +1135,223 @@ body.light-theme .pricing-note {
 
 body.light-theme .pricing-note-header {
   color: #000;
+}
+
+/* Donation Custom Styling */
+.donation-custom {
+  background: linear-gradient(135deg, #025bc5 0%, #001f4d 100%);
+  color: white;
+  border-radius: 40px;
+  padding: 60px;
+  text-align: center;
+}
+
+.donation-custom h2 {
+  font-size: 36px;
+  margin-bottom: 16px;
+}
+
+.donation-custom p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 32px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.btn-donation {
+  background-color: white;
+  color: #025bc5;
+  padding: 16px 40px;
+  font-size: 18px;
+  border-radius: 50px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.btn-donation:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+  .donation-custom {
+    padding: 32px 20px;
+    border-radius: 24px;
+  }
+  .donation-custom h2 {
+    font-size: 24px;
+  }
+  .donation-custom p {
+    font-size: 15px;
+    margin-bottom: 24px;
+  }
+  .btn-donation {
+    padding: 12px 28px;
+    font-size: 15px;
+  }
+}
+
+/* --- Modal Styles --- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.modal-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+.premium-modal {
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 24px;
+  width: 90%;
+  max-width: 320px;
+  position: relative;
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+.modal-overlay.active .premium-modal {
+  transform: translateY(0);
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.modal-header h3 {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 700;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-close {
+  background: none; 
+  border: none;
+  color: #888888;
+  cursor: pointer;
+  padding: 12px;
+  margin-left: 4px;
+  margin-right: -24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+.modal-close:hover {
+  color: white;
+}
+.modal-desc {
+  color: #a0a0a0;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  padding: 0 8px;
+}
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 12px;
+}
+.premium-btn-store {
+  width: 100%;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #000000 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 12px !important;
+  padding: 8px 16px !important;
+  height: 50px !important;
+  gap: 12px !important;
+  text-decoration: none;
+  color: white;
+  transition: all 0.2s ease;
+}
+.premium-btn-store:hover {
+  background: #1a1a1a !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+.premium-btn-store svg {
+  width: 22px !important;
+  height: 22px !important;
+  margin: 0 !important;
+}
+.premium-btn-store .store-text {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  line-height: 1 !important;
+}
+.premium-btn-store .store-text span:first-child {
+  font-size: 9px !important;
+  letter-spacing: 0.5px !important;
+  opacity: 0.8 !important;
+  margin-bottom: 2px !important;
+  text-transform: uppercase !important;
+}
+.premium-btn-store .store-text span:last-child {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+}
+
+/* --- Global Mobile Size Reductions --- */
+@media (max-width: 768px) {
+  /* Global */
+  body { font-size: 14px; }
+  .section-padding { padding: 40px 0; }
+  
+  /* Buttons */
+  .btn { padding: 10px 20px; font-size: 14px; }
+  .btn-sm { padding: 6px 12px; font-size: 11px; }
+  .btn-como-funciona { padding: 10px 24px; }
+  .btn-store { padding: 10px 16px; }
+  .store-text span:last-child { font-size: 14px; }
+  
+  /* Headings */
+  .hero h1 { font-size: 36px !important; }
+  .hero p { font-size: 16px; }
+  .how-it-works h2, .features-header h2, .pricing-header h2 { font-size: 28px; margin-bottom: 30px; }
+  .step-card h3, .feature-card h3, .price-card h3, .install-cta-card h3 { font-size: 18px; }
+  
+  /* Cards padding */
+  .step-card, .feature-card, .install-cta-card { padding: 24px; }
+  .price-card { padding: 32px; }
+  .event-content { padding: 16px; }
+  
+  /* Event Card specifics */
+  .event-title { font-size: 16px; margin-bottom: 8px; }
+  .event-meta { margin-bottom: 8px; }
+  .event-category, .event-date { font-size: 11px; }
+  .event-location, .event-description { font-size: 13px; }
+  .event-image-container { height: 160px; }
+  
+  /* Ad-free banner */
+  .ad-free-banner { padding: 24px; }
+  .ad-free-banner h3 { font-size: 22px; }
+  .ad-free-banner p { font-size: 14px; }
+  
+  /* Pricing note */
+  .pricing-note { padding: 16px; font-size: 14px; }
+  .pricing-note-header { font-size: 16px; }
+  
+  /* Footer */
+  footer { padding: 40px 0; }
 }

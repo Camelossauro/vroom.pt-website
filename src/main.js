@@ -4,7 +4,9 @@ import { loadHeader, loadFooter } from './layout.js';
 // Funções globais para garantir que o script não falha
 const body = document.body;
 let allEvents = [];
-let visibleCount = 6;
+let visibleCount = 3;
+const itemsPerPage = 3;
+let loadMoreClickCount = 0;
 
 // Page Fade-in imediato
 setTimeout(() => {
@@ -26,7 +28,7 @@ async function loadEvents() {
   if (cachedEvents) {
     console.log('VROOM: Carregando eventos da cache...');
     allEvents = JSON.parse(cachedEvents);
-    visibleCount = cachedCount ? parseInt(cachedCount) : 6;
+    visibleCount = cachedCount ? parseInt(cachedCount) : itemsPerPage;
     renderEvents();
     setupPagination();
     return;
@@ -138,7 +140,7 @@ function setupPagination() {
 
   if (!paginationContainer || !btnLoadMore || !btnShowLess) return;
 
-  if (allEvents.length > 6) {
+  if (allEvents.length > itemsPerPage) {
     paginationContainer.style.display = 'flex';
     
     // Remover listeners antigos para evitar duplicação
@@ -148,12 +150,23 @@ function setupPagination() {
     btnShowLess.parentNode.replaceChild(newBtnShowLess, btnShowLess);
 
     newBtnLoadMore.addEventListener('click', () => {
-      visibleCount += 6;
+      if (window.innerWidth <= 768) {
+        loadMoreClickCount++;
+        if (loadMoreClickCount % 2 === 0) {
+          const popup = document.getElementById('mobile-install-popup');
+          if (popup) {
+            popup.classList.add('active');
+          }
+        }
+      }
+      
+      visibleCount += itemsPerPage;
       sessionStorage.setItem('vroom_visible_count', visibleCount);
       renderEvents();
     });
     newBtnShowLess.addEventListener('click', () => {
-      visibleCount = 6;
+      visibleCount = itemsPerPage;
+      loadMoreClickCount = 0; // Reset click count when showing less
       sessionStorage.setItem('vroom_visible_count', visibleCount);
       renderEvents();
       const eventosSection = document.getElementById('eventos');
@@ -185,7 +198,7 @@ function renderEvents() {
     btnLoadMore.style.display = 'block';
   }
 
-  if (visibleCount > 6) {
+  if (visibleCount > itemsPerPage) {
     btnShowLess.style.display = 'block';
   } else {
     btnShowLess.style.display = 'none';
@@ -368,4 +381,18 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
     }
   });
+
+  // Mobile Install Popup Logic
+  const popup = document.getElementById('mobile-install-popup');
+  const closeBtn = document.getElementById('close-install-popup');
+  if (popup && closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      popup.classList.remove('active');
+    });
+    popup.addEventListener('click', (e) => {
+      if (e.target === popup) {
+        popup.classList.remove('active');
+      }
+    });
+  }
 });

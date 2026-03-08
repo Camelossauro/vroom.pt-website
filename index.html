@@ -20,17 +20,17 @@
         <p>Todos os eventos. Um só lugar. A maior plataforma de motorsport em Portugal.</p>
         <div class="hero-btns">
           <div class="store-links">
-            <a href="https://apps.apple.com/pt/app/vroom-pt/id6751053867" class="btn-store" target="_blank">
+            <a href="https://apps.apple.com/pt/app/vroom-pt/id6751053867" class="btn-store hero-btn-store" target="_blank">
               <svg viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 21.8-88.5 21.8-11.4 0-51.1-20.8-83.6-20.1-42.9.6-82.7 25-104.7 63.3-44 76.3-11.3 189.4 31.1 250.7 20.6 29.7 45.6 63.3 77.3 62.1 29.9-1.2 41.3-19.4 77.6-19.4 36.3 0 46.5 19.4 78.2 18.8 32.5-.6 54.2-30.3 74.6-59.9 23.6-34.4 33.2-67.7 33.5-69.4-.7-.3-64.1-24.7-64.4-98.2zM285.3 57.6c16.2-19.5 27.3-46.7 24.3-73.9-23.3 1-51.5 15.5-68.2 35.1-14.9 17.1-28.1 44.7-24.8 71.3 26 2.1 52.7-13 68.7-32.5z"/></svg>
               <div class="store-text">
-                <span>Download on the</span>
+                <span style="text-transform: uppercase;">Download on the</span>
                 <span>App Store</span>
               </div>
             </a>
-            <a href="https://play.google.com/store/apps/details?id=com.baseguy.shedulebase&hl=pt_PT" class="btn-store" target="_blank">
+            <a href="https://play.google.com/store/apps/details?id=com.baseguy.shedulebase&hl=pt_PT" class="btn-store hero-btn-store" target="_blank">
               <svg viewBox="0 0 512 512" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
               <div class="store-text">
-                <span>GET IT ON</span>
+                <span style="text-transform: uppercase;">Get it on</span>
                 <span>Google Play</span>
               </div>
             </a>
@@ -191,20 +191,51 @@
     <!-- Donation -->
     <section id="apoio" class="section-padding">
       <div class="container">
-        <div class="donation" style="background: linear-gradient(135deg, #025bc5 0%, #001f4d 100%); color: white; border-radius: 40px; padding: 60px; text-align: center;">
-          <h2 style="font-size: 36px; margin-bottom: 16px;">🏁 Abastece o Vroom.pt!</h2>
-          <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 32px; font-size: 18px; line-height: 1.6;">
+        <div class="donation donation-custom">
+          <h2>🏁 Abastece o Vroom.pt!</h2>
+          <p>
             Esta secção é específica para quem gosta de apoiar boas causas!<br>
             O Vroom.pt é apenas gerido por um jovem entusiasta, se quiseres ajudar a manter o projeto de pé... Uma ajuda é bem-vinda!<br><br>
             Podes fazê-lo aqui em baixo, com qualquer quantia!
           </p>
-          <a href="https://buy.stripe.com/cNi8wR1N42Yx7HWfKMcEw01" class="btn" style="background-color: white; color: #025bc5; padding: 16px 40px; font-size: 18px; border-radius: 50px; font-weight: 700; text-decoration: none; display: inline-block; transition: transform 0.3s ease;">Apoiar o Projeto</a>
+          <a href="https://buy.stripe.com/cNi8wR1N42Yx7HWfKMcEw01" class="btn btn-donation">Apoiar o Projeto</a>
         </div>
       </div>
     </section>
 
     <!-- Footer -->
     <footer></footer>
+
+    <!-- Mobile Install Popup -->
+    <div id="mobile-install-popup" class="modal-overlay">
+      <div class="modal-content premium-modal">
+        <div class="modal-header">
+          <h3>
+            📱 Instala a App Vroom.pt
+            <button id="close-install-popup" class="modal-close" aria-label="Fechar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </h3>
+        </div>
+        <p class="modal-desc">Para veres todos os eventos sem<br>limites e teres a melhor experiência,<br>instala a nossa app gratuita!</p>
+        <div class="cta-buttons modal-buttons">
+          <a href="https://apps.apple.com/pt/app/vroom-pt/id6742231221" class="btn-store premium-btn-store" target="_blank">
+            <svg viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 21.8-88.5 21.8-11.4 0-51.1-20.8-83.6-20.1-42.9.6-82.7 25-104.7 63.3-44 76.3-11.3 189.4 31.1 250.7 20.6 29.7 45.6 63.3 77.3 62.1 29.9-1.2 41.3-19.4 77.6-19.4 36.3 0 46.5 19.4 78.2 18.8 32.5-.6 54.2-30.3 74.6-59.9 23.6-34.4 33.2-67.7 33.5-69.4-.7-.3-64.1-24.7-64.4-98.2zM285.3 57.6c16.2-19.5 27.3-46.7 24.3-73.9-23.3 1-51.5 15.5-68.2 35.1-14.9 17.1-28.1 44.7-24.8 71.3 26 2.1 52.7-13 68.7-32.5z"/></svg>
+            <div class="store-text">
+              <span>DESCARREGAR NA</span>
+              <span>App Store</span>
+            </div>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=com.vroom.app" class="btn-store premium-btn-store" target="_blank">
+            <svg viewBox="0 0 512 512" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+            <div class="store-text">
+              <span>DISPONÍVEL NO</span>
+              <span>Google Play</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
 
     <script type="module" src="/src/main.js"></script>
   </body>
