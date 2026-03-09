@@ -22,13 +22,13 @@ export default defineConfig(({mode}) => {
           planosBasico: path.resolve(__dirname, 'planos-basico.html'),
           planosPremium: path.resolve(__dirname, 'planos-premium.html'),
           corridasBasico: path.resolve(__dirname, 'corridas-basico.html'),
-          corridasPremium: path.resolve(__dirname, 'corridas-premium.html')
+          corridasPremium: path.resolve(__dirname, 'corridas-premium.html'),
+          encontrosBasico: path.resolve(__dirname, 'encontros-basico.html'),
+          encontrosPremium: path.resolve(__dirname, 'encontros-premium.html')
         }
       }
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
     },
   };
