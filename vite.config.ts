@@ -24,11 +24,17 @@ export default defineConfig(({mode}) => {
           corridasBasico: path.resolve(__dirname, 'corridas-basico.html'),
           corridasPremium: path.resolve(__dirname, 'corridas-premium.html'),
           encontrosBasico: path.resolve(__dirname, 'encontros-basico.html'),
-          encontrosPremium: path.resolve(__dirname, 'encontros-premium.html')
+          encontrosPremium: path.resolve(__dirname, 'encontros-premium.html'),
+          corridasBasicoCarros: path.resolve(__dirname, 'corridas-basico-carros.html'),
+          corridasBasicoMotas: path.resolve(__dirname, 'corridas-basico-motas.html'),
+          corridasPremiumCarros: path.resolve(__dirname, 'corridas-premium-carros.html'),
+          corridasPremiumMotas: path.resolve(__dirname, 'corridas-premium-motas.html')
         }
       }
     },
     server: {
+      // HMR is disabled in AI Studio via DISABLE_HMR env var.
+      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
     },
   };

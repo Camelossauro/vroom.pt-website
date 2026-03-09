@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Corridas Premium Carros - Vroom.pt</title>
+    <link rel="icon" type="image/png" href="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png">
+    <link rel="stylesheet" href="/src/style.css">
+    <style>
+      .info-page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 160px 24px 80px;
+        background: var(--bg-color);
+      }
+
+      .info-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        width: 100%;
+      }
+
+      @media (max-width: 992px) {
+        .info-container {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .info-page {
+          padding-top: 140px;
+        }
+      }
+
+      .info-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .btn-voltar {
+        background-color: var(--surface-color);
+        color: var(--gold-accent);
+        border: 1px solid var(--border-color);
+        padding: 10px 24px;
+        border-radius: 8px;
+        font-weight: 800;
+        font-size: 14px;
+        text-transform: uppercase;
+        cursor: pointer;
+        margin-bottom: 40px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.2s ease;
+      }
+
+      .btn-voltar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px var(--border-color);
+        background-color: var(--gold-accent);
+        color: var(--bg-color);
+      }
+
+      .info-title {
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        color: var(--text-primary);
+        letter-spacing: -0.5px;
+      }
+
+      .info-subtitle {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--bg-color);
+        background-color: var(--gold-accent);
+        padding: 4px 12px;
+        display: inline-block;
+        margin-bottom: 40px;
+        line-height: 1.2;
+        margin-left: -12px;
+        border-radius: 4px;
+      }
+
+      .info-text {
+        color: var(--text-secondary);
+        font-size: 18px;
+        line-height: 1.8;
+        margin-bottom: 40px;
+      }
+
+      .info-text p {
+        margin-bottom: 16px;
+      }
+
+      .highlight-text {
+        background-color: var(--gold-accent);
+        color: var(--bg-color);
+        padding: 0 4px;
+        font-weight: 800;
+        border-radius: 2px;
+      }
+
+      .btn-vamos {
+        background-color: var(--gold-accent);
+        color: var(--bg-color);
+        border: none;
+        padding: 12px 40px;
+        border-radius: 8px;
+        font-weight: 800;
+        font-size: 16px;
+        text-transform: uppercase;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.2s ease;
+        align-self: center;
+      }
+
+      .btn-vamos:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4);
+      }
+
+      .info-preview {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      .preview-title {
+        color: var(--text-secondary);
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 24px;
+        align-self: flex-start;
+      }
+
+      .preview-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .preview-carousel {
+        position: relative;
+        width: 100%;
+        max-width: 320px;
+        aspect-ratio: 9/19;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* ADICIONA A TUA IMAGEM AQUI */
+      .preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 16px;
+        /* Substitui o src abaixo pelo link da tua imagem */
+      }
+
+      .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        z-index: 10;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      }
+
+      .carousel-btn:hover {
+        background-color: var(--border-color);
+      }
+
+      .carousel-prev {
+        left: -70px;
+      }
+
+      .carousel-next {
+        right: -70px;
+      }
+      
+      @media (max-width: 768px) {
+        .info-title {
+          font-size: 28px;
+        }
+        .info-subtitle {
+          font-size: 24px;
+        }
+        .info-text {
+          font-size: 16px;
+        }
+        .carousel-prev { left: -40px; }
+        .carousel-next { right: -40px; }
+      }
+
+      @media (max-width: 500px) {
+        .carousel-prev { left: -15px; }
+        .carousel-next { right: -15px; }
+        .carousel-btn {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav>
+      <div class="container nav-container">
+        <a href="/" class="logo">VROOM<span>.PT</span></a>
+        <div class="nav-links">
+          <a href="/#como-funciona">Como funciona</a>
+          <a href="/#eventos">Eventos</a>
+          <a href="/#precos">Preços</a>
+          <a href="/#apoio">Apoiar</a>
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme"></button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="info-page">
+      <div class="info-container">
+        <div class="info-content">
+          <a href="javascript:history.back()" class="btn-voltar">VOLTAR</a>
+          
+          <h1 class="info-title">Informações</h1>
+          <div class="info-subtitle">Corridas Carros - Plano Premium</div>
+          
+          <div class="info-text">
+            <p>O Plano Premium, nas Corridas no <span class="highlight-text">Vroom.pt</span>.</p>
+            <p>Aqui, como pode ver ao lado, é tudo do melhor.</p>
+            <p>Com este plano o evento fica com um posicionamento estratégico e também por ordem cronológica. Este conta ainda com um detalhe em dourado nos botões e nomenclaturas.</p>
+            <p>Na página dedicada, tem o mesmo que o plano inferior, mais 5 imagens extra incluidas neste plano. Este plano também conta com a notificação personalisada que pode ver ao lado.</p>
+            <p>Este plano é ideal para ter o máximo de visibilidade dentro da app.</p>
+          </div>
+          
+          <a href="https://tally.so/r/VLEBzJ" class="btn-vamos" target="_blank">VAMOS A ISSO!</a>
+        </div>
+        
+        <div class="info-preview">
+          <div class="preview-title">Como vai ficar:</div>
+          <div class="preview-wrapper">
+            <button class="carousel-btn carousel-prev" aria-label="Anterior">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            
+            <div class="preview-carousel">
+              <!-- ADICIONA A TUA IMAGEM AQUI -->
+              <!-- Substitui o src="https://..." pelo link da tua imagem -->
+              <img src="https://vroom-images.b-cdn.net/imagens_ecras_planos/Encontros_Premium/Encontros_4.png" alt="Preview do Plano Premium" class="preview-image" id="carousel-image">
+            </div>
+            
+            <button class="carousel-btn carousel-next" aria-label="Próximo">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-logo">
+          <a href="/" class="logo" style="justify-content: center;">
+            <img src="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png" alt="Vroom.pt Logo" referrerPolicy="no-referrer">
+            Vroom.pt
+          </a>
+        </div>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/vroom.pt/" class="social-btn premium" target="_blank" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="social-btn premium" target="_blank" aria-label="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="mailto:geral@vroom.pt" class="social-btn premium" aria-label="Email">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </a>
+        </div>
+        <p class="copyright">© 2024 Vroom.pt. Todos os direitos reservados. Feito com paixão em Portugal.</p>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+    <script>
+      // Array com os links das tuas imagens
+      // ADICIONA OS LINKS DAS TUAS IMAGENS AQUI DENTRO DAS ASPAS
+      const images = [
+        "https://vroom-images.b-cdn.net/imagens_ecras_planos/Encontros_Premium/Encontros_4.png", // Imagem 1
+        "https://vroom-images.b-cdn.net/imagens_ecras_planos/Encontros_Premium/Encontros_5.png", // Imagem 2
+        "https://vroom-images.b-cdn.net/imagens_ecras_planos/Encontros_Premium/Encontros_6.png",  // Imagem 3
+        "https://vroom-images.b-cdn.net/imagens_ecras_planos/Encontros_Premium/Encontros_7.png"  // Imagem 4
+      ];
+      
+      let currentIndex = 0;
+      const imageElement = document.getElementById('carousel-image');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      
+      if (images.length > 0 && imageElement) {
+        prevBtn.addEventListener('click', () => {
+          currentIndex = (currentIndex - 1 + images.length) % images.length;
+          imageElement.src = images[currentIndex];
+        });
+        
+        nextBtn.addEventListener('click', () => {
+          currentIndex = (currentIndex + 1) % images.length;
+          imageElement.src = images[currentIndex];
+        });
+      }
+    </script>
+  </body>
+</html>
