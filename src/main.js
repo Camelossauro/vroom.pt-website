@@ -91,6 +91,17 @@ function initializeFilters() {
     applyFilters();
   });
   
+  const btnToggleModalidades = document.getElementById('btn-toggle-modalidades');
+  const chipsContainer = document.getElementById('filter-modalidade-chips');
+  
+  if (btnToggleModalidades && chipsContainer) {
+    btnToggleModalidades.addEventListener('click', () => {
+      const isExpanded = btnToggleModalidades.getAttribute('aria-expanded') === 'true';
+      btnToggleModalidades.setAttribute('aria-expanded', !isExpanded);
+      chipsContainer.classList.toggle('expanded');
+    });
+  }
+  
   updateModalidadeChips();
 }
 

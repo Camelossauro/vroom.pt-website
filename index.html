@@ -152,8 +152,14 @@
             </div>
           </div>
           <div class="filter-group modalidade-group">
-            <label>Modalidade</label>
-            <div id="filter-modalidade-chips" class="choice-chips">
+            <div class="modalidade-header">
+              <label>Modalidade</label>
+              <button id="btn-toggle-modalidades" class="btn-toggle-modalidades" aria-expanded="false">
+                <span>Ver Modalidades</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+            </div>
+            <div id="filter-modalidade-chips" class="choice-chips choice-chips-collapse">
               <!-- Chips will be injected here -->
             </div>
           </div>
