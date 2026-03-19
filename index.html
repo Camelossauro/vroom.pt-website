@@ -124,6 +124,41 @@
     <section id="eventos" class="section-padding">
       <div class="container">
         <h2 style="font-size: 32px; font-weight: 800; margin-bottom: 40px;">Próximos Eventos</h2>
+        
+        <!-- Filters -->
+        <div class="events-filters" id="events-filters" style="display: none;">
+          <div class="filters-left-col">
+            <div class="filters-dropdowns">
+              <div class="filter-group">
+                <label for="filter-mes">Mês</label>
+                <select id="filter-mes" class="filter-select">
+                  <!-- Options injected via JS -->
+                </select>
+              </div>
+              <div class="filter-group">
+                <label for="filter-natureza">Natureza</label>
+                <select id="filter-natureza" class="filter-select">
+                  <option value="">Todas</option>
+                  <option value="Competição">Competição</option>
+                  <option value="Lazer">Lazer</option>
+                </select>
+              </div>
+            </div>
+            <div class="filters-actions" id="filters-actions" style="display: none;">
+              <button id="btn-clear-filters" class="btn-clear-filters">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                Limpar Filtros
+              </button>
+            </div>
+          </div>
+          <div class="filter-group modalidade-group">
+            <label>Modalidade</label>
+            <div id="filter-modalidade-chips" class="choice-chips">
+              <!-- Chips will be injected here -->
+            </div>
+          </div>
+        </div>
+
         <div id="eventos-container">
           <!-- Placeholder cards -->
           <div class="placeholder-card">A carregar eventos do Supabase...</div>
@@ -131,9 +166,14 @@
           <div class="placeholder-card">A carregar eventos do Supabase...</div>
         </div>
         <div id="pagination-container" class="pagination-container" style="display: none;">
-          <button id="btn-load-more" class="btn btn-outline">Ver Mais Eventos</button>
-          <button id="btn-show-less" class="btn btn-outline" style="display: none;">Ver Menos</button>
+          <button id="btn-load-more" class="btn btn-outline">Ver Todos os Eventos</button>
         </div>
+        
+        <!-- Floating Close Button -->
+        <button id="btn-floating-close" class="btn-floating-close">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          Fechar Lista
+        </button>
       </div>
     </section>
 

@@ -4,14 +4,187 @@ import { loadHeader, loadFooter } from './layout.js';
 // Funções globais para garantir que o script não falha
 const body = document.body;
 let allEvents = [];
+let filteredEvents = [];
 let visibleCount = 3;
 const itemsPerPage = 3;
 let loadMoreClickCount = 0;
+let isListExpanded = false;
+let isEventosInView = false;
+let eventosObserver = null;
+
+// Filtros
+let selectedMes = '';
+let selectedNatureza = '';
+let selectedModalidades = [];
 
 // Page Fade-in imediato
 setTimeout(() => {
   body.classList.add('fade-in');
 }, 10);
+
+function initializeFilters() {
+  const filtersContainer = document.getElementById('events-filters');
+  const naturezaSelect = document.getElementById('filter-natureza');
+  const mesSelect = document.getElementById('filter-mes');
+  
+  if (!filtersContainer || !naturezaSelect || !mesSelect) return;
+  
+  filtersContainer.style.display = 'flex';
+  
+  const filtersActions = document.getElementById('filters-actions');
+  const btnClearFilters = document.getElementById('btn-clear-filters');
+  if (filtersActions) filtersActions.style.display = 'flex';
+  
+  // --- Setup Mês ---
+  const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+  const currentDate = new Date();
+  let currentMonth = currentDate.getMonth();
+  let currentYear = currentDate.getFullYear();
+  
+  mesSelect.innerHTML = '';
+  let defaultMes = '';
+  for(let i=0; i<3; i++) {
+    let m = (currentMonth + i) % 12;
+    let y = currentYear + Math.floor((currentMonth + i) / 12);
+    let value = `${y}-${String(m+1).padStart(2, '0')}`;
+    let label = `${monthNames[m]} ${y}`;
+    
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = label;
+    mesSelect.appendChild(option);
+    
+    if (i === 0) {
+      defaultMes = value;
+      selectedMes = value; // Default to current month
+    }
+  }
+  mesSelect.value = selectedMes;
+
+  if (btnClearFilters) {
+    btnClearFilters.addEventListener('click', () => {
+      // Reset variables
+      selectedMes = defaultMes;
+      selectedNatureza = '';
+      selectedModalidades = [];
+      
+      // Reset UI
+      mesSelect.value = defaultMes;
+      naturezaSelect.value = '';
+      
+      // Update chips and apply filters
+      updateModalidadeChips();
+      applyFilters();
+    });
+  }
+
+  mesSelect.addEventListener('change', (e) => {
+    selectedMes = e.target.value;
+    applyFilters();
+  });
+  // -----------------
+  
+  naturezaSelect.addEventListener('change', (e) => {
+    selectedNatureza = e.target.value;
+    selectedModalidades = []; // Reset modalities when nature changes
+    updateModalidadeChips();
+    applyFilters();
+  });
+  
+  updateModalidadeChips();
+}
+
+function updateModalidadeChips() {
+  const chipsContainer = document.getElementById('filter-modalidade-chips');
+  if (!chipsContainer) return;
+  
+  chipsContainer.innerHTML = '';
+  
+  // Get unique modalities based on selected nature
+  const modalities = new Set();
+  allEvents.forEach(event => {
+    if (!event.modalidade) return;
+    
+    if (selectedNatureza === '' || (event.natureza && event.natureza.toLowerCase() === selectedNatureza.toLowerCase())) {
+      modalities.add(event.modalidade);
+    }
+  });
+  
+  const sortedModalities = Array.from(modalities).sort();
+  
+  sortedModalities.forEach(mod => {
+    const chip = document.createElement('div');
+    chip.className = 'choice-chip';
+    chip.textContent = mod;
+    
+    if (selectedModalidades.includes(mod.toLowerCase())) {
+      chip.classList.add('active');
+    }
+    
+    chip.addEventListener('click', () => {
+      const modLower = mod.toLowerCase();
+      if (selectedModalidades.includes(modLower)) {
+        selectedModalidades = selectedModalidades.filter(m => m !== modLower);
+        chip.classList.remove('active');
+      } else {
+        selectedModalidades.push(modLower);
+        chip.classList.add('active');
+      }
+      applyFilters();
+    });
+    
+    chipsContainer.appendChild(chip);
+  });
+}
+
+function normalizeString(str) {
+  if (!str) return '';
+  // Remove accents and convert to lowercase
+  return String(str).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
+function applyFilters() {
+  filteredEvents = allEvents.filter(event => {
+    // Check Mês
+    let matchMes = false;
+    if (selectedMes !== '') {
+      const [selYear, selMonth] = selectedMes.split('-');
+      const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+      const selectedMonthName = normalizeString(monthNames[parseInt(selMonth) - 1]);
+      
+      if (event.meses) {
+        if (Array.isArray(event.meses)) {
+          matchMes = event.meses.some(m => normalizeString(m).includes(selectedMonthName));
+        } else if (typeof event.meses === 'string') {
+          matchMes = normalizeString(event.meses).includes(selectedMonthName);
+        }
+      }
+    } else {
+      matchMes = true;
+    }
+
+    const matchNatureza = selectedNatureza === '' || (event.natureza && normalizeString(event.natureza) === normalizeString(selectedNatureza));
+    
+    let matchModalidade = true;
+    if (selectedModalidades.length > 0) {
+      if (event.modalidade) {
+        const eventMod = normalizeString(event.modalidade);
+        matchModalidade = selectedModalidades.some(m => eventMod === normalizeString(m));
+      } else {
+        matchModalidade = false;
+      }
+    }
+    
+    return matchMes && matchNatureza && matchModalidade;
+  });
+  
+  visibleCount = itemsPerPage;
+  isListExpanded = false;
+  sessionStorage.setItem('vroom_visible_count', visibleCount);
+  
+  renderEvents();
+  setupPagination();
+}
 
 async function loadEvents() {
   const container = document.getElementById('eventos-container');
@@ -28,7 +201,9 @@ async function loadEvents() {
   if (cachedEvents) {
     console.log('VROOM: Carregando eventos da cache...');
     allEvents = JSON.parse(cachedEvents);
+    filteredEvents = [...allEvents];
     visibleCount = cachedCount ? parseInt(cachedCount) : itemsPerPage;
+    initializeFilters();
     renderEvents();
     setupPagination();
     return;
@@ -70,7 +245,9 @@ async function loadEvents() {
     }
 
     allEvents = events;
+    filteredEvents = [...allEvents];
     sessionStorage.setItem('vroom_events', JSON.stringify(allEvents));
+    initializeFilters();
     renderEvents();
     setupPagination();
     injectStructuredData(allEvents); // <--- NOVA CHAMADA AQUI
@@ -133,76 +310,108 @@ function injectStructuredData(events) {
 }
 // -------------------------------------------------
 
-function setupPagination() {
+function updateButtonVisibility() {
   const paginationContainer = document.getElementById('pagination-container');
   const btnLoadMore = document.getElementById('btn-load-more');
-  const btnShowLess = document.getElementById('btn-show-less');
+  const btnFloatingClose = document.getElementById('btn-floating-close');
 
-  if (!paginationContainer || !btnLoadMore || !btnShowLess) return;
+  // 1. Botão "Ver Todos os Eventos"
+  // Só aparece se houver mais de 3 eventos e a lista não estiver expandida
+  if (filteredEvents.length > itemsPerPage && !isListExpanded) {
+    if (paginationContainer) paginationContainer.style.display = 'flex';
+    if (btnLoadMore) btnLoadMore.style.display = 'block';
+  } else {
+    if (btnLoadMore) btnLoadMore.style.display = 'none';
+    if (paginationContainer) paginationContainer.style.display = 'none';
+  }
 
-  if (allEvents.length > itemsPerPage) {
-    paginationContainer.style.display = 'flex';
-    
-    // Remover listeners antigos para evitar duplicação
-    const newBtnLoadMore = btnLoadMore.cloneNode(true);
-    const newBtnShowLess = btnShowLess.cloneNode(true);
-    btnLoadMore.parentNode.replaceChild(newBtnLoadMore, btnLoadMore);
-    btnShowLess.parentNode.replaceChild(newBtnShowLess, btnShowLess);
+  // 2. Botão Flutuante "Fechar Lista"
+  // Só aparece se houver mais de 6 eventos E a lista estiver expandida E a secção estiver visível
+  if (btnFloatingClose) {
+    if (filteredEvents.length > 6 && isListExpanded && isEventosInView) {
+      btnFloatingClose.classList.add('show');
+    } else {
+      btnFloatingClose.classList.remove('show');
+    }
+  }
+}
 
-    newBtnLoadMore.addEventListener('click', () => {
+function setupPagination() {
+  const btnLoadMore = document.getElementById('btn-load-more');
+  const btnFloatingClose = document.getElementById('btn-floating-close');
+  const eventosSection = document.getElementById('eventos');
+
+  // Configurar o botão "Ver Todos os Eventos"
+  if (btnLoadMore) {
+    btnLoadMore.onclick = () => {
       if (window.innerWidth <= 768) {
         loadMoreClickCount++;
         if (loadMoreClickCount % 2 === 0) {
           const popup = document.getElementById('mobile-install-popup');
-          if (popup) {
-            popup.classList.add('active');
-          }
+          if (popup) popup.classList.add('active');
         }
       }
       
-      visibleCount += itemsPerPage;
+      visibleCount = filteredEvents.length;
+      isListExpanded = true;
       sessionStorage.setItem('vroom_visible_count', visibleCount);
       renderEvents();
-    });
-    newBtnShowLess.addEventListener('click', () => {
+    };
+  }
+
+  // Configurar o botão flutuante "Fechar Lista"
+  if (btnFloatingClose) {
+    btnFloatingClose.onclick = () => {
       visibleCount = itemsPerPage;
-      loadMoreClickCount = 0; // Reset click count when showing less
+      isListExpanded = false;
+      loadMoreClickCount = 0; // Reset click count
       sessionStorage.setItem('vroom_visible_count', visibleCount);
       renderEvents();
-      const eventosSection = document.getElementById('eventos');
+      
       if (eventosSection) {
         eventosSection.scrollIntoView({ behavior: 'smooth' });
       }
-    });
-  } else {
-    paginationContainer.style.display = 'none';
+    };
   }
+
+  // Configurar o Intersection Observer APENAS UMA VEZ
+  if (eventosSection && !eventosObserver) {
+    eventosObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        isEventosInView = entry.isIntersecting;
+        updateButtonVisibility();
+      });
+    }, {
+      root: null,
+      threshold: 0.05 // Dispara quando 5% da secção está visível
+    });
+    eventosObserver.observe(eventosSection);
+  }
+
+  // Atualizar a visibilidade inicial
+  updateButtonVisibility();
 }
 
 function renderEvents() {
   const container = document.getElementById('eventos-container');
-  const btnLoadMore = document.getElementById('btn-load-more');
-  const btnShowLess = document.getElementById('btn-show-less');
   
   container.innerHTML = ''; // Limpar
   
-  const toShow = allEvents.slice(0, visibleCount);
+  if (filteredEvents.length === 0) {
+    container.innerHTML = `
+      <div class="placeholder-card" style="grid-column: 1 / -1; text-align: center;">
+        <p>Nenhum evento encontrado para este mês com os filtros selecionados.</p>
+      </div>`;
+    updateButtonVisibility();
+    return;
+  }
+  
+  const toShow = filteredEvents.slice(0, visibleCount);
   toShow.forEach(event => {
     container.appendChild(createEventCard(event));
   });
 
-  // Update buttons visibility
-  if (visibleCount >= allEvents.length) {
-    btnLoadMore.style.display = 'none';
-  } else {
-    btnLoadMore.style.display = 'block';
-  }
-
-  if (visibleCount > itemsPerPage) {
-    btnShowLess.style.display = 'block';
-  } else {
-    btnShowLess.style.display = 'none';
-  }
+  updateButtonVisibility();
 }
 
 function createEventCard(event) {
