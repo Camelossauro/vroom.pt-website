@@ -143,7 +143,7 @@ function normalizeString(str) {
   return String(str).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 }
 
-function applyFilters() {
+function applyFilters(preserveCount = false) {
   filteredEvents = allEvents.filter(event => {
     // Check Mês
     let matchMes = false;
@@ -178,9 +178,11 @@ function applyFilters() {
     return matchMes && matchNatureza && matchModalidade;
   });
   
-  visibleCount = itemsPerPage;
-  isListExpanded = false;
-  sessionStorage.setItem('vroom_visible_count', visibleCount);
+  if (!preserveCount) {
+    visibleCount = itemsPerPage;
+    isListExpanded = false;
+    sessionStorage.setItem('vroom_visible_count', visibleCount);
+  }
   
   renderEvents();
   setupPagination();
@@ -201,11 +203,12 @@ async function loadEvents() {
   if (cachedEvents) {
     console.log('VROOM: Carregando eventos da cache...');
     allEvents = JSON.parse(cachedEvents);
-    filteredEvents = [...allEvents];
     visibleCount = cachedCount ? parseInt(cachedCount) : itemsPerPage;
+    if (visibleCount > itemsPerPage) {
+      isListExpanded = true;
+    }
     initializeFilters();
-    renderEvents();
-    setupPagination();
+    applyFilters(true);
     return;
   }
 
@@ -245,11 +248,9 @@ async function loadEvents() {
     }
 
     allEvents = events;
-    filteredEvents = [...allEvents];
     sessionStorage.setItem('vroom_events', JSON.stringify(allEvents));
     initializeFilters();
-    renderEvents();
-    setupPagination();
+    applyFilters();
     injectStructuredData(allEvents); // <--- NOVA CHAMADA AQUI
 
     console.log('VROOM: Eventos carregados com sucesso!');
@@ -383,7 +384,7 @@ function setupPagination() {
       });
     }, {
       root: null,
-      threshold: 0.05 // Dispara quando 5% da secção está visível
+      threshold: 0 // Dispara assim que qualquer parte da secção estiver visível
     });
     eventosObserver.observe(eventosSection);
   }
