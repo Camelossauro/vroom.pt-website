@@ -665,10 +665,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const updateCounter = () => {
           current += increment;
           if (current < target) {
-            counter.innerText = Math.ceil(current).toLocaleString('pt-PT');
+            counter.innerText = '+' + Math.ceil(current).toLocaleString('pt-PT');
             requestAnimationFrame(updateCounter);
           } else {
-            counter.innerText = target.toLocaleString('pt-PT');
+            counter.innerText = '+' + target.toLocaleString('pt-PT');
           }
         };
 
@@ -681,4 +681,23 @@ document.addEventListener('DOMContentLoaded', () => {
   statsCounters.forEach(counter => {
     statsObserver.observe(counter);
   });
+
+  // Back to Top Button Logic
+  const backToTopBtn = document.getElementById('back-to-top');
+  if (backToTopBtn) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  }
 });
