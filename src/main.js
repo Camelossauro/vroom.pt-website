@@ -225,6 +225,14 @@ async function loadEvents() {
 
   console.log('VROOM: Iniciando loadEvents...');
   
+  container.innerHTML = `
+    <div class="loading-state" style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+      <div class="spinner" style="width: 40px; height: 40px; border: 4px solid var(--border-color); border-top-color: var(--accent-blue); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px;"></div>
+      <p style="color: var(--text-secondary);">A carregar eventos...</p>
+    </div>
+    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+  `;
+
   try {
     const supabase = getSupabase();
     if (!supabase) {
@@ -419,8 +427,18 @@ function renderEvents() {
   }
   
   const toShow = filteredEvents.slice(0, visibleCount);
-  toShow.forEach(event => {
-    container.appendChild(createEventCard(event));
+  toShow.forEach((event, index) => {
+    const card = createEventCard(event);
+    card.classList.add('animate-on-scroll');
+    // Add staggered delay based on index (max 400ms)
+    const delay = (index % 4) * 100 + 100;
+    card.classList.add(`delay-${delay}`);
+    container.appendChild(card);
+    
+    // Observe the new card if the global observer exists
+    if (window.globalScrollObserver) {
+      window.globalScrollObserver.observe(card);
+    }
   });
 
   updateButtonVisibility();
@@ -469,7 +487,7 @@ function createEventCard(event) {
 
   card.innerHTML = `
     <div class="event-image-container">
-      <img src="${mainImage}" alt="${event.nome}" class="event-image" referrerPolicy="no-referrer">
+      <img src="${mainImage}" alt="${event.nome}" class="event-image" referrerPolicy="no-referrer" loading="lazy">
       ${isPremium ? `<div class="premium-badge">${event.plano_destaque.toUpperCase()}</div>` : ''}
       ${statusBadge}
     </div>
@@ -486,7 +504,7 @@ function createEventCard(event) {
       <p class="event-description">${event.description || event.descricao || ''}</p>
       <div class="event-footer">
         <div class="organizer">
-          ${!isDirectLink && event.logo_organizadora ? `<img src="${event.logo_organizadora}" alt="${event.organizadora}" class="org-logo" referrerPolicy="no-referrer">` : ''}
+          ${!isDirectLink && event.logo_organizadora ? `<img src="${event.logo_organizadora}" alt="${event.organizadora}" class="org-logo" referrerPolicy="no-referrer" loading="lazy">` : ''}
           <span>${event.organizadora || ''}</span>
         </div>
         <a href="${detailUrl}" ${targetAttr} class="btn btn-primary btn-sm">Ver Detalhes</a>
@@ -581,19 +599,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Intersection Observer for Animations (Funcionalidades Exclusivas)
-  const observerOptions = { threshold: 0.1 };
-  const observer = new IntersectionObserver((entries) => {
+  // Auto-add animate-on-scroll to key elements
+  const elementsToAnimate = document.querySelectorAll('.step-card, .feature-card, .stat-card, .price-card, .donation, .ad-free-banner, .section-padding h2');
+  elementsToAnimate.forEach((el, index) => {
+    if (!el.classList.contains('animate-on-scroll')) {
+      el.classList.add('animate-on-scroll');
+      // Add staggered delay based on index for siblings
+      const delay = (index % 4) * 100 + 100;
+      el.classList.add(`delay-${delay}`);
+    }
+  });
+
+  // Intersection Observer for Animations
+  const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+  window.globalScrollObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('animate');
-        observer.unobserve(entry.target);
+        entry.target.classList.add('is-visible');
+        window.globalScrollObserver.unobserve(entry.target);
+        
+        // Remove animation classes after it finishes to restore original hover transitions
+        setTimeout(() => {
+          entry.target.classList.remove('animate-on-scroll', 'is-visible', 'delay-0', 'delay-100', 'delay-200', 'delay-300', 'delay-400');
+        }, 1200); // 800ms animation + max 400ms delay
       }
     });
   }, observerOptions);
 
-  document.querySelectorAll('.feature-card').forEach(card => {
-    observer.observe(card);
+  document.querySelectorAll('.animate-on-scroll').forEach(el => {
+    window.globalScrollObserver.observe(el);
   });
 
   // Proteção de Imagens: Desativar clique direito
@@ -616,4 +650,35 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Stats Counter Animation
+  const statsCounters = document.querySelectorAll('.stat-number');
+  const statsObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const counter = entry.target;
+        const target = +counter.getAttribute('data-target');
+        const duration = 2000; // 2 seconds
+        const increment = target / (duration / 16); // 60fps
+        let current = 0;
+
+        const updateCounter = () => {
+          current += increment;
+          if (current < target) {
+            counter.innerText = Math.ceil(current).toLocaleString('pt-PT');
+            requestAnimationFrame(updateCounter);
+          } else {
+            counter.innerText = target.toLocaleString('pt-PT');
+          }
+        };
+
+        updateCounter();
+        observer.unobserve(counter);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  statsCounters.forEach(counter => {
+    statsObserver.observe(counter);
+  });
 });

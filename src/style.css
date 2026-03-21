@@ -62,7 +62,7 @@ body.fade-out {
 }
 
 .section-padding {
-  padding: 100px 0;
+  padding: 120px 0;
 }
 
 @media (max-width: 768px) {
@@ -70,7 +70,7 @@ body.fade-out {
     padding: 0 24px;
   }
   .section-padding {
-    padding: 60px 0;
+    padding: 80px 0;
   }
 }
 
@@ -230,6 +230,16 @@ body.light-theme .btn-como-funciona {
   padding: 0 20px;
   max-width: 800px;
   margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: heroSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+
+@keyframes heroSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hero h1 {
@@ -316,7 +326,53 @@ body.light-theme .btn-como-funciona {
   font-weight: 700;
 }
 
+/* Stats Section */
+.stats-section {
+  position: relative;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 32px;
+  text-align: center;
+}
+
+.stat-card {
+  padding: 20px;
+}
+
+.stat-icon {
+  color: var(--accent-blue);
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.stat-number {
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
 /* How it Works */
+.section-title {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 60px;
+  text-align: center;
+}
+
 .how-it-works h2 {
   text-align: center;
   font-size: 36px;
@@ -390,13 +446,6 @@ body.light-theme .btn-como-funciona {
   padding: 32px;
   border-radius: 20px;
   transition: all 0.3s ease;
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.feature-card.animate {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .feature-card:hover {
@@ -404,6 +453,32 @@ body.light-theme .btn-como-funciona {
   background-color: var(--card-hover);
   transform: translateY(-10px);
 }
+
+/* Generic Scroll Animations */
+.animate-on-scroll {
+  opacity: 0;
+}
+
+.animate-on-scroll.is-visible {
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.delay-0 { animation-delay: 0ms; }
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
 
 .feature-icon {
   color: var(--accent-blue);
@@ -424,8 +499,8 @@ body.light-theme .btn-como-funciona {
 
 @media (max-width: 768px) {
   .ad-free-banner {
-    max-width: 90%;
-    margin: 0 auto;
+    border-radius: 20px;
+    padding: 32px 20px;
   }
 }
 
@@ -1172,20 +1247,22 @@ body.light-theme .pricing-note-header {
 }
 
 @media (max-width: 768px) {
-  .donation-custom {
-    padding: 32px 20px;
-    border-radius: 24px;
+  .donation, .donation-custom {
+    padding: 20px 16px;
+    border-radius: 20px;
   }
-  .donation-custom h2 {
-    font-size: 24px;
+  .donation h2, .donation-custom h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
   }
-  .donation-custom p {
-    font-size: 15px;
-    margin-bottom: 24px;
+  .donation p, .donation-custom p {
+    font-size: 12px;
+    margin-bottom: 16px;
+    line-height: 1.4;
   }
   .btn-donation {
-    padding: 12px 28px;
-    font-size: 15px;
+    padding: 10px 16px;
+    font-size: 12px;
   }
 }
 
@@ -1512,7 +1589,7 @@ body.light-theme .btn-floating-close {
 @media (max-width: 768px) {
   /* Global */
   body { font-size: 13px; }
-  .section-padding { padding: 32px 0; }
+  .section-padding { padding: 60px 0; }
   
   /* Buttons */
   .btn { padding: 8px 16px; font-size: 13px; }
@@ -1523,13 +1600,51 @@ body.light-theme .btn-floating-close {
   .store-text span:last-child { font-size: 12px !important; }
   
   /* Headings */
-  .how-it-works h2, .features-header h2, .pricing-header h2 { font-size: 24px; margin-bottom: 24px; }
-  .step-card h3, .feature-card h3, .price-card h3, .install-cta-card h3 { font-size: 16px; margin-bottom: 8px; }
+  .section-title, .how-it-works h2, .features-header h2, .pricing-header h2 { font-size: 24px; margin-bottom: 24px; }
+  .step-card h3, .feature-card h3, .install-cta-card h3 { font-size: 16px; margin-bottom: 8px; }
   
   /* Cards padding */
   .step-card, .feature-card, .install-cta-card { padding: 16px; }
-  .price-card { padding: 24px; }
   .event-content { padding: 12px; }
+  
+  /* Pricing Cards Mobile Adjustments */
+  .price-card { padding: 20px 16px; border-radius: 20px; }
+  .price-card h3 { font-size: 15px; margin-bottom: 4px; }
+  .price { font-size: 28px; margin-bottom: 16px; }
+  .price span { font-size: 11px; }
+  .price-features { margin-bottom: 20px; }
+  .price-features li { font-size: 12px; margin-bottom: 8px; gap: 8px; }
+  .price-features li svg { width: 16px; height: 16px; }
+  .btn-pricing { padding: 10px 16px; font-size: 12px; }
+  .badge { font-size: 9px; padding: 3px 10px; top: -10px; }
+  
+  /* 2-Column Grid for Mobile */
+  .stats-grid, .steps-grid, .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .steps-grid .step-card:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+  
+  .stat-card, .step-card, .feature-card {
+    padding: 12px;
+  }
+  
+  /* Adjust text sizes for 2-column layout to prevent overflow */
+  .step-card h3, .feature-card h3 { font-size: 13px; margin-bottom: 6px; }
+  .step-card p, .feature-card p { font-size: 11px; line-height: 1.4; }
+  .step-number { width: 28px; height: 28px; font-size: 12px; margin-bottom: 10px; }
+  .feature-icon { width: 32px; height: 32px; margin-bottom: 10px; }
+  .feature-icon svg { width: 16px; height: 16px; }
+  
+  /* Stats specific adjustments */
+  .stat-number { font-size: 28px; }
+  .stat-label { font-size: 10px; }
+  .stat-icon { margin-bottom: 8px; }
+  .stat-icon svg { width: 20px; height: 20px; }
   
   /* Event Card specifics */
   .event-title { font-size: 15px; margin-bottom: 6px; }

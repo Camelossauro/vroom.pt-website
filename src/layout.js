@@ -32,18 +32,18 @@ export function loadHeader() {
 export function loadFooter() {
   console.log('VROOM: loadFooter() called');
   const footerHtml = `
-      <div class="container">
+      <div class="container animate-on-scroll">
         <div class="footer-logo">
           <a href="/" class="logo" style="justify-content: center;">
-            <img src="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png" alt="Vroom.pt Logo" referrerPolicy="no-referrer">
+            <img src="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png" alt="Vroom.pt Logo" referrerPolicy="no-referrer" loading="lazy">
             Vroom.pt
           </a>
         </div>
         <div class="footer-social">
-          <a href="https://www.instagram.com/vroom.pt/" class="social-btn" target="_blank" aria-label="Instagram">
+          <a href="https://www.instagram.com/vroom.pt/" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           </a>
-          <a href="https://www.facebook.com/profile.php?id=61577592274881" class="social-btn" target="_blank" aria-label="Facebook">
+          <a href="https://www.facebook.com/profile.php?id=61577592274881" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
           </a>
           <a href="mailto:contacto@vroomapp.pt" class="social-btn" aria-label="Email">
