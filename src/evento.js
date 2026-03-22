@@ -1,5 +1,9 @@
 import { getSupabase } from './supabase.js';
 import { loadHeader, loadFooter } from './layout.js';
+import { inject } from '@vercel/analytics';
+
+// Injetar Vercel Analytics
+inject();
 
 console.log('VROOM: src/evento.js is executing');
 
@@ -421,6 +425,22 @@ function setupNavScroll() {
 
 function init() {
   console.log('VROOM: init() chamado');
+
+  // Intersection Observer for Animations
+  const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+  window.globalScrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        window.globalScrollObserver.unobserve(entry.target);
+        
+        // Remove animation classes after it finishes
+        setTimeout(() => {
+          entry.target.classList.remove('animate-on-scroll', 'is-visible', 'delay-0', 'delay-100', 'delay-200', 'delay-300', 'delay-400');
+        }, 1200);
+      }
+    });
+  }, observerOptions);
   
   // Ensure header and footer are loaded first
   console.log('VROOM: Tentando carregar header e footer...');
@@ -454,6 +474,10 @@ function init() {
   } catch (e) {
     console.error('VROOM: Erro ao iniciar setupNavScroll:', e);
   }
+
+  document.querySelectorAll('.animate-on-scroll').forEach(el => {
+    window.globalScrollObserver.observe(el);
+  });
 }
 
 if (document.readyState === 'loading') {

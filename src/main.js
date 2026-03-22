@@ -1,5 +1,9 @@
 import { getSupabase } from './supabase.js';
 import { loadHeader, loadFooter } from './layout.js';
+import { inject } from '@vercel/analytics';
+
+// Injetar Vercel Analytics
+inject();
 
 // Funções globais para garantir que o script não falha
 const body = document.body;

@@ -1,4 +1,8 @@
 import { loadHeader, loadFooter } from './layout.js';
+import { inject } from '@vercel/analytics';
+
+// Injetar Vercel Analytics
+inject();
 
 console.log("VROOM: deeplink.js carregado com sucesso!");
 
