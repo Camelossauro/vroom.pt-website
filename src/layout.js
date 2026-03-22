@@ -1,3 +1,5 @@
+console.log('VROOM: src/layout.js is executing');
+
 export function loadHeader() {
   console.log('VROOM: loadHeader() called');
   const headerHtml = `
@@ -22,6 +24,9 @@ export function loadHeader() {
   if (nav) {
     nav.innerHTML = headerHtml;
     console.log('VROOM: Header injected');
+    if (window.globalScrollObserver) {
+      nav.querySelectorAll('.animate-on-scroll').forEach(el => window.globalScrollObserver.observe(el));
+    }
   } else {
     console.log('VROOM: nav not found, retrying...');
     // Fallback: wait a bit and try again if nav not found
@@ -32,7 +37,7 @@ export function loadHeader() {
 export function loadFooter() {
   console.log('VROOM: loadFooter() called');
   const footerHtml = `
-      <div class="container animate-on-scroll">
+      <div class="container">
         <div class="footer-logo">
           <a href="/" class="logo" style="justify-content: center;">
             <img src="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png" alt="Vroom.pt Logo" referrerPolicy="no-referrer" loading="lazy">
@@ -58,6 +63,10 @@ export function loadFooter() {
   if (footer) {
     console.log('VROOM: Injecting footer HTML:', footerHtml);
     footer.innerHTML = footerHtml;
+    console.log('VROOM: Footer HTML injected, innerHTML length:', footer.innerHTML.length);
+    if (window.globalScrollObserver) {
+      footer.querySelectorAll('.animate-on-scroll').forEach(el => window.globalScrollObserver.observe(el));
+    }
     console.log('VROOM: Footer injected with updated content');
   } else {
     console.log('VROOM: footer not found, retrying...');

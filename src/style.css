@@ -662,13 +662,35 @@ img {
 
 /* Footer */
 footer {
-  padding: 60px 0;
+  padding: 60px 0 20px 0;
   border-top: 1px solid var(--border-color);
   text-align: center;
+  position: relative !important;
+  z-index: 100 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  background-color: var(--bg-color) !important;
+  display: block !important;
+  min-height: 100px !important;
+  width: 100% !important;
+  overflow: visible !important;
+}
+
+footer * {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+footer .container {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
 }
 
 .footer-logo {
   margin-bottom: 24px;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .copyright {
@@ -908,8 +930,9 @@ footer {
 .event-footer {
   margin-top: auto;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
   padding-top: 20px;
   border-top: 1px solid var(--border-color);
 }
@@ -918,6 +941,16 @@ footer {
   display: flex;
   align-items: center;
   gap: 10px;
+  order: 1;
+  justify-content: flex-start;
+}
+
+.event-footer .btn-sm {
+  order: 2;
+  width: 100%;
+  text-align: center;
+  padding: 12px 20px;
+  font-size: 15px;
 }
 
 .org-logo {
@@ -1593,7 +1626,7 @@ body.light-theme .btn-floating-close {
   
   /* Buttons */
   .btn { padding: 8px 16px; font-size: 13px; }
-  .btn-sm { padding: 4px 10px; font-size: 10px; }
+  .btn-sm { padding: 3px 10px; font-size: 10px; }
   .btn-como-funciona { padding: 8px 20px; }
   .btn-store { padding: 8px 12px; }
   .store-text span:first-child { font-size: 8px !important; }
@@ -1657,7 +1690,23 @@ body.light-theme .btn-floating-close {
   .status-badge { padding: 4px 8px; font-size: 9px; top: 8px; left: 8px; }
   .org-logo { width: 24px; height: 24px; }
   .org-name { font-size: 11px; }
-  .event-footer { padding-top: 12px; }
+  .event-footer { 
+    padding-top: 16px; 
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 16px; 
+  }
+  .event-footer .btn-sm { 
+    width: 100%; 
+    padding: 10px 14px; 
+    font-size: 15px; 
+    text-align: center; 
+    order: 2;
+  }
+  .organizer {
+    justify-content: flex-start;
+    order: 1;
+  }
   
   /* Filters */
   .events-filters { padding: 16px; gap: 12px; margin-bottom: 20px; }
@@ -1689,7 +1738,12 @@ body.light-theme .btn-floating-close {
   .btn-floating-close { padding: 10px 20px; font-size: 13px; bottom: 20px; }
   
   /* Footer */
-  footer { padding: 32px 0; }
+  footer { 
+    padding: 32px 0 16px 0; 
+    background-color: var(--bg-color) !important;
+    position: relative !important;
+    z-index: 100 !important;
+  }
   .footer-logo img { height: 32px; }
   .copyright { font-size: 11px; }
 }

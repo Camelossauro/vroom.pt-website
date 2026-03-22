@@ -507,7 +507,7 @@ function createEventCard(event) {
           ${!isDirectLink && event.logo_organizadora ? `<img src="${event.logo_organizadora}" alt="${event.organizadora}" class="org-logo" referrerPolicy="no-referrer" loading="lazy">` : ''}
           <span>${event.organizadora || ''}</span>
         </div>
-        <a href="${detailUrl}" ${targetAttr} class="btn btn-primary btn-sm">Ver Detalhes</a>
+        <a href="${detailUrl}" ${targetAttr} class="btn btn-primary btn-sm">Saber +</a>
       </div>
     </div>
   `;
@@ -532,6 +532,22 @@ const LOGO_DARK = "https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/pu
 const LOGO_LIGHT = "https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo.png";
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Intersection Observer for Animations
+  const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+  window.globalScrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        window.globalScrollObserver.unobserve(entry.target);
+        
+        // Remove animation classes after it finishes to restore original hover transitions
+        setTimeout(() => {
+          entry.target.classList.remove('animate-on-scroll', 'is-visible', 'delay-0', 'delay-100', 'delay-200', 'delay-300', 'delay-400');
+        }, 1200); // 800ms animation + max 400ms delay
+      }
+    });
+  }, observerOptions);
+
   loadHeader();
   loadFooter();
   const themeToggle = document.getElementById('theme-toggle');
@@ -609,22 +625,6 @@ document.addEventListener('DOMContentLoaded', () => {
       el.classList.add(`delay-${delay}`);
     }
   });
-
-  // Intersection Observer for Animations
-  const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
-  window.globalScrollObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        window.globalScrollObserver.unobserve(entry.target);
-        
-        // Remove animation classes after it finishes to restore original hover transitions
-        setTimeout(() => {
-          entry.target.classList.remove('animate-on-scroll', 'is-visible', 'delay-0', 'delay-100', 'delay-200', 'delay-300', 'delay-400');
-        }, 1200); // 800ms animation + max 400ms delay
-      }
-    });
-  }, observerOptions);
 
   document.querySelectorAll('.animate-on-scroll').forEach(el => {
     window.globalScrollObserver.observe(el);
