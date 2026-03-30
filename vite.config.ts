@@ -28,7 +28,8 @@ export default defineConfig(({mode}) => {
           corridasBasicoCarros: path.resolve(__dirname, 'corridas-basico-carros.html'),
           corridasBasicoMotas: path.resolve(__dirname, 'corridas-basico-motas.html'),
           corridasPremiumCarros: path.resolve(__dirname, 'corridas-premium-carros.html'),
-          corridasPremiumMotas: path.resolve(__dirname, 'corridas-premium-motas.html')
+          corridasPremiumMotas: path.resolve(__dirname, 'corridas-premium-motas.html'),
+          sucesso: path.resolve(__dirname, 'sucesso.html')
         }
       }
     },
