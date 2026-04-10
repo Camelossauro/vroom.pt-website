@@ -7,8 +7,8 @@ inject();
 
 console.log('VROOM: src/evento.js is executing');
 
-// VROOM VERSION: 1.0.4
-console.log('VROOM: src/evento.js carregado v1.0.4');
+// VROOM VERSION: 1.0.5
+console.log('VROOM: src/evento.js carregado v1.0.5');
 
 // Global error handler for debugging
 window.onerror = function(message, source, lineno, colno, error) {
@@ -380,8 +380,6 @@ function renderEventDetail(event) {
           </section>
           
           ${extraImagesHtml}
-          
-          ${getInstallCtaHtml()}
         </div>
         
         <aside class="event-sidebar">
@@ -419,6 +417,8 @@ function renderEventDetail(event) {
             </div>
           </div>
         </aside>
+
+        ${getInstallCtaHtml()}
       </div>
     </div>
   `;
