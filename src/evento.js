@@ -7,8 +7,8 @@ inject();
 
 console.log('VROOM: src/evento.js is executing');
 
-// VROOM VERSION: 1.0.2
-console.log('VROOM: src/evento.js carregado v1.0.2');
+// VROOM VERSION: 1.0.4
+console.log('VROOM: src/evento.js carregado v1.0.4');
 
 // Global error handler for debugging
 window.onerror = function(message, source, lineno, colno, error) {
@@ -32,11 +32,15 @@ const LOGO_LIGHT = "https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/p
 
 function getBackButtonHtml() {
   return `
-    <div class="container" style="padding-top: 140px; padding-bottom: 0;">
-      <div style="text-align: left; margin-bottom: 24px;">
-        <button onclick="window.history.back()" class="btn btn-outline btn-back" style="cursor: pointer; padding: 10px 20px; font-size: 13px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; background: transparent; color: inherit; border: 1px solid currentColor;">
+    <div class="container" style="padding-top: 140px; padding-bottom: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <button onclick="window.history.back()" class="btn btn-outline btn-back" style="cursor: pointer; padding: 10px 20px; font-size: 13px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; background: transparent; color: inherit; border: 1px solid var(--border-color);">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           Voltar
+        </button>
+        <button id="share-event-btn" class="btn btn-outline" style="cursor: pointer; padding: 10px 20px; font-size: 13px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; background: transparent; color: inherit; border: 1px solid var(--border-color);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          Partilhar
         </button>
       </div>
     </div>
@@ -149,14 +153,6 @@ async function loadEventDetail() {
     injectDynamicSEO(event);
     // --- FIM: INJEÇÃO DE SEO DINÂMICO ---
 
-    // Redirecionar se for Competição + Default (não deve ter página dedicada)
-    const isDirectLink = event.natureza?.toLowerCase() === 'competição' && event.plano_destaque?.toLowerCase() === 'default';
-    if (isDirectLink && event.site_evento) {
-      console.log('VROOM: Redirecionando para site oficial...');
-      window.location.href = event.site_evento;
-      return;
-    }
-
     renderEventDetail(event);
   } catch (err) {
     console.error('VROOM: Erro fatal:', err);
@@ -242,37 +238,80 @@ function injectDynamicSEO(event) {
 // ---------------------------------------------------------
 
 function getInstallCtaHtml() {
-  console.log('VROOM: getInstallCtaHtml() called');
-  const html = `
-    <div class="container section-padding" style="padding-top: 40px; padding-bottom: 60px;">
-      <div class="install-cta-card" style="display: block !important; visibility: visible !important;">
-        <h3>Queres ver mais eventos e novidades?</h3>
-        <p>Instala a nossa app para teres acesso a tudo em primeira mão.</p>
-        <div class="cta-buttons" style="display: flex !important; gap: 16px; justify-content: center; flex-wrap: wrap;">
-          <a href="https://apps.apple.com/pt/app/vroom-pt/id6751053867" class="btn-store" target="_blank" style="background: #000; color: #fff; padding: 10px 20px; border-radius: 12px; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-            <span>App Store</span>
+  return `
+    <div class="app-promo-banner animate-on-scroll">
+      <div class="app-promo-content">
+        <div class="app-promo-text">
+          <h3>VIVE O MOTORSPORT NO TEU TELEMÓVEL</h3>
+          <p>Instala a nossa app para teres acesso a todos os eventos em primeira mão e notificações exclusivas.</p>
+        </div>
+        <div class="app-promo-actions">
+          <a href="https://apps.apple.com/pt/app/vroom-pt/id6751053867" class="btn-store" target="_blank">
+            <svg viewBox="0 0 384 512" width="20" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 21.8-88.5 21.8-11.4 0-51.1-20.8-83.6-20.1-42.9.6-82.7 25-104.7 63.3-44 76.3-11.3 189.4 31.1 250.7 20.6 29.7 45.6 63.3 77.3 62.1 29.9-1.2 41.3-19.4 77.6-19.4 36.3 0 46.5 19.4 78.2 18.8 32.5-.6 54.2-30.3 74.6-59.9 23.6-34.4 33.2-67.7 33.5-69.4-.7-.3-64.1-24.7-64.4-98.2zM285.3 57.6c16.2-19.5 27.3-46.7 24.3-73.9-23.3 1-51.5 15.5-68.2 35.1-14.9 17.1-28.1 44.7-24.8 71.3 26 2.1 52.7-13 68.7-32.5z"/></svg>
+            <div class="store-text">
+              <span class="store-label">App Store</span>
+              <span class="store-name">iOS</span>
+            </div>
           </a>
-          <a href="https://play.google.com/store/apps/details?id=com.baseguy.shedulebase&hl=pt_PT" class="btn-store" target="_blank" style="background: #000; color: #fff; padding: 10px 20px; border-radius: 12px; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-            <span>Google Play</span>
+          <a href="https://play.google.com/store/apps/details?id=com.baseguy.shedulebase&hl=pt_PT" class="btn-store" target="_blank">
+            <svg viewBox="0 0 512 512" width="20" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+            <div class="store-text">
+              <span class="store-label">Google Play</span>
+              <span class="store-name">Android</span>
+            </div>
           </a>
         </div>
       </div>
     </div>
   `;
-  console.log('VROOM: getInstallCtaHtml() returning:', html);
-  return html;
+}
+
+function setupShareButton(event) {
+  const shareBtn = document.getElementById('share-event-btn');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `${event.nome} | Vroom.pt`,
+            text: `Vê este evento no Vroom.pt: ${event.nome}`,
+            url: window.location.href,
+          });
+        } catch (err) {
+          console.log('VROOM: Erro ao partilhar:', err);
+        }
+      } else {
+        // Fallback: copiar link
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          const originalText = shareBtn.innerHTML;
+          shareBtn.innerHTML = 'Link Copiado!';
+          setTimeout(() => {
+            shareBtn.innerHTML = originalText;
+          }, 2000);
+        } catch (err) {
+          console.error('VROOM: Erro ao copiar link:', err);
+        }
+      }
+    });
+  }
 }
 
 function renderEventDetail(event) {
   console.log('VROOM: renderEventDetail() called for:', event.nome);
   const container = document.getElementById('event-detail-content');
-  const isPremium = event.plano_destaque?.toLowerCase() === 'premium';
-  const isCompeticao = event.natureza?.toLowerCase().includes('competição');
-  const isLazer = event.natureza?.toLowerCase().includes('lazer') || 
-                  event.natureza?.toLowerCase().includes('encontro') ||
-                  event.natureza?.toLowerCase().includes('passeio') ||
-                  event.modalidade?.toLowerCase().includes('passeio') ||
-                  event.modalidade?.toLowerCase().includes('encontro');
+  
+  const plano = event.plano_destaque?.toLowerCase() || 'default';
+  const isPremium = plano === 'premium';
+  const isBasico = plano === 'basico';
+  
+  // Apply plan class to body
+  body.classList.remove('event-page-premium', 'event-page-basico', 'event-page-default');
+  body.classList.add(`event-page-${plano}`);
+
+  const nature = event.natureza?.toLowerCase() || '';
+  const isCompeticao = nature.includes('competição') || nature.includes('corrida');
+  const isLazer = nature.includes('lazer') || nature.includes('encontro') || nature.includes('passeio');
   
   const showAmbito = !isLazer && event.ambito && event.ambito.trim() !== '.' && event.ambito.trim() !== '';
   const mainImage = event.imagem_evento || 'https://vroom-images.b-cdn.net/Design%20sem%20nome%20(17).png';
@@ -281,16 +320,16 @@ function renderEventDetail(event) {
   const endDate = new Date(event.data_fim).toLocaleDateString('pt-PT');
   const dateDisplay = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
 
-  // Layout logic
+  // Gallery logic
   let extraImagesHtml = '';
   if (isPremium) {
     const images = [event.imagem_1, event.imagem_2, event.imagem_3, event.imagem_4, event.imagem_5].filter(img => img);
     if (images.length > 0) {
       extraImagesHtml = `
-        <div class="event-gallery">
+        <div class="event-gallery animate-on-scroll">
           <h3>Galeria de Imagens</h3>
           <div class="gallery-grid">
-            ${images.map(img => `<img src="${img}" alt="Galeria" class="gallery-img" referrerPolicy="no-referrer">`).join('')}
+            ${images.map(img => `<img src="${img}" alt="Galeria" class="gallery-img" referrerPolicy="no-referrer" loading="lazy">`).join('')}
           </div>
         </div>
       `;
@@ -299,11 +338,21 @@ function renderEventDetail(event) {
 
   const html = `
     ${getBackButtonHtml()}
-    <div class="event-hero" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${mainImage}')">
+    
+    <div class="event-header-section animate-on-scroll">
       <div class="container">
-        <div class="event-hero-content">
+        <div class="event-poster-wrapper">
+          <div class="event-poster-blur" style="background-image: url('${mainImage}')"></div>
+          <img src="${mainImage}" alt="${event.nome}" class="event-main-poster" referrerPolicy="no-referrer">
+          ${isPremium ? '<span class="badge-premium-floating">PREMIUM</span>' : ''}
+          ${isBasico ? '<span class="badge-basico-floating">BÁSICO</span>' : ''}
+        </div>
+        
+        <div class="event-header-info">
           <div class="event-badges">
+            <span class="badge ${isCompeticao ? 'badge-comp' : 'badge-lazer'}">${event.natureza || 'Evento'}</span>
             ${isPremium ? '<span class="badge badge-premium">PREMIUM</span>' : ''}
+            ${isBasico ? '<span class="badge badge-basico">BÁSICO</span>' : ''}
           </div>
           <h1 class="event-title-large">${event.nome}</h1>
           <div class="event-meta-large">
@@ -320,19 +369,24 @@ function renderEventDetail(event) {
       </div>
     </div>
 
-    <div class="container section-padding">
+    <div class="container" style="padding-top: 60px; padding-bottom: 80px;">
       <div class="event-detail-grid">
         <div class="event-main-info">
-          <section class="event-description-section">
-            <h3>Sobre o Evento</h3>
-            <p>${event.description || event.descricao || 'Sem descrição disponível.'}</p>
+          <section class="event-description-section animate-on-scroll">
+            <h2 class="section-title">Sobre o Evento</h2>
+            <div class="event-description-content">
+              <p>${event.description || event.descricao || 'Sem descrição disponível.'}</p>
+            </div>
           </section>
+          
           ${extraImagesHtml}
+          
+          ${getInstallCtaHtml()}
         </div>
         
         <aside class="event-sidebar">
-          <div class="sidebar-card">
-            <h3>Informações Técnicas</h3>
+          <div class="sidebar-card animate-on-scroll">
+            <h3 style="margin-bottom: 24px; font-size: 20px; font-weight: 800; letter-spacing: -0.5px;">Informações Técnicas</h3>
             <div class="tech-info-list">
               <div class="tech-item">
                 <span class="tech-label">Modalidade</span>
@@ -348,28 +402,37 @@ function renderEventDetail(event) {
                 <span class="tech-value">${event.ambito}</span>
               </div>
               ` : ''}
-              ${isLazer ? `
-              <div class="tech-item" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 20px 0; border-bottom: 1px solid var(--border-color);">
-                <span class="tech-label" style="margin-bottom: 0;">Organizadora</span>
-                ${event.logo_organizadora ? `<img src="${event.logo_organizadora}" alt="${event.organizadora}" style="width: 80px; height: 80px; object-fit: contain; border-radius: 12px; background: white; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" referrerPolicy="no-referrer">` : ''}
-                <span class="tech-value" style="font-size: 14px; font-weight: 700;">${event.organizadora}</span>
-              </div>
-              ` : `
-              <div class="tech-item">
+              
+              <div class="tech-item organizer-info">
                 <span class="tech-label">Organizadora</span>
-                <span class="tech-value">${event.organizadora}</span>
+                <div class="organizer-detail">
+                  ${event.logo_organizadora ? `<img src="${event.logo_organizadora}" alt="${event.organizadora}" class="sidebar-org-logo" referrerPolicy="no-referrer">` : ''}
+                  <span class="tech-value">${event.organizadora || 'N/A'}</span>
+                </div>
               </div>
-              `}
             </div>
-            <a href="${event.site_evento || '#'}" class="btn btn-primary w-full" target="_blank">Site Oficial</a>
+            
+            <div class="sidebar-actions">
+              <a href="${event.site_evento || '#'}" class="btn btn-primary w-full" target="_blank" style="padding: 16px;">
+                ${isCompeticao ? 'Inscrições / Site Oficial' : 'Mais Informações'}
+              </a>
+            </div>
           </div>
         </aside>
       </div>
     </div>
-    ${getInstallCtaHtml()}
   `;
-  console.log('VROOM: renderEventDetail() setting container.innerHTML');
+  
   container.innerHTML = html;
+  
+  setupShareButton(event);
+  
+  // Re-observe new elements
+  if (window.globalScrollObserver) {
+    container.querySelectorAll('.animate-on-scroll').forEach(el => {
+      window.globalScrollObserver.observe(el);
+    });
+  }
 }
 
 // Theme logic

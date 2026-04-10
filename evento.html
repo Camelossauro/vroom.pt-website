@@ -5,46 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Detalhes do Evento - Vroom.pt</title>
     <link rel="icon" type="image/png" href="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png">
-    <link rel="stylesheet" href="/src/style.css">
+    <link rel="stylesheet" href="/src/style.css?v=1.0.4">
   </head>
   <body>
     <!-- Navbar -->
     <nav></nav>
 
     <main id="event-detail-content">
-      <div class="container" style="padding-top: clamp(80px, 10vw, 140px);">
-        <div id="debug-back-button" style="text-align: left; margin-bottom: 24px;">
-          <a href="/" class="btn btn-outline btn-back" style="padding: 10px 20px; font-size: 13px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-            Voltar
-          </a>
-        </div>
+      <div class="container" style="padding-top: 140px; padding-bottom: 100px;">
         <div id="event-status-card" class="placeholder-card">
-          <p id="status-text">A carregar detalhes do evento (v3)...</p>
-          <p id="error-details" style="font-size: 12px; margin-top: 10px; color: #ff4444; display: none;"></p>
+          <p id="status-text">A carregar detalhes do evento...</p>
         </div>
       </div>
     </main>
 
-    <script>
-      // Script de emergência para detetar falhas no carregamento do módulo principal
-      window.addEventListener('error', function(e) {
-        if (e.target.tagName === 'SCRIPT') {
-          console.error('VROOM: Falha ao carregar script:', e.target.src);
-          const statusText = document.getElementById('status-text');
-          const errorDetails = document.getElementById('error-details');
-          if (statusText) statusText.innerText = '⚠️ Erro ao carregar o motor da página.';
-          if (errorDetails) {
-            errorDetails.style.display = 'block';
-            errorDetails.innerText = 'O ficheiro ' + e.target.src + ' não pôde ser carregado. Verifique a consola do navegador.';
-          }
-        }
-      }, true);
-    </script>
-
     <!-- Footer -->
     <footer></footer>
 
-    <script type="module" src="/src/evento.js?v=4"></script>
+    <script type="module" src="/src/evento.js?v=1.0.4"></script>
   </body>
 </html>

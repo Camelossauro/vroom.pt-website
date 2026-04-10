@@ -274,7 +274,8 @@ async function loadEvents() {
     sessionStorage.setItem('vroom_events', JSON.stringify(allEvents));
     initializeFilters();
     applyFilters();
-    injectStructuredData(allEvents); // <--- NOVA CHAMADA AQUI
+    renderPremiumCarousel(allEvents); // Render premium carousel
+    injectStructuredData(allEvents); 
 
     console.log('VROOM: Eventos carregados com sucesso!');
 
@@ -450,6 +451,7 @@ function renderEvents() {
 
 function createEventCard(event) {
   const isPremium = event.plano_destaque?.toLowerCase() === 'premium';
+  const isBasico = event.plano_destaque?.toLowerCase() === 'basico';
   
   // Lógica de Status
   const now = new Date();
@@ -476,7 +478,12 @@ function createEventCard(event) {
   }
 
   const card = document.createElement('div');
-  card.className = `event-card ${isPremium ? 'premium premium-highlight' : 'basic'}`;
+  let highlightClass = '';
+  if (isPremium) highlightClass = 'premium premium-highlight';
+  else if (isBasico) highlightClass = 'basico basico-highlight';
+  else highlightClass = 'basic';
+  
+  card.className = `event-card ${highlightClass}`;
   
   const startDate = new Date(event.data_inicio).toLocaleDateString('pt-PT');
   const endDate = new Date(event.data_fim).toLocaleDateString('pt-PT');
@@ -492,7 +499,7 @@ function createEventCard(event) {
   card.innerHTML = `
     <div class="event-image-container">
       <img src="${mainImage}" alt="${event.nome}" class="event-image" referrerPolicy="no-referrer" loading="lazy">
-      ${isPremium ? `<div class="premium-badge">${event.plano_destaque.toUpperCase()}</div>` : ''}
+      ${isPremium ? `<div class="premium-badge">PREMIUM</div>` : ''}
       ${statusBadge}
     </div>
     <div class="event-content">
@@ -516,6 +523,59 @@ function createEventCard(event) {
     </div>
   `;
   return card;
+}
+
+function renderPremiumCarousel(events) {
+  const premiumEvents = events.filter(e => e.plano_destaque?.toLowerCase() === 'premium');
+  const section = document.getElementById('premium-carousel-section');
+  const track = document.getElementById('premium-carousel-track');
+  
+  if (!section || !track) return;
+  
+  if (premiumEvents.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+  
+  section.style.display = 'block';
+  track.innerHTML = '';
+  
+  premiumEvents.forEach(event => {
+    const startDate = new Date(event.data_inicio).toLocaleDateString('pt-PT');
+    const endDate = new Date(event.data_fim).toLocaleDateString('pt-PT');
+    const dateDisplay = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
+    const mainImage = event.imagem_evento || 'https://vroom-images.b-cdn.net/Design%20sem%20nome%20(17).png';
+    const detailUrl = `/evento.html?id=${event.id}`;
+
+    const carouselCard = document.createElement('a');
+    carouselCard.href = detailUrl;
+    carouselCard.className = 'premium-carousel-card animate-on-scroll';
+    carouselCard.innerHTML = `
+      <div class="premium-carousel-image">
+        <img src="${mainImage}" alt="${event.nome}" referrerPolicy="no-referrer" loading="lazy">
+      </div>
+      <div class="premium-carousel-content">
+        <div class="premium-carousel-badge">PREMIUM</div>
+        <h3 class="premium-carousel-title">${event.nome}</h3>
+        <div class="premium-carousel-meta">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>${dateDisplay}</span>
+          </div>
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>${event.local}</span>
+          </div>
+        </div>
+        <div class="premium-carousel-btn">Explorar Evento</div>
+      </div>
+    `;
+    track.appendChild(carouselCard);
+    
+    if (window.globalScrollObserver) {
+      window.globalScrollObserver.observe(carouselCard);
+    }
+  });
 }
 
 // Inicialização
