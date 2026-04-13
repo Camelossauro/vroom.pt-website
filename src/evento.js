@@ -36,12 +36,12 @@ function getBackButtonHtml() {
   return `
     <div class="container" style="padding-top: 140px; padding-bottom: 24px;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <button onclick="window.history.back()" class="btn btn-outline btn-back" style="cursor: pointer; padding: 10px 20px; font-size: 13px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; background: transparent; color: inherit; border: 1px solid var(--border-color);">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <button onclick="window.history.back()" class="btn btn-outline btn-back" style="cursor: pointer; padding: 10px 20px; font-size: 13px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; background: transparent; color: inherit; border: 1px solid var(--border-color);" aria-label="Voltar à página anterior">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
           Voltar
         </button>
-        <button id="share-event-btn" class="btn btn-outline" style="cursor: pointer; padding: 10px 20px; font-size: 13px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; background: transparent; color: inherit; border: 1px solid var(--border-color);">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        <button id="share-event-btn" class="btn btn-outline" style="cursor: pointer; padding: 10px 20px; font-size: 13px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; background: transparent; color: inherit; border: 1px solid var(--border-color);" aria-label="Partilhar este evento">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
           Partilhar
         </button>
       </div>
