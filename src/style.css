@@ -206,6 +206,8 @@ body.light-theme .btn-como-funciona {
 
 .hero-logo {
   height: clamp(80px, 12vw, 120px) !important;
+  width: auto !important;
+  object-fit: contain !important;
   margin-right: 16px;
   vertical-align: middle;
 }
@@ -368,6 +370,22 @@ body.light-theme .btn-como-funciona {
 .store-text span:last-child {
   font-size: 16px;
   font-weight: 700;
+}
+
+.section-header {
+  margin-bottom: 80px;
+  text-align: left;
+}
+
+.section-header h2 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.section-header p {
+  color: var(--text-secondary);
+  font-size: 18px;
 }
 
 /* Stats Section */

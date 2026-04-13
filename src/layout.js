@@ -5,7 +5,7 @@ export function loadHeader() {
   const headerHtml = `
       <div class="container nav-container">
         <a href="/" class="logo">
-          <img src="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png" alt="Vroom.pt Logo" referrerPolicy="no-referrer" width="40" height="40">
+          <img src="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png" alt="Vroom.pt Logo" referrerPolicy="no-referrer" width="40">
           Vroom.pt
         </a>
         <div class="nav-links">
@@ -40,7 +40,7 @@ export function loadFooter() {
       <div class="container">
         <div class="footer-logo">
           <a href="/" class="logo" style="justify-content: center;">
-            <img src="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png" alt="Vroom.pt Logo" referrerPolicy="no-referrer" loading="lazy" width="40" height="40">
+            <img src="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png" alt="Vroom.pt Logo" referrerPolicy="no-referrer" loading="lazy" width="40">
             Vroom.pt
           </a>
         </div>
