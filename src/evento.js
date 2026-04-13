@@ -9,8 +9,8 @@ inject();
 
 console.log('VROOM: src/evento.js is executing');
 
-// VROOM VERSION: 1.1.0
-console.log('VROOM: src/evento.js carregado v1.1.0');
+// VROOM VERSION: 1.1.1
+console.log('VROOM: src/evento.js carregado v1.1.1');
 
 // Global error handler for debugging
 window.onerror = function(message, source, lineno, colno, error) {
@@ -172,10 +172,12 @@ async function loadEventDetail() {
 // --- NOVA FUNÇÃO PARA SEO DINÂMICO NA PÁGINA DE DETALHE ---
 function injectDynamicSEO(event) {
   const mainImage = getEventImage(event.id, event.modalidade || event.natureza, event.local, event.imagem_evento, event.veiculo_alvo);
-  const description = event.descricao || event.description || `Detalhes do evento ${event.nome} no Vroom.pt`;
+  const category = event.modalidade || event.natureza || 'Motorsport';
+  const location = event.local || 'Portugal';
+  const description = event.descricao || event.description || `Detalhes do evento ${event.nome} (${category}) em ${location}. Vê todas as informações no Vroom.pt.`;
 
-  // 1. Atualizar o Título da Página (Aba do Navegador)
-  document.title = `${event.nome} | Vroom.pt`;
+  // 1. Atualizar o Título da Página (Aba do Navegador) - Mais rico para SEO
+  document.title = `${event.nome} | ${category} em ${location} | Vroom.pt`;
 
   // 2. Atualizar Meta Tags (Open Graph para Redes Sociais)
   const updateMetaTag = (property, content) => {
@@ -193,10 +195,20 @@ function injectDynamicSEO(event) {
   };
 
   updateMetaTag('description', description);
-  updateMetaTag('og:title', `${event.nome} | Vroom.pt`);
+  updateMetaTag('keywords', `${event.nome}, ${category}, ${location}, motorsport portugal, eventos corridas`);
+  updateMetaTag('og:title', `${event.nome} | ${category} em ${location}`);
   updateMetaTag('og:description', description);
   updateMetaTag('og:image', mainImage);
   updateMetaTag('og:url', window.location.href);
+  
+  // Adicionar Canonical
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    document.head.appendChild(canonical);
+  }
+  canonical.setAttribute('href', window.location.href);
 
   // 3. Injetar Dados Estruturados (Schema.org) específicos para este evento
   const existingScript = document.getElementById('schema-evento-detalhe');
