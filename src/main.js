@@ -7,8 +7,8 @@ import { getEventImage } from './utils.js';
 // Injetar Vercel Analytics
 inject();
 
-// VROOM VERSION: 1.1.1
-console.log('VROOM: src/main.js carregado v1.1.1');
+// VROOM VERSION: 1.1.2
+console.log('VROOM: src/main.js carregado v1.1.2');
 
 // Funções globais para garantir que o script não falha
 const body = document.body;
@@ -229,7 +229,7 @@ async function loadEvents() {
     }
     initializeFilters();
     applyFilters(true);
-    renderPremiumCarousel(allEvents);
+    setTimeout(() => renderPremiumCarousel(allEvents), 0);
     return;
   }
 
@@ -280,7 +280,7 @@ async function loadEvents() {
     sessionStorage.setItem('vroom_events', JSON.stringify(allEvents));
     initializeFilters();
     applyFilters();
-    renderPremiumCarousel(allEvents); // Render premium carousel
+    setTimeout(() => renderPremiumCarousel(allEvents), 0);
     injectStructuredData(allEvents); 
 
     console.log('VROOM: Eventos carregados com sucesso!');

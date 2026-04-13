@@ -13,7 +13,8 @@ export function getEventImage(id, category, circuit, imagemEvento, veiculoAlvo) 
   const cat = (category || "").toUpperCase().trim();
   const circ = (circuit || "").toUpperCase().trim();
   const veiculo = (veiculoAlvo || "").trim();
-  const eventId = id || 0;
+  const rawId = parseInt(id);
+  const eventId = isNaN(rawId) ? 0 : rawId;
 
   let folderName = "M CIRCUITO";
   let imageFiles = [];

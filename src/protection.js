@@ -53,7 +53,7 @@ export function initProtection() {
   window.addEventListener('keyup', (e) => {
     if (e.key === 'PrintScreen') {
       navigator.clipboard.writeText('');
-      alert('A captura de ecrã está desativada para proteger o conteúdo.');
+      // No alert in iframe
     }
   });
 }
