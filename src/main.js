@@ -6,8 +6,8 @@ import { initProtection } from './protection.js';
 // Injetar Vercel Analytics
 inject();
 
-// VROOM VERSION: 1.0.7
-console.log('VROOM: src/main.js carregado v1.0.7');
+// VROOM VERSION: 1.0.9
+console.log('VROOM: src/main.js carregado v1.0.9');
 
 // Funções globais para garantir que o script não falha
 const body = document.body;
