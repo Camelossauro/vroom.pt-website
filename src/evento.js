@@ -2,14 +2,15 @@ import { getSupabase } from './supabase.js';
 import { loadHeader, loadFooter } from './layout.js';
 import { inject } from '@vercel/analytics';
 import { initProtection } from './protection.js';
+import { getEventImage } from './utils.js';
 
 // Injetar Vercel Analytics
 inject();
 
 console.log('VROOM: src/evento.js is executing');
 
-// VROOM VERSION: 1.0.9
-console.log('VROOM: src/evento.js carregado v1.0.9');
+// VROOM VERSION: 1.1.0
+console.log('VROOM: src/evento.js carregado v1.1.0');
 
 // Global error handler for debugging
 window.onerror = function(message, source, lineno, colno, error) {
@@ -170,7 +171,7 @@ async function loadEventDetail() {
 
 // --- NOVA FUNÇÃO PARA SEO DINÂMICO NA PÁGINA DE DETALHE ---
 function injectDynamicSEO(event) {
-  const mainImage = event.imagem_evento || 'https://vroom-images.b-cdn.net/Design%20sem%20nome%20(17).png';
+  const mainImage = getEventImage(event.id, event.modalidade || event.natureza, event.local, event.imagem_evento, event.veiculo_alvo);
   const description = event.descricao || event.description || `Detalhes do evento ${event.nome} no Vroom.pt`;
 
   // 1. Atualizar o Título da Página (Aba do Navegador)
@@ -315,7 +316,7 @@ function renderEventDetail(event) {
   const isLazer = nature.includes('lazer') || nature.includes('encontro') || nature.includes('passeio');
   
   const showAmbito = !isLazer && event.ambito && event.ambito.trim() !== '.' && event.ambito.trim() !== '';
-  const mainImage = event.imagem_evento || 'https://vroom-images.b-cdn.net/Design%20sem%20nome%20(17).png';
+  const mainImage = getEventImage(event.id, event.modalidade || event.natureza, event.local, event.imagem_evento, event.veiculo_alvo);
   
   const startDate = new Date(event.data_inicio).toLocaleDateString('pt-PT');
   const endDate = new Date(event.data_fim).toLocaleDateString('pt-PT');

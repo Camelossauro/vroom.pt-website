@@ -2,12 +2,13 @@ import { getSupabase } from './supabase.js';
 import { loadHeader, loadFooter } from './layout.js';
 import { inject } from '@vercel/analytics';
 import { initProtection } from './protection.js';
+import { getEventImage } from './utils.js';
 
 // Injetar Vercel Analytics
 inject();
 
-// VROOM VERSION: 1.0.9
-console.log('VROOM: src/main.js carregado v1.0.9');
+// VROOM VERSION: 1.1.0
+console.log('VROOM: src/main.js carregado v1.1.0');
 
 // Funções globais para garantir que o script não falha
 const body = document.body;
@@ -317,7 +318,7 @@ function injectStructuredData(events) {
         }
       },
       "image": [
-        event.imagem_evento || "https://vroom-images.b-cdn.net/Design%20sem%20nome%20(17).png"
+        getEventImage(event.id, event.modalidade || event.natureza, event.local, event.imagem_evento, event.veiculo_alvo)
       ],
       "description": event.descricao || event.description || "Evento automóvel em Portugal.",
       "organizer": {
@@ -494,8 +495,8 @@ function createEventCard(event) {
   const endDate = new Date(event.data_fim).toLocaleDateString('pt-PT');
   const dateDisplay = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
   
-  // Imagem default se estiver vazio
-  const mainImage = event.imagem_evento || 'https://vroom-images.b-cdn.net/Design%20sem%20nome%20(17).png';
+  // Imagem dinâmica baseada na lógica Dart
+  const mainImage = getEventImage(event.id, event.modalidade || event.natureza, event.local, event.imagem_evento, event.veiculo_alvo);
   
   const detailUrl = `/evento.html?id=${event.id}`;
   const targetAttr = '';
@@ -548,7 +549,7 @@ function renderPremiumCarousel(events) {
     const startDate = new Date(event.data_inicio).toLocaleDateString('pt-PT');
     const endDate = new Date(event.data_fim).toLocaleDateString('pt-PT');
     const dateDisplay = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
-    const mainImage = event.imagem_evento || 'https://vroom-images.b-cdn.net/Design%20sem%20nome%20(17).png';
+    const mainImage = getEventImage(event.id, event.modalidade || event.natureza, event.local, event.imagem_evento, event.veiculo_alvo);
     const detailUrl = `/evento.html?id=${event.id}`;
 
     const carouselCard = document.createElement('a');
