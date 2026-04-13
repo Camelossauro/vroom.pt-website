@@ -1,14 +1,15 @@
 import { getSupabase } from './supabase.js';
 import { loadHeader, loadFooter } from './layout.js';
 import { inject } from '@vercel/analytics';
+import { initProtection } from './protection.js';
 
 // Injetar Vercel Analytics
 inject();
 
 console.log('VROOM: src/evento.js is executing');
 
-// VROOM VERSION: 1.0.5
-console.log('VROOM: src/evento.js carregado v1.0.5');
+// VROOM VERSION: 1.0.6
+console.log('VROOM: src/evento.js carregado v1.0.6');
 
 // Global error handler for debugging
 window.onerror = function(message, source, lineno, colno, error) {
@@ -541,6 +542,9 @@ function init() {
   document.querySelectorAll('.animate-on-scroll').forEach(el => {
     window.globalScrollObserver.observe(el);
   });
+
+  // Inicializar Sistema de Proteção
+  initProtection();
 }
 
 if (document.readyState === 'loading') {

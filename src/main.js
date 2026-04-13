@@ -1,9 +1,13 @@
 import { getSupabase } from './supabase.js';
 import { loadHeader, loadFooter } from './layout.js';
 import { inject } from '@vercel/analytics';
+import { initProtection } from './protection.js';
 
 // Injetar Vercel Analytics
 inject();
+
+// VROOM VERSION: 1.0.6
+console.log('VROOM: src/main.js carregado v1.0.6');
 
 // Funções globais para garantir que o script não falha
 const body = document.body;
@@ -492,9 +496,8 @@ function createEventCard(event) {
   // Imagem default se estiver vazio
   const mainImage = event.imagem_evento || 'https://vroom-images.b-cdn.net/Design%20sem%20nome%20(17).png';
   
-  const isDirectLink = event.natureza?.toLowerCase() === 'competição' && event.plano_destaque?.toLowerCase() === 'default';
-  const detailUrl = isDirectLink ? (event.site_evento || '#') : `/evento.html?id=${event.id}`;
-  const targetAttr = isDirectLink ? 'target="_blank"' : '';
+  const detailUrl = `/evento.html?id=${event.id}`;
+  const targetAttr = '';
 
   card.innerHTML = `
     <div class="event-image-container">
@@ -515,7 +518,7 @@ function createEventCard(event) {
       <p class="event-description">${event.description || event.descricao || ''}</p>
       <div class="event-footer">
         <div class="organizer">
-          ${!isDirectLink && event.logo_organizadora ? `<img src="${event.logo_organizadora}" alt="${event.organizadora}" class="org-logo" referrerPolicy="no-referrer" loading="lazy">` : ''}
+          ${event.logo_organizadora ? `<img src="${event.logo_organizadora}" alt="${event.organizadora}" class="org-logo" referrerPolicy="no-referrer" loading="lazy">` : ''}
           <span>${event.organizadora || ''}</span>
         </div>
         <a href="${detailUrl}" ${targetAttr} class="btn btn-primary btn-sm">Saber +</a>
@@ -694,12 +697,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.globalScrollObserver.observe(el);
   });
 
-  // Proteção de Imagens: Desativar clique direito
-  document.addEventListener('contextmenu', (e) => {
-    if (e.target.tagName === 'IMG') {
-      e.preventDefault();
-    }
-  });
+  // Inicializar Sistema de Proteção
+  initProtection();
 
   // Mobile Install Popup Logic
   const popup = document.getElementById('mobile-install-popup');
