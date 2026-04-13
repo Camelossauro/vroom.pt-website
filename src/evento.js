@@ -9,8 +9,8 @@ inject();
 
 console.log('VROOM: src/evento.js is executing');
 
-// VROOM VERSION: 1.1.3
-console.log('VROOM: src/evento.js carregado v1.1.3');
+// VROOM VERSION: 1.1.4
+console.log('VROOM: src/evento.js carregado v1.1.4');
 
 // Global error handler for debugging
 window.onerror = function(message, source, lineno, colno, error) {

@@ -7,8 +7,8 @@ import { getEventImage } from './utils.js';
 // Injetar Vercel Analytics
 inject();
 
-// VROOM VERSION: 1.1.3
-console.log('VROOM: src/main.js carregado v1.1.3');
+// VROOM VERSION: 1.1.4
+console.log('VROOM: src/main.js carregado v1.1.4');
 
 // Funções globais para garantir que o script não falha
 const body = document.body;
