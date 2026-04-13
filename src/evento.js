@@ -9,8 +9,8 @@ inject();
 
 console.log('VROOM: src/evento.js is executing');
 
-// VROOM VERSION: 1.1.2
-console.log('VROOM: src/evento.js carregado v1.1.2');
+// VROOM VERSION: 1.1.3
+console.log('VROOM: src/evento.js carregado v1.1.3');
 
 // Global error handler for debugging
 window.onerror = function(message, source, lineno, colno, error) {
@@ -90,6 +90,7 @@ async function loadEventDetail() {
       const eventFromCache = allEvents.find(e => String(e.id) === String(eventId));
       if (eventFromCache) {
         console.log('VROOM: Evento encontrado na cache! Renderizando...');
+        injectDynamicSEO(eventFromCache);
         renderEventDetail(eventFromCache);
         return;
       }
@@ -171,6 +172,7 @@ async function loadEventDetail() {
 
 // --- NOVA FUNÇÃO PARA SEO DINÂMICO NA PÁGINA DE DETALHE ---
 function injectDynamicSEO(event) {
+  console.log('VROOM: Injetando SEO dinâmico para:', event.nome);
   const mainImage = getEventImage(event.id, event.modalidade || event.natureza, event.local, event.imagem_evento, event.veiculo_alvo);
   const category = event.modalidade || event.natureza || 'Motorsport';
   const location = event.local || 'Portugal';
