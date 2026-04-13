@@ -6,8 +6,8 @@ import { initProtection } from './protection.js';
 // Injetar Vercel Analytics
 inject();
 
-// VROOM VERSION: 1.0.6
-console.log('VROOM: src/main.js carregado v1.0.6');
+// VROOM VERSION: 1.0.7
+console.log('VROOM: src/main.js carregado v1.0.7');
 
 // Funções globais para garantir que o script não falha
 const body = document.body;
@@ -228,6 +228,7 @@ async function loadEvents() {
     }
     initializeFilters();
     applyFilters(true);
+    renderPremiumCarousel(allEvents);
     return;
   }
 
@@ -582,7 +583,26 @@ function renderPremiumCarousel(events) {
 }
 
 // Inicialização
+function setupScrollObserver() {
+  if (window.globalScrollObserver) return;
+  
+  const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+  window.globalScrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        window.globalScrollObserver.unobserve(entry.target);
+        
+        setTimeout(() => {
+          entry.target.classList.remove('animate-on-scroll', 'is-visible', 'delay-0', 'delay-100', 'delay-200', 'delay-300', 'delay-400');
+        }, 1200);
+      }
+    });
+  }, observerOptions);
+}
+
 function init() {
+  setupScrollObserver();
   if (document.getElementById('eventos-container')) {
     loadEvents();
   }
@@ -599,22 +619,8 @@ const LOGO_DARK = "https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/pu
 const LOGO_LIGHT = "https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo.png";
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Intersection Observer for Animations
-  const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
-  window.globalScrollObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        window.globalScrollObserver.unobserve(entry.target);
-        
-        // Remove animation classes after it finishes to restore original hover transitions
-        setTimeout(() => {
-          entry.target.classList.remove('animate-on-scroll', 'is-visible', 'delay-0', 'delay-100', 'delay-200', 'delay-300', 'delay-400');
-        }, 1200); // 800ms animation + max 400ms delay
-      }
-    });
-  }, observerOptions);
-
+  // Observer already initialized in init()
+  
   loadHeader();
   loadFooter();
   const themeToggle = document.getElementById('theme-toggle');
