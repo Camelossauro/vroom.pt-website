@@ -9,8 +9,8 @@ inject();
 
 console.log('VROOM: src/evento.js is executing');
 
-// VROOM VERSION: 1.1.4
-console.log('VROOM: src/evento.js carregado v1.1.4');
+// VROOM VERSION: 1.1.5
+console.log('VROOM: src/evento.js carregado v1.1.5');
 
 // Global error handler for debugging
 window.onerror = function(message, source, lineno, colno, error) {
@@ -332,6 +332,37 @@ function renderEventDetail(event) {
   const showAmbito = !isLazer && event.ambito && event.ambito.trim() !== '.' && event.ambito.trim() !== '';
   const mainImage = getEventImage(event.id, event.modalidade || event.natureza, event.local, event.imagem_evento, event.veiculo_alvo);
   
+  // Lógica do Mapa Estático
+  let mapHtml = '';
+  if (event.latitude && event.longitude) {
+    const lat = event.latitude;
+    const lng = event.longitude;
+    // Usando Yandex Static Maps (gratuito e sem necessidade de chave para uso básico)
+    const mapUrl = `https://static-maps.yandex.ru/1.x/?lang=pt_PT&ll=${lng},${lat}&z=13&l=map&pt=${lng},${lat},pm2rdm`;
+    const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    
+    mapHtml = `
+      <section class="event-map-section animate-on-scroll" style="margin-top: 48px;">
+        <h2 class="section-title">Localização</h2>
+        <div class="sidebar-card" style="padding: 0; overflow: hidden; position: relative; top: 0; margin-top: 24px;">
+          <div class="map-image-container" onclick="window.open('${gmapsUrl}', '_blank')" style="height: 300px;">
+            <img src="${mapUrl}" alt="Mapa de localização" referrerPolicy="no-referrer" loading="lazy">
+            <div class="map-overlay">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Abrir no Google Maps</span>
+            </div>
+          </div>
+          <div style="padding: 24px;">
+            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; display: flex; align-items: center; gap: 8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              ${event.local}
+            </p>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
   const startDate = new Date(event.data_inicio).toLocaleDateString('pt-PT');
   const endDate = new Date(event.data_fim).toLocaleDateString('pt-PT');
   const dateDisplay = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
@@ -385,16 +416,17 @@ function renderEventDetail(event) {
       </div>
     </div>
 
-    <div class="container" style="padding-top: 60px; padding-bottom: 80px;">
+    <div class="container" style="padding-top: 40px; padding-bottom: 80px;">
       <div class="event-detail-grid">
         <div class="event-main-info">
           <section class="event-description-section animate-on-scroll">
             <h2 class="section-title">Sobre o Evento</h2>
-            <div class="event-description-content">
-              <p>${event.description || event.descricao || 'Sem descrição disponível.'}</p>
+            <div class="event-description-content" style="margin-top: 20px;">
+              <p style="font-size: 16px; line-height: 1.8; color: var(--text-secondary);">${event.description || event.descricao || 'Sem descrição disponível.'}</p>
             </div>
           </section>
           
+          ${mapHtml}
           ${extraImagesHtml}
         </div>
         
@@ -426,8 +458,8 @@ function renderEventDetail(event) {
               </div>
             </div>
             
-            <div class="sidebar-actions">
-              <a href="${event.site_evento || '#'}" class="btn btn-primary w-full" target="_blank" style="padding: 16px;">
+            <div class="sidebar-actions" style="margin-top: 32px;">
+              <a href="${event.site_evento || '#'}" class="btn btn-primary w-full" target="_blank" style="padding: 18px; font-size: 16px;">
                 ${isCompeticao ? 'Inscrições / Site Oficial' : 'Mais Informações'}
               </a>
             </div>
