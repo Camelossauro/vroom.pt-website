@@ -1345,7 +1345,7 @@ footer .container {
 .event-header-section {
   position: relative;
   width: 100%;
-  padding: 0 0 60px;
+  padding: 40px 0 60px;
   background-color: var(--surface-color);
   overflow: hidden;
 }
