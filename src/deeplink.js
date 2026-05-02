@@ -4,8 +4,8 @@ import { inject } from '@vercel/analytics';
 // Injetar Vercel Analytics
 inject();
 
-// VROOM VERSION: 1.1.6
-console.log("VROOM: deeplink.js carregado v1.1.6");
+// VROOM VERSION: 1.1.7
+console.log("VROOM: deeplink.js carregado v1.1.7");
 
 // --- CONFIGURAÇÃO ---
 const linkAndroid = "https://play.google.com/store/apps/details?id=com.baseguy.shedulebase";

@@ -9,8 +9,8 @@ inject();
 
 console.log('VROOM: src/evento.js is executing');
 
-// VROOM VERSION: 1.1.6
-console.log('VROOM: src/evento.js carregado v1.1.6');
+// VROOM VERSION: 1.1.7
+console.log('VROOM: src/evento.js carregado v1.1.7');
 
 // Global error handler for debugging
 window.onerror = function(message, source, lineno, colno, error) {
@@ -528,15 +528,13 @@ function updateThemeIcon(isLight) {
 function setupNavScroll() {
   const nav = document.querySelector('nav');
   if (nav) {
-    window.addEventListener('scroll', () => {
-      nav.style.padding = window.scrollY > 50 ? '10px 0' : '20px 0';
-    });
+    // Nav padding is now handled by CSS
   }
 }
 
 function init() {
-  console.log('VROOM: init() chamado');
-
+  console.log('VROOM: init() starting...');
+  
   // Intersection Observer for Animations
   const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
   window.globalScrollObserver = new IntersectionObserver((entries) => {
@@ -553,38 +551,14 @@ function init() {
     });
   }, observerOptions);
   
-  // Ensure header and footer are loaded first
-  console.log('VROOM: Tentando carregar header e footer...');
-  if (typeof loadHeader === 'function') {
-    loadHeader();
-  } else {
-    console.error('VROOM: loadHeader não é uma função');
-  }
-  
-  if (typeof loadFooter === 'function') {
-    loadFooter();
-  } else {
-    console.error('VROOM: loadFooter não é uma função');
-  }
+  // Ensure header and footer are loaded
+  loadHeader();
+  loadFooter();
   
   // Then setup other things
-  try {
-    loadEventDetail();
-  } catch (e) {
-    console.error('VROOM: Erro ao iniciar loadEventDetail:', e);
-  }
-  
-  try {
-    setupTheme();
-  } catch (e) {
-    console.error('VROOM: Erro ao iniciar setupTheme:', e);
-  }
-  
-  try {
-    setupNavScroll();
-  } catch (e) {
-    console.error('VROOM: Erro ao iniciar setupNavScroll:', e);
-  }
+  loadEventDetail();
+  setupTheme();
+  setupNavScroll();
 
   document.querySelectorAll('.animate-on-scroll').forEach(el => {
     window.globalScrollObserver.observe(el);
