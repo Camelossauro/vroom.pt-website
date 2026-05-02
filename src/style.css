@@ -8,8 +8,8 @@
   --text-primary: #ffffff;
   --text-secondary: #94a3b8;
   --border-color: rgba(255, 255, 255, 0.1);
-  --glass-bg: rgba(10, 10, 10, 0.8);
-  --nav-blur: blur(12px);
+  --glass-bg: rgba(10, 10, 10, 0.5);
+  --nav-blur: blur(20px);
   --gold-accent: #d4af37;
   --card-hover: rgba(255, 255, 255, 0.05);
 }
@@ -21,7 +21,7 @@ body.light-theme {
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --border-color: rgba(0, 0, 0, 0.1);
-  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg: rgba(255, 255, 255, 0.5);
   --card-hover: rgba(0, 0, 0, 0.02);
 }
 
@@ -154,22 +154,50 @@ body.fade-out {
 /* Navbar */
 nav {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 1100px;
   z-index: 1000;
   background-color: var(--glass-bg);
   backdrop-filter: var(--nav-blur);
   -webkit-backdrop-filter: var(--nav-blur);
-  border-bottom: 1px solid var(--border-color);
-  transition: padding 0.3s ease;
+  border: 1px solid var(--border-color);
+  border-radius: 100px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .nav-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80px;
+  height: 64px;
+  padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+  nav {
+    top: 12px;
+    width: calc(100% - 16px);
+  }
+  .nav-container {
+    height: 52px;
+    padding: 0 12px;
+  }
+  .nav-links {
+    gap: 8px;
+  }
+  .nav-links a {
+    font-size: 10px;
+  }
+  .logo {
+    font-size: 16px;
+  }
+  .logo img {
+    height: 28px;
+  }
 }
 
 .logo {
@@ -181,6 +209,11 @@ nav {
   display: flex;
   align-items: center;
   gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.logo:hover {
+  transform: translateY(-1px);
 }
 
 body.light-theme .logo {
@@ -227,11 +260,13 @@ body.light-theme .btn-como-funciona {
   color: var(--text-secondary);
   font-weight: 600;
   font-size: 14px;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  display: inline-block;
 }
 
 .nav-links a:hover {
-  color: var(--text-primary);
+  color: var(--accent-blue);
+  transform: translateY(-1px);
 }
 
 .theme-toggle {

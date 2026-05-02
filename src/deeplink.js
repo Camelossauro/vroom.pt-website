@@ -4,8 +4,8 @@ import { inject } from '@vercel/analytics';
 // Injetar Vercel Analytics
 inject();
 
-// VROOM VERSION: 1.1.4
-console.log("VROOM: deeplink.js carregado v1.1.4");
+// VROOM VERSION: 1.1.6
+console.log("VROOM: deeplink.js carregado v1.1.6");
 
 // --- CONFIGURAÇÃO ---
 const linkAndroid = "https://play.google.com/store/apps/details?id=com.baseguy.shedulebase";
@@ -82,7 +82,7 @@ function renderDeeplinkUI() {
     `;
 
     // 3. Lógica do Deep Link
-    const deepLink = `vroomapp://vroomapp.pt/check?eventoID=${eventoID}&rota=${rotaRecebida}`;
+    const deepLink = `vroomapp://vroomapp.pt/Check?eventoID=${eventoID}&rota=Encontros_Corridas_Geral`;
     const btn = document.getElementById('deepLinkBtn');
     if (btn) {
         btn.href = deepLink;
