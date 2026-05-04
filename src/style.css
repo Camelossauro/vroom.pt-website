@@ -255,6 +255,31 @@ body.light-theme .btn-como-funciona {
   align-items: center;
 }
 
+/* Navbar Publish Button Style */
+.btn-nav-publish {
+  background-color: var(--gold-accent) !important;
+  color: black !important;
+  font-size: 11px !important;
+  padding: 6px 14px !important;
+  border-radius: 100px !important;
+  font-weight: 800 !important;
+  margin-left: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-nav-publish:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+@media (max-width: 768px) {
+  .btn-nav-publish {
+    font-size: 9px !important;
+    padding: 4px 10px !important;
+    margin-left: 4px !important;
+  }
+}
+
 .nav-links a {
   text-decoration: none;
   color: var(--text-secondary);
@@ -586,6 +611,12 @@ body.light-theme .btn-como-funciona {
 /* Generic Scroll Animations */
 .animate-on-scroll {
   opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Fallback if JS is disabled or observer fails, we can't really do much but at least we can try to be safe */
+.no-js .animate-on-scroll {
+  opacity: 1;
 }
 
 .animate-on-scroll.is-visible {
@@ -743,6 +774,15 @@ img {
   font-size: 48px;
   font-weight: 900;
   margin-bottom: 32px;
+}
+
+.free-plan-tag {
+  color: var(--accent-blue);
+  font-weight: 800;
+  font-size: 14px;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .price span {
