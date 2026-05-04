@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png">
     <link rel="apple-touch-icon" href="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png">
     <link rel="shortcut icon" href="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png">
-    <link rel="stylesheet" href="/src/style.css?v=1.1.7">
+    <link rel="stylesheet" href="/src/style.css?v=2.1.0">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7HXXDM8SLH"></script>
     <script>
@@ -20,7 +20,22 @@
   </head>
   <body>
     <!-- Navbar -->
-    <nav></nav>
+    <nav>
+      <div class="nav-container">
+        <a href="/" class="logo">
+          <img src="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png" alt="Vroom.pt Logo" style="height: 40px;">
+          <span>Vroom.pt</span>
+        </a>
+        <div class="nav-links">
+          <a href="/#como-funciona">Como funciona</a>
+          <a href="/#eventos">Eventos</a>
+          <a href="/#apoio">Apoiar</a>
+          <a href="/#precos" class="btn btn-nav-publish">PUBLICAR</a>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Alternar Tema Claro/Escuro">
+        </button>
+      </div>
+    </nav>
 
     <main id="event-detail-content">
       <div class="container" style="padding-top: 140px; padding-bottom: 100px;">
@@ -33,6 +48,6 @@
     <!-- Footer -->
     <footer></footer>
 
-    <script type="module" src="/src/evento.js?v=1.1.7"></script>
+    <script type="module" src="/src/evento.js?v=2.1.0"></script>
   </body>
 </html>

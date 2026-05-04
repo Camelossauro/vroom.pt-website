@@ -7,8 +7,15 @@ import { getEventImage } from './utils.js';
 // Injetar Vercel Analytics
 inject();
 
-// VROOM VERSION: 1.1.7
-console.log('VROOM: src/main.js carregado v1.1.7');
+// VROOM VERSION: 2.1.0
+console.log('VROOM: src/main.js carregado v2.1.0');
+
+// Debugging for production
+window.vroom_debug = true;
+function debugLog(...args) {
+  if (window.vroom_debug) console.log('[VROOM DEBUG]', ...args);
+}
+debugLog('Main.js is executing');
 
 // Funções globais para garantir que o script não falha
 const body = document.body;
@@ -604,14 +611,17 @@ function setupScrollObserver() {
 
 // Inicialização Consolidada
 function init() {
-  console.log('VROOM: init() starting...');
+  debugLog('init() starting...');
   setupScrollObserver();
   
   loadHeader();
   loadFooter();
 
   if (document.getElementById('eventos-container')) {
+    debugLog('Eventos container detected, calling loadEvents()');
     loadEvents();
+  } else {
+    debugLog('Eventos container not found on this page');
   }
 
   const themeToggle = document.getElementById('theme-toggle');
@@ -658,10 +668,20 @@ function init() {
   }
 
   // Smooth scroll
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  document.querySelectorAll('a[href^="#"], a[href^="/#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-      const targetId = this.getAttribute('href');
-      if (targetId === '#') return;
+      let targetId = this.getAttribute('href');
+      if (targetId === '#' || targetId === '/#') return;
+      
+      // If link starts with /#, but we are on home page, handle as local scroll
+      if (targetId.startsWith('/#')) {
+        if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+          targetId = targetId.substring(1); // remove the leading /
+        } else {
+          return; // Let browser handle normal navigation to home page
+        }
+      }
+      
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
         e.preventDefault();
@@ -702,6 +722,30 @@ function init() {
 
   // Stats Counter Animation
   const statsCounters = document.querySelectorAll('.stat-number');
+  
+  // Dynamic calculation for the first stat (Events/Downloads)
+  // Base: 550, Increases by 15 each month since January 1st, 2024
+  const startDate = new Date(2024, 0, 1);
+  const now = new Date();
+  const monthsDiff = (now.getFullYear() - startDate.getFullYear()) * 12 + (now.getMonth() - startDate.getMonth());
+  const calculatedEvents = 550 + (monthsDiff * 15);
+  
+  // Update the first counter's target if it exists
+  if (statsCounters.length > 0) {
+    statsCounters[0].setAttribute('data-target', calculatedEvents);
+    debugLog(`Calculated Stat Value: ${calculatedEvents} (${monthsDiff} months passed)`);
+  }
+
+  // Dynamic calculation for the second stat (Utilizadores)
+  // Base: 650, Increases by 5 each week since January 1st, 2024
+  const weeksDiff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24 * 7));
+  const calculatedUsers = 650 + (weeksDiff * 5);
+  
+  if (statsCounters.length > 1) {
+    statsCounters[1].setAttribute('data-target', calculatedUsers);
+    debugLog(`Calculated User Value: ${calculatedUsers} (${weeksDiff} weeks passed)`);
+  }
+
   const statsObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {

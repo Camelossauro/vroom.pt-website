@@ -9,8 +9,8 @@ inject();
 
 console.log('VROOM: src/evento.js is executing');
 
-// VROOM VERSION: 1.1.7
-console.log('VROOM: src/evento.js carregado v1.1.7');
+// VROOM VERSION: 2.1.0
+console.log('VROOM: src/evento.js carregado v2.1.0');
 
 // Global error handler for debugging
 window.onerror = function(message, source, lineno, colno, error) {
@@ -562,6 +562,29 @@ function init() {
 
   document.querySelectorAll('.animate-on-scroll').forEach(el => {
     window.globalScrollObserver.observe(el);
+  });
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"], a[href^="/#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      let targetId = this.getAttribute('href');
+      if (targetId === '#' || targetId === '/#') return;
+      
+      // If link starts with /#, but we are on home page, handle as local scroll
+      if (targetId.startsWith('/#')) {
+        if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+          targetId = targetId.substring(1); // remove the leading /
+        } else {
+          return; // Let browser handle normal navigation to home page
+        }
+      }
+      
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        e.preventDefault();
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
   });
 
   // Inicializar Sistema de Proteção

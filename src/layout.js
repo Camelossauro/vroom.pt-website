@@ -1,4 +1,5 @@
-console.log('VROOM: src/layout.js is executing');
+// VROOM VERSION: 2.1.0
+console.log('VROOM: src/layout.js carregado v2.1.0');
 
 export function loadHeader() {
   console.log('VROOM: loadHeader() called');
@@ -6,13 +7,13 @@ export function loadHeader() {
       <div class="container nav-container">
         <a href="/" class="logo">
           <img src="https://joxalzicitgkaqpouvlb.supabase.co/storage/v1/object/public/eventimages/default/vroom.pt_logo_branco.png" alt="Vroom.pt Logo" referrerPolicy="no-referrer" width="40">
-          Vroom.pt
+          <span>Vroom.pt</span>
         </a>
         <div class="nav-links">
           <a href="/#como-funciona">Como funciona</a>
           <a href="/#eventos">Eventos</a>
-          <a href="/#precos">Preços</a>
           <a href="/#apoio">Apoiar</a>
+          <a href="/#precos" class="btn btn-nav-publish">PUBLICAR</a>
         </div>
         <button id="theme-toggle" class="theme-toggle" aria-label="Alternar Tema Claro/Escuro">
         </button>
