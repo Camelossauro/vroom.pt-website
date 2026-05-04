@@ -723,27 +723,27 @@ function init() {
   // Stats Counter Animation
   const statsCounters = document.querySelectorAll('.stat-number');
   
-  // Dynamic calculation for the first stat (Events/Downloads)
-  // Base: 550, Increases by 15 each month since January 1st, 2024
-  const startDate = new Date(2024, 0, 1);
+  // Dynamic calculation for the first stat (Events)
+  // Base: 550, Increases by 15 each month since May 4th, 2026
+  const startDate = new Date(2026, 4, 4); // 04/05/2026
   const now = new Date();
-  const monthsDiff = (now.getFullYear() - startDate.getFullYear()) * 12 + (now.getMonth() - startDate.getMonth());
+  const monthsDiff = Math.max(0, (now.getFullYear() - startDate.getFullYear()) * 12 + (now.getMonth() - startDate.getMonth()));
   const calculatedEvents = 550 + (monthsDiff * 15);
   
   // Update the first counter's target if it exists
   if (statsCounters.length > 0) {
     statsCounters[0].setAttribute('data-target', calculatedEvents);
-    debugLog(`Calculated Stat Value: ${calculatedEvents} (${monthsDiff} months passed)`);
+    debugLog(`Calculated Stat Value: ${calculatedEvents} (${monthsDiff} months passed since 04/05/2026)`);
   }
 
   // Dynamic calculation for the second stat (Utilizadores)
-  // Base: 650, Increases by 5 each week since January 1st, 2024
-  const weeksDiff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24 * 7));
+  // Base: 650, Increases by 5 each week since May 4th, 2026
+  const weeksDiff = Math.max(0, Math.floor((now - startDate) / (1000 * 60 * 60 * 24 * 7)));
   const calculatedUsers = 650 + (weeksDiff * 5);
   
   if (statsCounters.length > 1) {
     statsCounters[1].setAttribute('data-target', calculatedUsers);
-    debugLog(`Calculated User Value: ${calculatedUsers} (${weeksDiff} weeks passed)`);
+    debugLog(`Calculated User Value: ${calculatedUsers} (${weeksDiff} weeks passed since 04/05/2026)`);
   }
 
   const statsObserver = new IntersectionObserver((entries, observer) => {
