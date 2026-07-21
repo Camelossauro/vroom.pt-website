@@ -65,10 +65,10 @@ export default function SocialProof() {
                 <span className="text-2xl sm:text-4xl lg:text-5xl font-bold font-mono text-white tracking-tight leading-none stat-number" data-target={stat.target}>
                   +0
                 </span>
-                <span className="text-[10px] sm:text-xs font-semibold text-slate-200 mt-1.5 sm:mt-2 block">
+                <span className="text-xs sm:text-xs font-semibold text-slate-200 mt-1.5 sm:mt-2 block">
                   {stat.label}
                 </span>
-                <span className="text-[9px] sm:text-[10px] text-slate-500 font-light mt-0.5 block">
+                <span className="text-xs sm:text-xs text-slate-500 font-light mt-0.5 block">
                   {stat.sub}
                 </span>
               </div>

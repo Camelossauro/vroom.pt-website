@@ -64,7 +64,7 @@ export default function WhyVroom() {
               className="border border-[#262B37] bg-[#1D212B] p-4 sm:p-6 rounded-xl hover:border-slate-700 transition-all duration-300 flex flex-col items-start gap-3 sm:gap-4 text-left"
             >
               <div className="p-2 sm:p-3 bg-[#0F1115] rounded-lg sm:rounded-xl border border-[#262B37]">
-                {cloneElement(benefit.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 sm:h-5 text-brand-blue' })}
+                {cloneElement(benefit.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-brand-blue' })}
               </div>
               <div>
                 <h4 className="font-semibold text-white text-[14px] sm:text-base mb-1.5 leading-tight">

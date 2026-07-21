@@ -48,7 +48,7 @@ export default function FAQ() {
                 : 'text-slate-400 hover:text-white hover:bg-[#1D212B]'
             }`}
           >
-            <Smartphone className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <Smartphone className="w-3.5 h-3.5 sm:w-4 h-4" />
             Para Adeptos
           </button>
           
@@ -63,7 +63,7 @@ export default function FAQ() {
                 : 'text-slate-400 hover:text-white hover:bg-[#1D212B]'
             }`}
           >
-            <LayoutDashboard className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <LayoutDashboard className="w-3.5 h-3.5 sm:w-4 h-4" />
             Para Clubes
           </button>
 
@@ -78,7 +78,7 @@ export default function FAQ() {
                 : 'text-slate-400 hover:text-white hover:bg-[#1D212B]'
             }`}
           >
-            <UserCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <UserCheck className="w-3.5 h-3.5 sm:w-4 h-4" />
             Para Pilotos
           </button>
         </div>
@@ -128,7 +128,7 @@ export default function FAQ() {
         {/* Support Banner */}
         <div className="text-center mt-12">
           <p className="text-xs text-slate-400 font-light">
-            Ainda tem dúvidas? <button onClick={() => window.location.href = 'mailto:contacto@vroomapp.pt'} className="font-semibold text-brand-blue hover:text-white cursor-pointer hover:underline">Entre em contacto com o nosso suporte português</button>. Resposta em menos de 2 horas.
+            Ainda tem dúvidas? <a href="mailto:contacto@vroomapp.pt" className="font-semibold text-brand-blue hover:text-white cursor-pointer hover:underline">Entre em contacto com o nosso suporte português</a>. Resposta em menos de 2 horas.
           </p>
         </div>
 

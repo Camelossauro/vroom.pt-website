@@ -69,7 +69,7 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
   ];
 
   return (
-    <section id="organizations-section" className="py-10 sm:py-20 bg-[#171A21] relative border-b border-[#262B37]">
+    <section id="organizations-section" className="py-10 sm:py-30 bg-[#171A21] relative border-b border-[#262B37]">
       {/* Background glow orbs */}
       <div className="absolute top-1/4 left-1/3 w-80 h-80 bg-brand-red/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none" />
@@ -78,13 +78,13 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-20">
-          <span className="text-[10px] font-montserrat font-bold text-brand-red tracking-widest uppercase bg-brand-red/10 px-2 py-0.5 rounded-lg sm:rounded-xl">
+          <span className="text-xs font-montserrat font-bold text-brand-red tracking-widest uppercase bg-brand-red/10 px-2 py-0.5 rounded-lg sm:rounded-xl">
             Para Clubes, Organizadores e Promotores
           </span>
           <h2 className="font-display font-bold text-xl sm:text-4xl lg:text-5xl text-white tracking-tight mt-3 mb-3 sm:mb-6 leading-tight">
             Simplifique a sua comunicação oficial
           </h2>
-          <p className="text-slate-400 text-xs sm:text-lg font-light leading-relaxed">
+          <p className="text-slate-400 text-sm sm:text-lg font-light leading-relaxed">
             O Vroom.pt centraliza a informação das maiores provas e eventos de automobilismo em Portugal numa app móvel intuitiva.
           </p>
         </div>
@@ -93,7 +93,7 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
         <div className="mb-10 sm:mb-24">
           <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12">
             <h3 className="font-display font-bold text-lg sm:text-2xl text-white leading-tight">Como Funciona</h3>
-            <p className="text-[11px] sm:text-sm text-slate-400 mt-1.5 font-light">
+            <p className="text-xs sm:text-sm text-slate-400 mt-1.5 font-light">
               Desenhamos um fluxo focado na fidedignidade.
             </p>
           </div>
@@ -107,12 +107,12 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
                 <div>
                   <div className="flex justify-between items-start mb-4">
                     <div className="p-2 sm:p-3 bg-[#0F1115] rounded-xl border border-[#262B37]">
-                      {cloneElement(step.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 sm:h-5 text-brand-blue' })}
+                      {cloneElement(step.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-brand-blue' })}
                     </div>
                     <span className="text-xl sm:text-2xl font-bold font-mono text-slate-700/50">{step.num}</span>
                   </div>
                   <h4 className="font-display font-bold text-white text-[14px] sm:text-base mb-1.5 text-left">{step.title}</h4>
-                  <p className="text-slate-400 text-[10px] sm:text-xs leading-relaxed font-light text-left">{step.description}</p>
+                  <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-light text-left">{step.description}</p>
                 </div>
                 {idx < 3 && (
                   <div className="hidden lg:block absolute top-1/2 -right-3.5 transform -translate-y-1/2 z-20">
@@ -128,7 +128,7 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
         <div className="mb-10 sm:mb-20">
           <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12">
             <h3 className="font-display font-bold text-lg sm:text-2xl text-white leading-tight">Recursos para o seu Clube</h3>
-            <p className="text-[11px] sm:text-sm text-slate-400 mt-1.5 font-light">
+            <p className="text-xs sm:text-sm text-slate-400 mt-1.5 font-light">
               Autonomia total diretamente no telemóvel.
             </p>
           </div>
@@ -140,10 +140,10 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
                 className="bg-[#1D212B] rounded-xl border border-[#262B37] p-4 sm:p-6 shadow-xs hover:border-slate-700 transition-all duration-300 "
               >
                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#0F1115] flex items-center justify-center mb-4 border border-[#262B37]">
-                  {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 sm:h-5 text-brand-blue' })}
+                  {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-brand-blue' })}
                 </div>
                 <h3 className="font-display font-bold text-white text-[14px] sm:text-base mb-1.5 text-left">{feat.title}</h3>
-                <p className="text-slate-400 text-[10px] sm:text-sm font-light leading-relaxed text-left">{feat.description}</p>
+                <p className="text-slate-400 text-xs sm:text-sm font-light leading-relaxed text-left">{feat.description}</p>
               </div>
             ))}
           </div>
@@ -162,28 +162,28 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
                   <span className=" absolute inline-flex h-full w-full rounded-full bg-brand-red opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-red"></span>
                 </span>
-                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">PRESENÇA TOTALMENTE GRATUITA</span>
+                <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">PRESENÇA TOTALMENTE GRATUITA</span>
               </div>
               
               <h3 className="font-display font-bold text-xl sm:text-3xl text-white tracking-tight leading-tight">
                 Inicie a sua Jornada no Vroom.pt
               </h3>
               
-              <p className="text-slate-400 text-xs sm:text-sm font-light leading-relaxed max-w-xl">
+              <p className="text-slate-400 text-sm sm:text-sm font-light leading-relaxed max-w-xl">
                 O acesso e criação de conta no Vroom.pt é totalmente gratuito para organizadores oficiais de provas de desporto motorizado nacional. 
                 Os clubes validados podem gerir conteúdos, carregar horários, responder a espetadores e enviar notificações cruciais.
               </p>
 
               <div className="space-y-2 pt-2">
-                <div className="flex items-center gap-2 text-xs text-slate-300">
+                <div className="flex items-center gap-2 text-sm text-slate-300">
                   <CheckCircle className="w-4 h-4 text-brand-red flex-shrink-0" />
                   <span>Obtenha o Selo Azul de Organização Verificada</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-slate-300">
+                <div className="flex items-center gap-2 text-sm text-slate-300">
                   <CheckCircle className="w-4 h-4 text-brand-red flex-shrink-0" />
                   <span>Proteção ativa contra spam e perfis clonados</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-slate-300">
+                <div className="flex items-center gap-2 text-sm text-slate-300">
                   <CheckCircle className="w-4 h-4 text-brand-red flex-shrink-0" />
                   <span>Gestão completa e publicação de provas efetuada na Mobile App</span>
                 </div>
@@ -192,19 +192,19 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
 
             {/* Right button action wrapper */}
             <div className="lg:col-span-5 flex flex-col justify-center gap-4 bg-[#171A21] border border-[#262B37] p-4 sm:p-6 rounded-xl">
-              <span className="text-[10px] font-mono font-bold text-slate-400 text-center uppercase tracking-widest block mb-1">
+              <span className="text-xs font-mono font-bold text-slate-400 text-center uppercase tracking-widest block mb-1">
                 INICIAR VERIFICAÇÃO OFICIAL
               </span>
               
               <button 
                 onClick={() => onOpenPortal('register')}
-                className="w-full py-3.5 bg-brand-blue text-white font-bold rounded-xl text-xs sm:text-sm hover:bg-brand-blue-hover transition-all flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.01] active:scale-95"
+                className="w-full py-3.5 bg-brand-blue text-white font-bold rounded-xl text-sm sm:text-sm hover:bg-brand-blue-hover transition-all flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.01] active:scale-95"
               >
                 Tornar-se Organização Verificada
                 <ArrowUpRight className="w-4 h-4" />
               </button>
 
-              <p className="text-[10px] text-slate-500 font-light text-center">
+              <p className="text-xs text-slate-500 font-light text-center">
                 Disponível na Vroom.pt mobile app após aprovação manual de verificação.
               </p>
             </div>

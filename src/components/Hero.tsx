@@ -25,7 +25,7 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
           <div className="lg:col-span-6 flex flex-col items-start text-left">
             
             {/* Main Headline */}
-            <h1 className="font-display font-bold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.1] mb-5 sm:mb-6">
+            <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.1] mb-6 sm:mb-6">
               O <span className="text-brand-blue">Motorsport</span> <br className="hidden sm:block" />
               Nacional
             </h1>
@@ -58,15 +58,15 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
             {/* Mini Trust Badges - Balanced for mobile */}
             <div className="flex flex-wrap items-center gap-x-5 gap-y-3 pt-6 sm:pt-6 border-t border-[#262B37] w-full">
               <div className="flex items-center gap-2">
-                <BadgeCheck className="w-4 h-4 sm:w-5 sm:h-5 text-brand-blue" />
+                <BadgeCheck className="w-4 h-4 sm:w-5 h-5 text-brand-blue" />
                 <span className="text-xs sm:text-xs font-semibold text-slate-300">Oficial</span>
               </div>
               <div className="flex items-center gap-2">
-                <BellRing className="w-4 h-4 sm:w-5 sm:h-5 text-brand-blue" />
+                <BellRing className="w-4 h-4 sm:w-5 h-5 text-brand-blue" />
                 <span className="text-xs sm:text-xs font-semibold text-slate-300">Tempo Real</span>
               </div>
               <div className="flex items-center gap-2">
-                <Smartphone className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
+                <Smartphone className="w-4 h-4 sm:w-5 h-5 text-slate-400" />
                 <span className="text-xs sm:text-xs font-semibold text-slate-300">Mobile First</span>
               </div>
             </div>
@@ -88,41 +88,41 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
                     <span className="w-3 h-3 rounded-full bg-yellow-500/80 inline-block" />
                     <span className="w-3 h-3 rounded-full bg-green-500/80 inline-block" />
                   </div>
-                  <span className="text-[10px] font-mono text-slate-500">vroomapp.pt/clube/cam</span>
+                  <span className="text-xs font-mono text-slate-500">vroomapp.pt/clube/cam</span>
                   <Award className="w-3.5 h-3.5 text-slate-500 group-hover:text-white transition-colors" />
                 </div>
                 {/* Window interior */}
                 <div className="p-4 flex flex-col gap-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-slate-300">Pedido de Registo Oficial</span>
-                    <span className="text-[9px] bg-brand-blue/20 text-brand-blue px-2 py-0.5 rounded-full font-mono font-bold">AGUARDA APROVAÇÃO</span>
+                    <span className="text-xs bg-brand-blue/20 text-brand-blue px-2 py-0.5 rounded-full font-mono font-bold">AGUARDA APROVAÇÃO</span>
                   </div>
                   {/* Grid of stats */}
                   <div className="grid grid-cols-2 gap-2">
                     <div className="bg-[#171A21] p-2.5 rounded-xl border border-[#262B37]">
-                      <span className="text-[9px] text-slate-500 block uppercase font-mono">Tipo de Entidade</span>
+                      <span className="text-xs text-slate-500 block uppercase font-mono">Tipo de Entidade</span>
                       <span className="text-xs font-bold text-white font-mono">Associação / Clube</span>
                     </div>
                     <div className="bg-[#171A21] p-2.5 rounded-xl border border-[#262B37]">
-                      <span className="text-[9px] text-slate-500 block uppercase font-mono">Status Vroom.pt</span>
+                      <span className="text-xs text-slate-500 block uppercase font-mono">Status Vroom.pt</span>
                       <span className="text-xs font-bold text-brand-blue font-mono">Pendente de Verificação</span>
                     </div>
                   </div>
                   {/* Live alert simulator */}
                   <div className="bg-brand-blue/10 border border-brand-blue/30 p-2.5 rounded-xl flex flex-col gap-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-brand-blue flex items-center gap-1">
+                      <span className="text-xs font-bold text-brand-blue flex items-center gap-1">
                         <span className="h-1.5 w-1.5 bg-brand-blue rounded-full " /> Fluxo de Integração
                       </span>
-                      <span className="text-[8px] text-slate-400">Pendente</span>
+                      <span className="text-xs text-slate-400">Pendente</span>
                     </div>
-                    <p className="text-[9px] text-slate-300 leading-tight">
+                    <p className="text-xs text-slate-300 leading-tight">
                       "Os clubes criam a conta no site e gerem tudo no telemóvel após aprovação da conta."
                     </p>
                   </div>
                   {/* Subscriber Chart Placeholder */}
                   <div className="h-20 bg-[#0F1115] rounded-xl border border-[#262B37] p-2 flex flex-col justify-between">
-                    <span className="text-[9px] text-slate-500 font-mono">Processo Anti-Spam Ativo</span>
+                    <span className="text-xs text-slate-500 font-mono">Processo Anti-Spam Ativo</span>
                     <div className="flex items-end justify-between gap-1 h-10 px-2">
                       <span className="w-full bg-[#1D212B] h-3 rounded-xl" />
                       <span className="w-full bg-[#1D212B] h-5 rounded-xl" />
@@ -144,26 +144,26 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
                       className="w-11 h-11 rounded-full object-cover border-2 border-brand-blue"
                       referrerPolicy="no-referrer"
                     />
-                    <span className="absolute -bottom-1 -right-1 bg-brand-blue text-white p-0.5 rounded-full text-[8px] font-bold font-mono">
+                    <span className="absolute -bottom-1 -right-1 bg-brand-blue text-white p-0.5 rounded-full text-xs font-bold font-mono">
                       ✓
                     </span>
                   </div>
                   <div>
                     <span className="text-xs font-bold text-white block leading-tight">António Félix da Costa</span>
-                    <span className="text-[9px] text-slate-400">Jaguar TCS Racing</span>
+                    <span className="text-xs text-slate-400">Jaguar TCS Racing</span>
                   </div>
                 </div>
                 <div className="mt-3 pt-3 border-t border-[#262B37] grid grid-cols-2 gap-1 text-center">
                   <div className="bg-[#171A21] p-1.5 rounded-xl border border-[#262B37]">
-                    <span className="text-[8px] text-slate-400 block font-mono">STATUS</span>
-                    <span className="text-[10px] font-bold text-emerald-400">Verificado</span>
+                    <span className="text-xs text-slate-400 block font-mono">STATUS</span>
+                    <span className="text-xs font-bold text-emerald-400">Verificado</span>
                   </div>
                   <div className="bg-[#171A21] p-1.5 rounded-xl border border-[#262B37]">
-                    <span className="text-[8px] text-slate-400 block font-mono">NÚMERO</span>
-                    <span className="text-[10px] font-bold text-brand-blue font-mono">#13</span>
+                    <span className="text-xs text-slate-400 block font-mono">NÚMERO</span>
+                    <span className="text-xs font-bold text-brand-blue font-mono">#13</span>
                   </div>
                 </div>
-                <div className="mt-2 text-[9px] text-slate-300 text-center italic bg-[#171A21] py-1 rounded-xl border border-[#262B37]/50">
+                <div className="mt-2 text-xs text-slate-300 text-center italic bg-[#171A21] py-1 rounded-xl border border-[#262B37]/50">
                   Verificação Manual Vroom.pt
                 </div>
               </div>
@@ -185,7 +185,7 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
                    
                    <div className="relative z-10 flex flex-col h-full pt-6 px-1.5 sm:pt-8 sm:px-2">
                      <span className="text-white text-3xl sm:text-4xl font-light text-center mt-1 sm:mt-2 mb-1 tracking-tight">09:41</span>
-                     <span className="text-slate-300 text-[8px] sm:text-[10px] text-center mb-4 sm:mb-6 font-medium">Domingo, 19 de Julho</span>
+                     <span className="text-slate-300 text-xs sm:text-xs text-center mb-4 sm:mb-6 font-medium">Domingo, 19 de Julho</span>
                      
                      <div className="bg-slate-900/70 backdrop-blur-xl rounded-2xl p-2.5 shadow-2xl border border-white/10 flex gap-2.5 items-center">
                        <img 
@@ -199,12 +199,12 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
                                <div className="bg-brand-blue/20 p-0.5 rounded-md">
                                  <Bell className="w-2 h-2 text-brand-blue" />
                                </div>
-                               <span className="text-white/60 text-[8px] font-semibold tracking-wider uppercase">Vroom.pt</span>
+                               <span className="text-white/60 text-xs font-semibold tracking-wider uppercase">Vroom.pt</span>
                             </div>
-                            <span className="text-white/40 text-[7px]">agora</span>
+                            <span className="text-white/40 text-xs">agora</span>
                          </div>
-                         <h5 className="text-white font-bold text-[9px] mb-0.5">O evento está a começar!</h5>
-                         <p className="text-slate-300 text-[7px] leading-tight line-clamp-2">O circuito do Algarve aguarda. Prepare-se para a adrenalina.</p>
+                         <h5 className="text-white font-bold text-xs mb-0.5">O evento está a começar!</h5>
+                         <p className="text-slate-300 text-xs leading-tight line-clamp-2">O circuito do Algarve aguarda. Prepare-se para a adrenalina.</p>
                        </div>
                      </div>
                    </div>
@@ -214,7 +214,7 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
               {/* Floating Labels / Visual cues */}
               <button 
                 onClick={() => onScrollToSection('app')}
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 sm:left-auto sm:right-12 bg-brand-blue text-white text-[11px] font-bold px-4 py-2 rounded-full shadow-lg flex items-center gap-1.5 z-40 cursor-pointer hover:bg-brand-blue-hover transition-colors"
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 sm:left-auto sm:right-12 bg-brand-blue text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg flex items-center gap-1.5 z-40 cursor-pointer hover:bg-brand-blue-hover transition-colors"
               >
                 <Play className="w-3 h-3 fill-white" />
                 <span>Explorar App</span>

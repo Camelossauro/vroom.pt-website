@@ -15,6 +15,7 @@ export interface DatabaseEvent {
   descricao: string | null;
   site_evento: string | null;
   logo_organizadora_default: string | null;
+  logo_url?: string | null;
   imagem_evento: string | null;
   latitude: number | null;
   longitude: number | null;

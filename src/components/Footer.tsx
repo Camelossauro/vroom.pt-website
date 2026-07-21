@@ -22,7 +22,7 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
                 <img 
                   src={vroomLogoImg} 
                   alt="Vroom.pt Logo" 
-                  className="w-7 h-7 sm:w-8 sm:h-8 object-contain transition-transform duration-300 rounded-xl shadow-md"
+                  className="w-7 h-7 sm:w-8 h-8 object-contain transition-transform duration-300 rounded-xl shadow-md"
                   referrerPolicy="no-referrer"
                 />
               </div>
@@ -30,12 +30,12 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
                 Vroom<span className="text-white font-bold">.pt</span>
               </span>
             </a>
-            <p className="text-slate-400 text-[10px] sm:text-xs leading-relaxed font-light">
+            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-light">
               A central digital do desporto motorizado português.
             </p>
             
             <div className="flex flex-col gap-1.5 mt-1 sm:mt-2">
-              <div className="flex items-center gap-2 text-[10px] text-slate-400 text-left">
+              <div className="flex items-center gap-2 text-xs text-slate-400 text-left">
                 <Mail className="w-3 h-3 text-brand-blue" />
                 <span>contacto@vroomapp.pt</span>
               </div>
@@ -44,8 +44,8 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
 
           {/* Column 2: Platform links */}
           <div className="col-span-1 md:col-span-2 text-left">
-            <h4 className="text-[10px] font-bold text-white uppercase tracking-widest mb-3">Plataforma</h4>
-            <ul className="space-y-1.5 text-[10px] text-slate-400">
+            <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-3">Plataforma</h4>
+            <ul className="space-y-1.5 text-xs text-slate-400">
               <li><a href="#home" className="hover:text-white transition-colors">Início</a></li>
               <li><a href="#overview" className="hover:text-white transition-colors">O Ecossistema</a></li>
               <li><a href="#organizations-section" className="hover:text-white transition-colors">Como Funciona</a></li>
@@ -55,8 +55,8 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
 
           {/* Column 3: Organizations & Drivers links */}
           <div className="col-span-1 md:col-span-2 text-left">
-            <h4 className="text-[10px] font-bold text-white uppercase tracking-widest mb-3">Parceiros</h4>
-            <ul className="space-y-1.5 text-[10px] text-slate-400">
+            <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-3">Parceiros</h4>
+            <ul className="space-y-1.5 text-xs text-slate-400">
               <li><a href="#organizations-section" className="hover:text-white transition-colors">Registar Clube</a></li>
               <li><a href="#why-vroom" className="hover:text-white transition-colors">Verificação</a></li>
               <li><a href="#faq" className="hover:text-white transition-colors">Dúvidas Gerais</a></li>
@@ -65,8 +65,8 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
 
           {/* Column 4: Install App */}
           <div className="col-span-2 md:col-span-4 text-left">
-            <h4 className="text-[10px] font-bold text-white uppercase tracking-widest mb-3">Instalar App</h4>
-            <p className="text-slate-400 text-[10px] mb-4 font-light leading-relaxed">
+            <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-3">Instalar App</h4>
+            <p className="text-slate-400 text-xs mb-4 font-light leading-relaxed">
               Leve o motorsport no bolso. Descarregue a app oficial.
             </p>
             <div className="flex flex-wrap gap-2">
@@ -101,7 +101,7 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
         </div>
 
         {/* Bottom Bar: Copyright and disclaimer */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-[10px]">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-xs">
           <span>
             © {new Date().getFullYear()} Vroom.pt Portugal. Todos os direitos reservados.
           </span>

@@ -81,7 +81,7 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
             <img 
               src={vroomLogoImg} 
               alt="Vroom.pt Logo" 
-              className="w-7 h-7 sm:w-9 sm:h-9 object-contain transition-transform duration-300 rounded-lg sm:rounded-xl shadow-md"
+              className="w-7 h-7 sm:w-9 h-9 object-contain transition-transform duration-300 rounded-lg sm:rounded-xl shadow-md"
               referrerPolicy="no-referrer"
             />
           </div>
@@ -190,14 +190,14 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
             })}
           </div>
 
-          <div className="flex flex-col gap-3 pt-2">
+          <div className="flex flex-col gap-5 pt-2">
             {currentUser ? (
               <button
                 onClick={() => {
                   setIsOpen(false);
                   onOpenPortal('register');
                 }}
-                className={`flex items-center justify-center gap-2 py-3.5 font-bold rounded-xl transition-all w-full cursor-pointer shadow-md ${
+                className={`flex items-center justify-center gap-2 py-4.5 font-bold rounded-xl transition-all w-full cursor-pointer shadow-md text-base ${
                   currentUser.role === 'admin' 
                     ? 'bg-amber-500 text-black hover:bg-amber-600' 
                     : currentUser.role === 'unauthorized' 
@@ -205,33 +205,23 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
                       : 'bg-brand-blue text-white hover:bg-brand-blue-hover'
                 }`}
               >
-                {currentUser.role === 'admin' && <Sparkles className="w-4 h-4" />}
-                {currentUser.role === 'unauthorized' && <Lock className="w-4 h-4 animate-bounce text-yellow-400" />}
-                {currentUser.role === 'authorized' && <ShieldCheck className="w-4 h-4 text-green-300" />}
+                {currentUser.role === 'admin' && <Sparkles className="w-5 h-5" />}
+                {currentUser.role === 'unauthorized' && <Lock className="w-5 h-5 animate-bounce text-yellow-400" />}
+                {currentUser.role === 'authorized' && <ShieldCheck className="w-5 h-5 text-green-300" />}
                 {currentUser.role === 'admin' ? 'Painel Admin Vroom.pt' : currentUser.role === 'unauthorized' ? 'Pendente de Verificação Vroom.pt' : 'Painel de Organizador'}
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-5 h-5" />
               </button>
             ) : (
               <>
                 <button
                   onClick={() => {
                     setIsOpen(false);
-                    onOpenPortal('login');
-                  }}
-                  className="flex items-center justify-center gap-2 py-3 border border-[#262B37] text-slate-300 hover:text-white font-semibold rounded-xl hover:bg-[#1D212B] transition-colors w-full cursor-pointer"
-                >
-                  <LogIn className="w-4 h-4 text-brand-blue" />
-                  Sessão Supabase / Demo
-                </button>
-                <button
-                  onClick={() => {
-                    setIsOpen(false);
                     onOpenPortal('register');
                   }}
-                  className="flex items-center justify-center gap-2 py-3 bg-brand-blue hover:bg-brand-blue-hover text-white font-semibold rounded-xl transition-colors w-full shadow-md cursor-pointer"
+                  className="flex items-center justify-center gap-2 py-4.5 bg-brand-blue hover:bg-brand-blue-hover text-white font-bold rounded-xl transition-colors w-full shadow-md cursor-pointer text-base"
                 >
                   Registo de Organizador
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-5 h-5" />
                 </button>
               </>
             )}

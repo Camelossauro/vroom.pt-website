@@ -173,7 +173,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
   };
 
   return (
-    <section id="events" className="py-12 sm:py-20 bg-[#0F1115] relative border-b border-[#262B37]">
+    <section id="events" className="py-12 sm:py-30 bg-[#0F1115] relative border-b border-[#262B37]">
       <div className="absolute top-10 right-10 w-96 h-96 bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-10 left-10 w-96 h-96 bg-brand-red/5 rounded-full blur-[120px] pointer-events-none" />
 
@@ -181,13 +181,13 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
         
         {/* Section Header - Shorter on mobile */}
         <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-16">
-          <span className="text-[10px] sm:text-xs font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2 py-0.5 sm:px-3 sm:py-1 rounded-lg sm:rounded-xl">
+          <span className="text-xs sm:text-sm font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2 py-0.5 sm:px-4 sm:py-1 rounded-lg sm:rounded-xl">
             Descoberta
           </span>
           <h2 className="font-display font-bold text-xl sm:text-4xl lg:text-5xl text-white tracking-tight mt-2 sm:mt-4 mb-2 sm:mb-6 leading-tight">
             Provas em Portugal
           </h2>
-          <p className="text-slate-400 text-[11px] sm:text-lg font-light leading-relaxed px-4">
+          <p className="text-slate-400 text-xs sm:text-lg font-light leading-relaxed px-4">
             Acompanhe o calendário nacional. Use a app para navegar até às pistas.
           </p>
         </div>
@@ -197,11 +197,11 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
           <div className="flex flex-col md:flex-row gap-2 sm:gap-4 items-center justify-between mb-3 sm:mb-4">
             {/* Search Input */}
             <div className="relative w-full md:w-96">
-              <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-slate-500" />
+              <Search className="absolute left-3 top-3.5 w-4 h-4 text-slate-500" />
               <input 
                 type="text"
                 placeholder="Pesquisar prova..."
-                className="w-full bg-[#1D212B] border border-[#262B37] rounded-lg py-2 sm:py-3 pl-9 pr-3 text-[11px] sm:text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-blue"
+                className="w-full bg-[#1D212B] border border-[#262B37] rounded-lg py-4 sm:py-3 pl-10 pr-3 text-sm sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-blue"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -212,7 +212,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
               <div className="relative flex-1 md:w-48">
                 <button
                   onClick={() => setNaturezaDropdownOpen(!naturezaDropdownOpen)}
-                  className="w-full flex items-center justify-between px-3 py-2 bg-[#1D212B] border border-[#262B37] rounded-lg text-[10px] sm:text-xs text-white hover:border-slate-500 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 bg-[#1D212B] border border-[#262B37] rounded-lg text-xs sm:text-sm text-white hover:border-slate-500 transition-colors"
                 >
                   <span className="font-bold truncate">{naturezaCategory === 'Todos' ? 'Tipo' : naturezaCategory}</span>
                   <ChevronDown className="w-3 h-3" />
@@ -224,7 +224,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
                       <button
                         key={cat}
                         onClick={() => handleNaturezaSelect(cat)}
-                        className={`w-full text-left px-3 py-2 text-[10px] hover:bg-brand-blue/10 transition-colors ${
+                        className={`w-full text-left px-4 py-3 text-sm hover:bg-brand-blue/10 transition-colors ${
                           naturezaCategory === cat ? 'text-brand-blue font-bold' : 'text-slate-300'
                         }`}
                       >
@@ -239,7 +239,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
               <div className="relative flex-1 md:w-48">
                 <button
                   onClick={() => setMainDropdownOpen(!mainDropdownOpen)}
-                  className="w-full flex items-center justify-between px-3 py-2 bg-[#1D212B] border border-[#262B37] rounded-lg text-[10px] sm:text-xs text-white hover:border-slate-500 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 bg-[#1D212B] border border-[#262B37] rounded-lg text-xs sm:text-sm text-white hover:border-slate-500 transition-colors"
                 >
                   <span className="font-bold truncate">{mainCategory === 'Todos' ? 'Veículo' : mainCategory}</span>
                   <ChevronDown className="w-3 h-3" />
@@ -251,7 +251,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
                       <button
                         key={cat}
                         onClick={() => handleMainCategorySelect(cat)}
-                        className={`w-full text-left px-3 py-2 text-[10px] hover:bg-brand-blue/10 transition-colors ${
+                        className={`w-full text-left px-4 py-3 text-sm hover:bg-brand-blue/10 transition-colors ${
                           mainCategory === cat ? 'text-brand-blue font-bold' : 'text-slate-300'
                         }`}
                       >
@@ -269,7 +269,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
             <div className="flex flex-wrap gap-1.5 pt-3 border-t border-[#262B37]">
               <button
                 onClick={() => setSubCategory('Todos')}
-                className={`px-3 py-1.5 rounded-lg text-[9px] sm:text-xs font-bold transition-all ${
+                className={`px-4 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all ${
                   subCategory === 'Todos'
                     ? 'bg-brand-blue text-white' 
                     : 'bg-[#1D212B] border border-[#262B37] text-slate-400'
@@ -281,7 +281,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
                 <button
                   key={subCat}
                   onClick={() => setSubCategory(subCat)}
-                  className={`px-3 py-1.5 rounded-lg text-[9px] sm:text-xs font-bold transition-all ${
+                  className={`px-4 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all ${
                     subCategory === subCat 
                       ? 'bg-brand-blue text-white' 
                       : 'bg-[#1D212B] border border-[#262B37] text-slate-400'
@@ -298,7 +298,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
         {loading && (
           <div className="flex flex-col items-center justify-center py-10">
             <Loader2 className="w-6 h-6 text-brand-blue animate-spin mb-2" />
-            <span className="text-slate-400 text-xs">A carregar...</span>
+            <span className="text-slate-400 text-sm">A carregar...</span>
           </div>
         )}
 
@@ -330,7 +330,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
                       
                       {/* Category Pill - Readable micro scale */}
                       {ev.modalidade && (
-                        <span className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-brand-blue/90 backdrop-blur-md text-white px-2 py-0.5 sm:px-2.5 sm:py-1 rounded sm:rounded-xl text-[7px] sm:text-[10px] font-mono font-bold tracking-wider uppercase shadow-lg">
+                        <span className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-brand-blue/90 backdrop-blur-md text-white px-2 py-0.5 sm:px-2.5 sm:py-1 rounded sm:rounded-xl text-xs sm:text-xs font-mono font-bold tracking-wider uppercase shadow-lg">
                           {ev.modalidade}
                         </span>
                       )}
@@ -338,7 +338,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
                       {/* Status Badges - Clean positioning */}
                       <div className="absolute bottom-2 left-2 flex flex-col gap-1">
                         {isHappening && (
-                          <span className="text-[7px] font-bold uppercase tracking-wider px-1.5 py-0.5 border rounded bg-red-600 text-white border-red-400 flex items-center gap-0.5 shadow-xl">
+                          <span className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 border rounded bg-red-600 text-white border-red-400 flex items-center gap-0.5 shadow-xl">
                             <Radio className="w-2 h-2" /> LIVE
                           </span>
                         )}
@@ -348,19 +348,19 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
                     {/* Event Info - Balanced padding and text */}
                     <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between">
                       <div className="space-y-2 sm:space-y-3">
-                        <h3 className="font-display font-bold text-[13px] sm:text-lg text-white group-hover:text-brand-blue transition-colors leading-tight line-clamp-2">
+                        <h3 className="font-display font-bold text-base sm:text-lg text-white group-hover:text-brand-blue transition-colors leading-tight line-clamp-2">
                           {ev.nome}
                         </h3>
 
-                        <p className="text-slate-400 text-[10px] sm:text-xs leading-relaxed font-light line-clamp-1 sm:line-clamp-2">
+                        <p className="text-slate-400 text-sm sm:text-sm leading-relaxed font-light line-clamp-1 sm:line-clamp-2">
                           {ev.local || 'Localização a definir'}
                         </p>
                       </div>
 
                       {/* Metadata Row - Mini icons with breathing room */}
                       <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-[#262B37] flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-[10px] sm:text-xs text-slate-300">
-                          <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-blue" />
+                        <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-300">
+                          <Calendar className="w-3.5 h-3.5 sm:w-4 h-4 text-brand-blue" />
                           <span className="font-medium truncate max-w-[50px] sm:max-w-none">{ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-PT', {day:'numeric', month:'short'}) : 'TBD'}</span>
                         </div>
                         <ChevronRight className="w-4 h-4 text-brand-blue group-hover:translate-x-1 transition-transform" />
@@ -376,7 +376,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
                 <button
                   onClick={() => setVisibleCount(prev => prev + 3)}
-                  className="px-6 py-3 bg-[#171A21] hover:bg-[#1D212B] border border-brand-blue text-white rounded-xl text-xs font-bold transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2 cursor-pointer group-hover:scale-102"
+                  className="px-6 py-3 bg-[#171A21] hover:bg-[#1D212B] border border-brand-blue text-white rounded-xl text-sm font-bold transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2 cursor-pointer group-hover:scale-102"
                 >
                   <ChevronDown className="w-4 h-4 text-brand-blue animate-bounce" />
                   Carregar Mais Eventos
@@ -384,7 +384,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
                 {visibleCount > 6 && (
                   <button
                     onClick={handleCloseList}
-                    className="px-6 py-3 bg-transparent hover:bg-[#1D212B] border border-slate-700 text-slate-400 hover:text-white rounded-xl text-xs font-bold transition-all duration-300 cursor-pointer"
+                    className="px-6 py-3 bg-transparent hover:bg-[#1D212B] border border-slate-700 text-slate-400 hover:text-white rounded-xl text-sm font-bold transition-all duration-300 cursor-pointer"
                   >
                     Recolher Lista
                   </button>
@@ -400,7 +400,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
             <span className="text-slate-400 block text-sm font-light mb-4">Nenhuma prova encontrada para os critérios selecionados.</span>
             <button 
               onClick={() => { setSearchQuery(''); setMainCategory('Todos'); setSubCategory('Todos'); }}
-              className="px-4 py-2 bg-brand-blue text-white rounded-xl text-xs font-bold hover:bg-brand-blue-hover transition-all cursor-pointer"
+              className="px-4 py-3 bg-brand-blue text-white rounded-xl text-sm font-bold hover:bg-brand-blue-hover transition-all cursor-pointer"
             >
               Repor Filtros
             </button>
@@ -422,12 +422,12 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
               <Smartphone className="w-4 h-4" />
             </div>
             <div className="flex-1 text-left">
-              <p className="text-xs font-semibold text-white">Disponibilidade da App</p>
-              <p className="text-[10px] text-slate-400 font-light mt-0.5">{toastMessage}</p>
+              <p className="text-sm font-semibold text-white">Disponibilidade da App</p>
+              <p className="text-xs text-slate-400 font-light mt-0.5">{toastMessage}</p>
             </div>
             <button 
               onClick={() => setToastMessage(null)}
-              className="text-slate-400 hover:text-white text-xs font-bold p-1"
+              className="text-slate-400 hover:text-white text-sm font-bold p-1"
             >
               ✕
             </button>
@@ -447,7 +447,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
           >
             <button
               onClick={handleCloseList}
-              className="flex items-center gap-2.5 px-5 py-3.5 bg-brand-red hover:bg-brand-red-hover text-white text-xs font-bold rounded-full shadow-2xl border border-brand-red/15 hover:border-white/10 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider"
+              className="flex items-center gap-2.5 px-5 py-3.5 bg-brand-red hover:bg-brand-red-hover text-white text-sm font-bold rounded-full shadow-2xl border border-brand-red/15 hover:border-white/10 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider"
               title="Fechar Lista e voltar ao topo"
             >
               <X className="w-4 h-4" />

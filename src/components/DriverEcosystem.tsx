@@ -36,7 +36,7 @@ export default function DriverEcosystem() {
               <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block mb-4">
                 Verificação e Estrutura
               </span>
-              <p className="text-[11px] text-slate-400 font-light">
+              <p className="text-xs text-slate-400 font-light">
                 Cada piloto é analisado e adicionado manualmente pela nossa equipa para assegurar palmarés autênticos e perfis certificados na aplicação móvel oficial Vroom.pt.
               </p>
             </div>

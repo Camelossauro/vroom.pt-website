@@ -70,20 +70,20 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
   ];
 
   return (
-    <section id="overview" className="py-10 sm:py-20 bg-[#171A21] border-t border-[#262B37] relative">
+    <section id="overview" className="py-10 sm:py-30 bg-[#171A21] border-t border-[#262B37] relative">
       <div className="absolute top-0 right-1/4 w-72 h-72 bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-20">
-          <span className="text-[10px] font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2 py-0.5 rounded-lg sm:rounded-xl">
+          <span className="text-xs font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2 py-0.5 rounded-lg sm:rounded-xl">
             Um Único Ecossistema
           </span>
           <h2 className="font-display font-bold text-xl sm:text-4xl lg:text-5xl text-white tracking-tight mt-3 mb-3 sm:mb-6 leading-tight">
             A infraestrutura digital do Motorsport português
           </h2>
-          <p className="text-slate-400 text-xs sm:text-lg font-light leading-relaxed">
+          <p className="text-slate-400 text-sm sm:text-lg font-light leading-relaxed">
             Ligamos todas as pontas do Motorsport nacional.
           </p>
         </div>
@@ -99,11 +99,11 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
               <div>
                 {/* Badge & Icon Header */}
                 <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <span className={`text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-1 sm:py-1.5 border rounded-full ${pillar.badgeBg}`}>
+                  <span className={`text-xs sm:text-sm font-bold px-2 sm:px-4 py-1 sm:py-1.5 border rounded-full ${pillar.badgeBg}`}>
                     {pillar.badge}
                   </span>
                   <div className="p-2 sm:p-3 bg-[#0F1115] rounded-xl border border-[#262B37]">
-                    {cloneElement(pillar.icon as ReactElement, { className: 'w-5 h-5 sm:w-6 sm:h-6' })}
+                    {cloneElement(pillar.icon as ReactElement, { className: 'w-5 h-5 sm:w-6 h-6' })}
                   </div>
                 </div>
 
@@ -111,7 +111,7 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
                 <h3 className="font-display font-bold text-lg sm:text-xl text-white mb-2 sm:mb-3">
                   {pillar.title}
                 </h3>
-                <p className="text-slate-400 text-[11px] sm:text-sm leading-relaxed mb-4 sm:mb-6 font-light">
+                <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6 font-light">
                   {pillar.description}
                 </p>
 
@@ -122,7 +122,7 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
                       <div className="mt-0.5 flex-shrink-0 w-3.5 h-3.5 rounded-full bg-[#171A21] flex items-center justify-center border border-[#262B37]">
                         <Check className="w-2.5 h-2.5 text-brand-blue" />
                       </div>
-                      <span className="text-[10px] sm:text-xs text-slate-300 leading-tight">{feat}</span>
+                      <span className="text-xs sm:text-sm text-slate-300 leading-tight">{feat}</span>
                     </div>
                   ))}
                 </div>
@@ -131,7 +131,7 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
               {/* Action Button */}
               <button
                 onClick={pillar.ctaAction}
-                className={`w-full flex items-center justify-center gap-1.5 py-2.5 sm:py-3 border border-[#262B37] font-semibold text-[10px] sm:text-xs rounded-xl transition-all ${
+                className={`w-full flex items-center justify-center gap-1.5 py-3.5 sm:py-3 border border-[#262B37] font-semibold text-xs sm:text-sm rounded-xl transition-all ${
                   pillar.id === 'drivers'
                     ? 'text-brand-red hover:text-white hover:bg-brand-red hover:border-brand-red bg-[#0F1115] cursor-pointer'
                     : 'text-white hover:text-white hover:bg-[#025bc5] hover:border-[#025bc5] bg-[#0F1115] cursor-pointer'
@@ -155,14 +155,14 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
               <h4 className="font-display font-semibold text-white text-sm sm:text-base">
                 Quer registar a sua organização desportiva?
               </h4>
-              <p className="text-[11px] sm:text-xs text-slate-400 font-light mt-0.5 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-400 font-light mt-0.5 leading-relaxed">
                 Crie a sua conta no website, aguarde aprovação da nossa equipa e tenha acesso à gestão completa na mobile app de forma rápida.
               </p>
             </div>
           </div>
           <button
             onClick={() => onOpenPortal('register')}
-            className="w-full md:w-auto px-5 py-3 bg-brand-blue hover:bg-brand-blue-hover text-white font-semibold text-xs rounded-xl transition-all whitespace-nowrap cursor-pointer shadow-md text-center hover:scale-[1.01] active:scale-95"
+            className="w-full md:w-auto px-5 py-3 bg-brand-blue hover:bg-brand-blue-hover text-white font-semibold text-sm rounded-xl transition-all whitespace-nowrap cursor-pointer shadow-md text-center hover:scale-[1.01] active:scale-95"
           >
             Iniciar Registo de Organizador
           </button>

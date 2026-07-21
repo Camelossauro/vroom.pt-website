@@ -98,20 +98,20 @@ export default function MobileAppShowcase() {
   ];
 
   return (
-    <section id="app" className="py-10 sm:py-20 bg-[#0F1115] relative border-b border-[#262B37]">
+    <section id="app" className="py-10 sm:py-30 bg-[#0F1115] relative border-b border-[#262B37]">
       <div className="absolute top-1/2 left-0 w-72 h-72 bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-20">
-          <span className="text-[10px] font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2.5 py-0.5 rounded-lg sm:rounded-xl">
+          <span className="text-xs font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2.5 py-0.5 rounded-lg sm:rounded-xl">
             Para os Adeptos
           </span>
           <h2 className="font-display font-bold text-xl sm:text-4xl lg:text-5xl text-white tracking-tight mt-3 mb-3 sm:mb-6 leading-tight">
             A sua dose de adrenalina organizada
           </h2>
-          <p className="text-slate-400 text-xs sm:text-lg font-light leading-relaxed">
+          <p className="text-slate-400 text-sm sm:text-lg font-light leading-relaxed">
             O ecossistema Vroom.pt traz para o seu smartphone a aplicação de motorsport mais avançada do país.
           </p>
         </div>
@@ -124,7 +124,7 @@ export default function MobileAppShowcase() {
             <h3 className="font-display font-bold text-lg sm:text-2xl text-white mb-1">
               Explore os recursos
             </h3>
-            <p className="text-slate-400 font-light text-[11px] sm:text-sm mb-4 leading-relaxed">
+            <p className="text-slate-400 font-light text-xs sm:text-sm mb-4 leading-relaxed">
               Toque nos recursos abaixo para simular a funcionalidade.
             </p>
 
@@ -145,14 +145,14 @@ export default function MobileAppShowcase() {
                     }`}
                   >
                     <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl flex-shrink-0 flex items-center justify-center bg-[#0F1115]">
-                      {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 sm:h-5 text-brand-blue' })}
+                      {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-brand-blue' })}
                     </div>
                     <div>
                       <h4 className="font-semibold text-white text-[13px] sm:text-base flex items-center gap-2">
                         {feat.title}
                         {isActive && <span className="h-1.5 w-1.5 bg-brand-blue rounded-full " />}
                       </h4>
-                      <p className="text-[10px] sm:text-xs text-slate-400 font-light mt-0.5 leading-tight sm:leading-relaxed">{feat.desc}</p>
+                      <p className="text-xs sm:text-sm text-slate-400 font-light mt-0.5 leading-tight sm:leading-relaxed">{feat.desc}</p>
                     </div>
                   </button>
                 );
@@ -191,7 +191,7 @@ export default function MobileAppShowcase() {
               </div>
 
               {toastMessage && (
-                <div className="p-3 bg-brand-blue/10 border border-brand-blue/20 rounded-xl text-left text-xs text-slate-300 animate-pulse max-w-md">
+                <div className="p-3 bg-brand-blue/10 border border-brand-blue/20 rounded-xl text-left text-sm text-slate-300 animate-pulse max-w-md">
                   <span className="font-semibold text-brand-blue block">Disponibilidade Oficial</span>
                   {toastMessage}
                 </div>
@@ -209,14 +209,14 @@ export default function MobileAppShowcase() {
             <div className="w-[260px] h-[510px] sm:w-[310px] sm:h-[610px] bg-slate-950 rounded-[36px] sm:rounded-[44px] p-2 sm:p-3 shadow-2xl border-[6px] sm:border-[8px] border-[#262B37] relative flex flex-col ring-1 ring-white/10">
               
               {/* Phone Speaker & Dynamic Island */}
-              <div className="absolute top-5 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-full z-40 flex items-center justify-between px-3 shadow-sm border border-white/5">
+              <div className="absolute top-5 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-full z-40 flex items-center justify-between px-4 shadow-sm border border-white/5">
                 <span className="w-2 h-2 rounded-full bg-[#111] block" />
                 <span className="w-3 h-3 rounded-full bg-[#0a0a2a] block border border-white/5" />
               </div>
 
               {/* iOS Status Bar Overlay */}
               <div className="absolute top-3 left-0 right-0 h-6 flex items-center justify-between px-8 z-30 pointer-events-none">
-                <span className="text-[10px] text-white/90 font-mono font-medium drop-shadow-md">09:41</span>
+                <span className="text-xs text-white/90 font-mono font-medium drop-shadow-md">09:41</span>
                 <div className="flex gap-1 items-center">
                   <span className="w-2.5 h-1.5 bg-white/90 rounded-sm drop-shadow-md" />
                   <span className="w-3 h-2.5 bg-white/90 rounded-sm drop-shadow-md" />
@@ -276,12 +276,12 @@ export default function MobileAppShowcase() {
                                <div className="bg-brand-blue/20 p-1 rounded-md">
                                  <Bell className="w-2.5 h-2.5 text-brand-blue" />
                                </div>
-                               <span className="text-white/60 text-[10px] font-semibold tracking-wider">Vroom.pt</span>
+                               <span className="text-white/60 text-xs font-semibold tracking-wider">Vroom.pt</span>
                             </div>
-                            <span className="text-white/40 text-[9px]">agora</span>
+                            <span className="text-white/40 text-xs">agora</span>
                          </div>
-                         <h5 className="text-white font-bold text-xs mb-0.5">O evento está a começar!</h5>
-                         <p className="text-slate-300 text-[10px] leading-tight">O circuito do Algarve aguarda. Prepare-se para a adrenalina.</p>
+                         <h5 className="text-white font-bold text-sm mb-0.5">O evento está a começar!</h5>
+                         <p className="text-slate-300 text-xs leading-tight">O circuito do Algarve aguarda. Prepare-se para a adrenalina.</p>
                        </div>
                      </div>
                    </div>
