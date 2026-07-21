@@ -1,5 +1,6 @@
 {
   "name": "Vroom.pt",
-  "description": "Premium motorsport event discovery platform in Portugal with organizer purchase flow.",
-  "requestFramePermissions": []
+  "description": "The complete digital platform for Portuguese motorsport. Connecting fans, drivers, and organizations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

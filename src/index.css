@@ -1,34 +1,52 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
-  --color-vroom-blue: #025bc5;
-  --color-vroom-black: #0a0a0a;
+  --font-display: "Montserrat", sans-serif;
+  --font-mono: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-montserrat: "Montserrat", sans-serif;
+
+  
+  --color-brand-blue: #025bc5;
+  --color-brand-blue-hover: #014394;
+  --color-brand-red: #e10600;
+  --color-brand-red-hover: #b80500;
+
+  --color-dark-bg: #0F1115;
+  --color-dark-sec: #171A21;
+  --color-dark-card: #1D212B;
+  --color-dark-border: #262B37;
 }
 
-@layer base {
-  body {
-    @apply bg-vroom-black text-slate-200 antialiased selection:bg-vroom-blue/30;
-  }
+* {
+  font-family: "Montserrat", ui-sans-serif, system-ui, sans-serif !important;
 }
 
-.glass {
-  @apply bg-white/5 backdrop-blur-lg border border-white/10;
+body {
+  font-family: "Montserrat", ui-sans-serif, system-ui, sans-serif;
 }
 
-.glass-hover {
-  @apply transition-all duration-300 hover:bg-white/10 hover:border-white/20;
+/* Custom scrollbar for premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0F1115;
+}
+::-webkit-scrollbar-thumb {
+  background: #262B37;
+  border-radius: 12px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #025bc5;
 }
 
-.text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-500;
+/* Smooth scrolling and prevent horizontal scroll */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
-.blue-glow {
-  box-shadow: 0 0 40px -10px rgba(2, 91, 197, 0.3);
-}
-
-.gold-glow {
-  box-shadow: 0 0 40px -10px rgba(212, 175, 55, 0.3);
-}
