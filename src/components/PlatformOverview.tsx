@@ -103,7 +103,7 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
                     {pillar.badge}
                   </span>
                   <div className="p-2 sm:p-3 bg-[#0F1115] rounded-xl border border-[#262B37]">
-                    {cloneElement(pillar.icon as ReactElement, { className: 'w-5 h-5 sm:w-6 h-6' })}
+                    {cloneElement(pillar.icon as ReactElement, { className: 'w-5 h-5 sm:w-6 sm:h-6' })}
                   </div>
                 </div>
 

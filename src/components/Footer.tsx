@@ -22,7 +22,7 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
                 <img 
                   src={vroomLogoImg} 
                   alt="Vroom.pt Logo" 
-                  className="w-7 h-7 sm:w-8 h-8 object-contain transition-transform duration-300 rounded-xl shadow-md"
+                  className="w-7 h-7 sm:w-8 sm:h-8 object-contain transition-transform duration-300 rounded-xl shadow-md"
                   referrerPolicy="no-referrer"
                 />
               </div>

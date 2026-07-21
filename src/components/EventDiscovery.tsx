@@ -360,7 +360,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
                       {/* Metadata Row - Mini icons with breathing room */}
                       <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-[#262B37] flex items-center justify-between">
                         <div className="flex items-center gap-2 text-[10px] sm:text-xs text-slate-300">
-                          <Calendar className="w-3.5 h-3.5 sm:w-4 h-4 text-brand-blue" />
+                          <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-blue" />
                           <span className="font-medium truncate max-w-[50px] sm:max-w-none">{ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-PT', {day:'numeric', month:'short'}) : 'TBD'}</span>
                         </div>
                         <ChevronRight className="w-4 h-4 text-brand-blue group-hover:translate-x-1 transition-transform" />

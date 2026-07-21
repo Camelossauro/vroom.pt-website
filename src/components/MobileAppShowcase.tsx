@@ -145,7 +145,7 @@ export default function MobileAppShowcase() {
                     }`}
                   >
                     <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl flex-shrink-0 flex items-center justify-center bg-[#0F1115]">
-                      {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-brand-blue' })}
+                      {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 sm:h-5 text-brand-blue' })}
                     </div>
                     <div>
                       <h4 className="font-semibold text-white text-[13px] sm:text-base flex items-center gap-2">

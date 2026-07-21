@@ -58,15 +58,15 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
             {/* Mini Trust Badges - Balanced for mobile */}
             <div className="flex flex-wrap items-center gap-x-5 gap-y-3 pt-6 sm:pt-6 border-t border-[#262B37] w-full">
               <div className="flex items-center gap-2">
-                <BadgeCheck className="w-4 h-4 sm:w-5 h-5 text-brand-blue" />
+                <BadgeCheck className="w-4 h-4 sm:w-5 sm:h-5 text-brand-blue" />
                 <span className="text-xs sm:text-xs font-semibold text-slate-300">Oficial</span>
               </div>
               <div className="flex items-center gap-2">
-                <BellRing className="w-4 h-4 sm:w-5 h-5 text-brand-blue" />
+                <BellRing className="w-4 h-4 sm:w-5 sm:h-5 text-brand-blue" />
                 <span className="text-xs sm:text-xs font-semibold text-slate-300">Tempo Real</span>
               </div>
               <div className="flex items-center gap-2">
-                <Smartphone className="w-4 h-4 sm:w-5 h-5 text-slate-400" />
+                <Smartphone className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
                 <span className="text-xs sm:text-xs font-semibold text-slate-300">Mobile First</span>
               </div>
             </div>

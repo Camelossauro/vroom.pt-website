@@ -87,7 +87,7 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
     <div className="min-h-screen bg-[#0F1115] text-white p-4 pt-20 sm:pt-32 sm:p-12">
       <div className="max-w-4xl mx-auto">
         <button onClick={onClose} className="flex items-center gap-2 text-slate-400 hover:text-white mb-8 sm:mb-10 transition-colors cursor-pointer text-sm sm:text-base">
-          <ArrowLeft className="w-4 h-4 sm:w-5 h-5" /> Voltar ao Início
+          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" /> Voltar ao Início
         </button>
 
         {toastMessage && (
@@ -105,7 +105,7 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
               <div className="bg-[#171A21] border border-[#262B37] p-4 sm:p-6 rounded-lg flex items-center justify-between">
                 <div className="flex items-center gap-4 sm:gap-4">
                   <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg bg-brand-blue/10 border border-brand-blue/20 flex items-center justify-center text-brand-blue">
-                    <User className="w-6 h-6 sm:w-8 h-8" />
+                    <User className="w-6 h-6 sm:w-8 sm:h-8" />
                   </div>
                   <div>
                     <h4 className="font-bold text-base sm:text-xl text-white">{currentUser.nome}</h4>
@@ -118,7 +118,7 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
               </div>
               <div className="bg-[#171A21] border border-[#262B37] p-6 sm:p-8 rounded-lg text-center space-y-5 sm:space-y-6">
                 <div className="w-14 h-14 sm:w-16 sm:h-16 bg-brand-blue/10 rounded-full flex items-center justify-center mx-auto">
-                  <Smartphone className="w-7 h-7 sm:w-8 h-8 text-brand-blue" />
+                  <Smartphone className="w-7 h-7 sm:w-8 sm:h-8 text-brand-blue" />
                 </div>
                 <div className="space-y-2 sm:space-y-2">
                   <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">Gestão de Eventos na App</h3>
@@ -159,7 +159,7 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
 
               <div className="bg-red-500/5 border border-red-500/20 rounded-lg p-4 space-y-3">
                 <h5 className="font-bold text-red-400 text-sm sm:text-lg flex items-center gap-2">
-                    <Trash2 className="w-4 h-4 sm:w-5 h-5" /> Zona de Risco
+                    <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" /> Zona de Risco
                 </h5>
                 {showDeleteConfirm ? (
                     <div className="space-y-3">

@@ -107,7 +107,7 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
                 <div>
                   <div className="flex justify-between items-start mb-4">
                     <div className="p-2 sm:p-3 bg-[#0F1115] rounded-xl border border-[#262B37]">
-                      {cloneElement(step.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-brand-blue' })}
+                      {cloneElement(step.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 sm:h-5 text-brand-blue' })}
                     </div>
                     <span className="text-xl sm:text-2xl font-bold font-mono text-slate-700/50">{step.num}</span>
                   </div>
@@ -140,7 +140,7 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
                 className="bg-[#1D212B] rounded-xl border border-[#262B37] p-4 sm:p-6 shadow-xs hover:border-slate-700 transition-all duration-300 "
               >
                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#0F1115] flex items-center justify-center mb-4 border border-[#262B37]">
-                  {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-brand-blue' })}
+                  {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 sm:h-5 text-brand-blue' })}
                 </div>
                 <h3 className="font-display font-bold text-white text-[14px] sm:text-base mb-1.5 text-left">{feat.title}</h3>
                 <p className="text-slate-400 text-[10px] sm:text-sm font-light leading-relaxed text-left">{feat.description}</p>

@@ -81,7 +81,7 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
             <img 
               src={vroomLogoImg} 
               alt="Vroom.pt Logo" 
-              className="w-7 h-7 sm:w-9 h-9 object-contain transition-transform duration-300 rounded-lg sm:rounded-xl shadow-md"
+              className="w-7 h-7 sm:w-9 sm:h-9 object-contain transition-transform duration-300 rounded-lg sm:rounded-xl shadow-md"
               referrerPolicy="no-referrer"
             />
           </div>
