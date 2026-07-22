@@ -106,7 +106,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
   const NATUREZA_CATEGORIES = ['Todos', 'Competição', 'Lazer'];
   const MAIN_CATEGORIES = ['Todos', 'Automóveis', 'Motas'];
   const SUB_CATEGORIES: Record<string, string[]> = {
-    'Automóveis': ['Velocidade', 'Karting', 'Rally', 'Ralicross', 'Drift', 'Montanha', 'Drag', 'Racing', 'Todo Terreno', 'Trial 4x4'],
+    'Automóveis': ['Velocidade', 'Karting', 'Rally', 'Ralicross', 'Drift', 'Montanha', 'Drag Racing', 'Todo Terreno', 'Trial 4x4'],
     'Motas': ['Circuito', 'Enduro', 'Motocross', 'Super-Enduro', 'Hard Enduro', 'Todo-o-Terreno', 'Enduro Sprint', 'Supercross', 'Supermoto', 'Flat Track', 'Trial']
   };
 
@@ -181,7 +181,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
         
         {/* Section Header - Shorter on mobile */}
         <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-16">
-          <span className="text-xs sm:text-sm font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2 py-0.5 sm:px-4 sm:py-1 rounded-lg sm:rounded-xl">
+          <span className="box-decoration-clone leading-loose text-xs sm:text-sm font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2 py-0.5 sm:px-4 sm:py-1 rounded-lg sm:rounded-xl">
             Descoberta
           </span>
           <h2 className="font-display font-bold text-xl sm:text-4xl lg:text-5xl text-white tracking-tight mt-2 sm:mt-4 mb-2 sm:mb-6 leading-tight">

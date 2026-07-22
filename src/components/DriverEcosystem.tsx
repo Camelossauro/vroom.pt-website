@@ -1,5 +1,5 @@
 import { 
-  Users
+  Users, User
 } from 'lucide-react';
 import { mockDrivers } from '../data';
 
@@ -52,12 +52,9 @@ export default function DriverEcosystem() {
               {/* Photo & Basic details */}
               <div className="flex flex-col items-center md:items-start text-center md:text-left md:w-44 flex-shrink-0 relative z-10">
                 <div className="relative mb-4">
-                  <img 
-                    src="/assets/images/regenerated_image_1784641841305.jpg" 
-                    alt={driver.name} 
-                    className="w-24 h-24 rounded-full object-cover border-4 border-brand-blue shadow-md"
-                    referrerPolicy="no-referrer"
-                  />
+                  <div className="w-24 h-24 rounded-full bg-[#0F1115] border-4 border-brand-blue flex items-center justify-center shadow-md text-brand-blue">
+                    <User className="w-10 h-10" />
+                  </div>
                   <span className="absolute bottom-1 right-1 bg-brand-blue text-white p-1 rounded-full text-[10px] font-bold font-mono">
                     ✓
                   </span>
@@ -70,10 +67,6 @@ export default function DriverEcosystem() {
 
                 <div className="bg-[#171A21] border border-[#262B37] px-3 py-1 rounded-xl text-[10px] font-mono font-bold text-slate-300 mt-3">
                   NÚMERO {driver.compNumber}
-                </div>
-
-                <div className="w-full mt-4 py-2 bg-[#0F1115] border border-[#262B37] text-slate-400 text-[10px] text-center rounded-xl font-semibold uppercase tracking-wider font-mono">
-                  Verificado Oficialmente
                 </div>
               </div>
 

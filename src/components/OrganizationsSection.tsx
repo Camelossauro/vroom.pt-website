@@ -78,7 +78,7 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-20">
-          <span className="text-xs font-montserrat font-bold text-brand-red tracking-widest uppercase bg-brand-red/10 px-2 py-0.5 rounded-lg sm:rounded-xl">
+          <span className="box-decoration-clone leading-loose text-xs font-montserrat font-bold text-brand-red tracking-widest uppercase bg-brand-red/10 px-2 py-0.5 rounded-lg sm:rounded-xl">
             Para Clubes, Organizadores e Promotores
           </span>
           <h2 className="font-display font-bold text-xl sm:text-4xl lg:text-5xl text-white tracking-tight mt-3 mb-3 sm:mb-6 leading-tight">
@@ -171,7 +171,7 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
               
               <p className="text-slate-400 text-sm sm:text-sm font-light leading-relaxed max-w-xl">
                 O acesso e criação de conta no Vroom.pt é totalmente gratuito para organizadores oficiais de provas de desporto motorizado nacional. 
-                Os clubes validados podem gerir conteúdos, carregar horários, responder a espetadores e enviar notificações cruciais.
+                A publicação de eventos é 100% gratuita. Os clubes validados podem gerir conteúdos, carregar horários, interagir com fãs e enviar notificações cruciais sem qualquer custo.
               </p>
 
               <div className="space-y-2 pt-2">

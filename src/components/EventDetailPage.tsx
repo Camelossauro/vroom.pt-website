@@ -144,11 +144,11 @@ export default function EventDetailPage({ event, onClose }: EventDetailPageProps
                 O site é apenas o ponto de partida. Instale a app oficial para viver a adrenalina ao máximo com ferramentas em tempo real:
               </p>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 pt-1">
+              <div className="flex flex-col gap-2.5 pt-1">
                 {[
-                  'Alertas de resultados em tempo real',
-                  'Notificações push da organização',
-                  'Acesso offline a regulamentos',
+                  'Alertas em tempo real',
+                  'Notificações da organização',
+                  'Acesso a regulamentos',
                   'Perfis detalhados de pilotos',
                   'GPS exato até às zonas de espetáculo',
                   'Gestão de favoritos e subscrições'
@@ -195,7 +195,7 @@ export default function EventDetailPage({ event, onClose }: EventDetailPageProps
                 />
               </a>
               
-              <span className="text-xs text-slate-500 font-light block mt-2">100% Gratuito para Adeptos</span>
+              <span className="text-xs text-slate-500 font-light block mt-2 text-center sm:text-left">100% Gratuito para todos (Adeptos e Organizadores)</span>
             </div>
           </div>
         </div>

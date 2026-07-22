@@ -291,7 +291,7 @@ export const faqData: FAQItem[] = [
     id: 'faq-f1',
     category: 'fans',
     question: 'A aplicação móvel Vroom.pt é gratuita?',
-    answer: 'Sim, a aplicação Vroom.pt é 100% gratuita para todos os adeptos. Pode descarregar na App Store para iOS ou no Google Play para Android, explorar o mapa, ver calendários, ler regulamentos, consultar a meteorologia e seguir os seus pilotos e organizadores favoritos sem qualquer custo.'
+    answer: 'Sim, a plataforma Vroom.pt é 100% gratuita para todos. Para os adeptos, explorar eventos, calendários, regulamentos e usar a aplicação móvel não tem qualquer custo. Para os organizadores, a criação de perfil verificado e a publicação de eventos também são totalmente gratuitas.'
   },
   {
     id: 'faq-f2',

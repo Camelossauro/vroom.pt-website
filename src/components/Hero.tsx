@@ -77,7 +77,7 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
           <div className="lg:col-span-6 relative mt-12 lg:mt-0 flex justify-center">
             
             {/* Main Composition Container */}
-            <div className="relative w-full max-w-[400px] h-[320px] sm:h-[500px] select-none">
+            <div className="relative w-full max-w-[420px] sm:max-w-[480px] h-[480px] sm:h-[520px] select-none">
               
               {/* Back: Organizer Dashboard Preview (Stripe/Linear style window) */}
               <div className="absolute top-4 left-4 right-12 bottom-20 bg-[#1D212B] rounded-[24px] border border-[#262B37] shadow-2xl overflow-hidden transition-all duration-500 group hidden sm:block">
@@ -171,54 +171,57 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
               {/* Front Left: iPhone Mobile App Showcase */}
               <div 
                 onClick={() => onScrollToSection('app')}
-                className="absolute left-1/2 -translate-x-1/2 sm:left-8 sm:translate-x-0 bottom-4 w-[180px] h-[310px] sm:w-[200px] sm:h-[360px] bg-slate-950 rounded-[32px] sm:rounded-[36px] p-2 shadow-2xl border-[4px] sm:border-[5px] border-[#262B37] transition-all duration-500 z-30 overflow-hidden cursor-pointer hover:scale-105 hover:border-brand-blue/50 group"
+                className="absolute left-1/2 -translate-x-1/2 sm:left-4 sm:translate-x-0 bottom-2 w-[270px] h-[450px] sm:w-[290px] sm:h-[490px] bg-slate-950 rounded-[38px] sm:rounded-[42px] p-2 sm:p-2.5 shadow-2xl border-[5px] sm:border-[6px] border-[#262B37] transition-all duration-500 z-30 overflow-hidden cursor-pointer hover:scale-[1.02] hover:border-brand-blue/50 group"
               >
                 {/* iPhone notch/island */}
-                <div className="absolute top-4 left-1/2 -translate-x-1/2 w-16 h-4 bg-black rounded-full z-40 flex items-center justify-center">
+                <div className="absolute top-3.5 left-1/2 -translate-x-1/2 w-16 h-4 bg-black rounded-full z-40 flex items-center justify-center">
                   <span className="w-1.5 h-1.5 rounded-full bg-slate-900 block ml-auto mr-2" />
                 </div>
                 {/* Screen container */}
-                <div className="w-full h-full rounded-[28px] bg-slate-950 overflow-hidden relative flex flex-col">
+                <div className="w-full h-full rounded-[30px] sm:rounded-[34px] bg-slate-950 overflow-hidden relative flex flex-col">
                    {/* Lock screen style background */}
                    <img src="https://vroom-images.b-cdn.net/IMAGENS_EVENTOS_CORRIDAS/A%20ALGARVE/algarve_2.jpg" className="absolute inset-0 w-full h-full object-cover opacity-30" />
                    <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/80 to-slate-950" />
                    
-                   <div className="relative z-10 flex flex-col h-full pt-6 px-1.5 sm:pt-8 sm:px-2">
-                     <span className="text-white text-3xl sm:text-4xl font-light text-center mt-1 sm:mt-2 mb-1 tracking-tight">09:41</span>
-                     <span className="text-slate-300 text-xs sm:text-xs text-center mb-4 sm:mb-6 font-medium">Domingo, 19 de Julho</span>
+                   <div className="relative z-10 flex flex-col h-full pt-8 px-3.5 sm:pt-10 sm:px-4">
+                     <span className="text-white text-4xl sm:text-5xl font-light text-center mt-2 sm:mt-4 mb-1 tracking-tight">09:41</span>
+                     <span className="text-slate-300 text-[11px] sm:text-xs text-center mb-5 sm:mb-7 font-medium">Domingo, 19 de Julho</span>
                      
-                     <div className="bg-slate-900/70 backdrop-blur-xl rounded-2xl p-2.5 shadow-2xl border border-white/10 flex gap-2.5 items-center">
+                     <div className="bg-slate-900/90 backdrop-blur-2xl rounded-2xl p-3 sm:p-3.5 shadow-2xl border border-white/10 flex gap-3 items-start w-full">
                        <img 
                          src="https://vroom-images.b-cdn.net/IMAGENS_EVENTOS_CORRIDAS/A%20ALGARVE/algarve_2.jpg" 
                          alt="Autódromo do Algarve" 
-                         className="w-10 h-10 rounded-[10px] object-cover shadow-sm"
+                         className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl object-cover shadow-md flex-shrink-0"
                        />
-                       <div className="flex-1">
-                         <div className="flex justify-between items-center mb-0.5">
-                            <div className="flex items-center gap-1">
-                               <div className="bg-brand-blue/20 p-0.5 rounded-md">
-                                 <Bell className="w-2 h-2 text-brand-blue" />
+                       <div className="flex-1 min-w-0">
+                         <div className="flex justify-between items-center mb-1">
+                            <div className="flex items-center gap-1.5 min-w-0">
+                               <div className="bg-brand-blue/20 p-1 rounded-md flex-shrink-0">
+                                 <Bell className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-brand-blue" />
                                </div>
-                               <span className="text-white/60 text-xs font-semibold tracking-wider uppercase">Vroom.pt</span>
+                               <span className="text-white/90 text-[10px] sm:text-xs font-bold tracking-wider uppercase font-mono truncate">Vroom.pt</span>
                             </div>
-                            <span className="text-white/40 text-xs">agora</span>
+                            <span className="text-white/40 text-[9px] sm:text-[10px] font-mono flex-shrink-0 ml-1">agora</span>
                          </div>
-                         <h5 className="text-white font-bold text-xs mb-0.5">O evento está a começar!</h5>
-                         <p className="text-slate-300 text-xs leading-tight line-clamp-2">O circuito do Algarve aguarda. Prepare-se para a adrenalina.</p>
+                         <h5 className="text-white font-bold text-xs sm:text-xs mb-0.5 leading-snug">O evento está a começar!</h5>
+                         <p className="text-slate-300 text-[10px] sm:text-[11px] leading-relaxed">O circuito do Algarve aguarda por si. Prepare-se para a adrenalina.</p>
                        </div>
                      </div>
+                   </div>
+
+                   {/* Quick Action Button - Inside Phone */}
+                   <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 w-full px-5">
+                      <button className="w-full bg-brand-blue hover:bg-brand-blue-dark text-white text-xs sm:text-sm font-bold py-2.5 rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all">
+                        <Play className="w-3 h-3 fill-white" /> Explorar App
+                      </button>
                    </div>
                 </div>
               </div>
 
+              {/* Removing original floating button as it's now inside the phone */}
               {/* Floating Labels / Visual cues */}
-              <button 
-                onClick={() => onScrollToSection('app')}
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 sm:left-auto sm:right-12 bg-brand-blue text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg flex items-center gap-1.5 z-40 cursor-pointer hover:bg-brand-blue-hover transition-colors"
-              >
-                <Play className="w-3 h-3 fill-white" />
-                <span>Explorar App</span>
-              </button>
+              <div className="hidden sm:block">
+              </div>
 
             </div>
             

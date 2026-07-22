@@ -105,7 +105,7 @@ export default function MobileAppShowcase() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-20">
-          <span className="text-xs font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2.5 py-0.5 rounded-lg sm:rounded-xl">
+          <span className="box-decoration-clone leading-loose text-xs font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2.5 py-0.5 rounded-lg sm:rounded-xl">
             Para os Adeptos
           </span>
           <h2 className="font-display font-bold text-xl sm:text-4xl lg:text-5xl text-white tracking-tight mt-3 mb-3 sm:mb-6 leading-tight">
