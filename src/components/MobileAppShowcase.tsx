@@ -3,6 +3,9 @@ import {
   Smartphone, MapPin, Calendar, Heart, Search, Bell, Navigation, 
   Compass, ChevronRight, CircleDot, Share2
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+// @ts-ignore
+import vroomLogoImg from '../assets/images/vroom_logo_1784301043513.jpg';
 import { mockEvents, PortugueseTracks } from '../data';
 
 const AppleLogo = () => (
@@ -74,37 +77,43 @@ export default function MobileAppShowcase() {
     {
       id: 'map',
       title: 'Mapa Interativo de Pistas',
+      shortTitle: 'Mapa',
       desc: 'Encontre todos os eventos num mapa dinâmico de Portugal. Toque nos autódromos ou classificativas de rali para saber horários e rotas.',
       icon: <MapPin className="w-5 h-5 text-brand-blue" />
     },
     {
       id: 'calendar',
       title: 'Calendário & Pesquisa',
+      shortTitle: 'Calendário',
       desc: 'Pesquise, filtre por rali, pista ou karting, e encontre eventos oficiais organizados de norte a sul do país.',
       icon: <Calendar className="w-5 h-5 text-brand-blue" />
     },
     {
       id: 'notifications',
       title: 'Notificações & Favoritos',
+      shortTitle: 'Notificações',
       desc: 'Adicione provas aos seus favoritos. Receba alertas push nativos sempre que houver alterações de horários ou novos regulamentos.',
       icon: <Bell className="w-5 h-5 text-brand-blue" />
     },
     {
       id: 'tracks',
       title: 'Fichas de Autódromos',
+      shortTitle: 'Autódromos',
       desc: 'Explore fichas detalhadas dos principais traçados em Portugal (AIA, Estoril, Braga, Lousada, Baltar), com extensão e curvas.',
       icon: <Compass className="w-5 h-5 text-brand-blue" />
     }
   ];
 
+  const currentFeatureObj = features.find(f => f.id === activeFeature) || features[0];
+
   return (
-    <section id="app" className="py-10 sm:py-30 bg-[#0F1115] relative border-b border-[#262B37]">
+    <section id="app" className="py-10 sm:py-30 bg-[#0F1115] relative border-b border-[#262B37] overflow-hidden">
       <div className="absolute top-1/2 left-0 w-72 h-72 bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-20">
           <span className="box-decoration-clone leading-loose text-xs font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2.5 py-0.5 rounded-lg sm:rounded-xl">
             Para os Adeptos
           </span>
@@ -120,15 +129,75 @@ export default function MobileAppShowcase() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
           
           {/* Left: App Features Selector */}
-          <div className="lg:col-span-5 space-y-4 sm:space-y-6 text-left">
-            <h3 className="font-display font-bold text-lg sm:text-2xl text-white mb-1">
-              Explore os recursos
-            </h3>
-            <p className="text-slate-400 font-light text-xs sm:text-sm mb-4 leading-relaxed">
-              Toque nos recursos abaixo para simular a funcionalidade.
-            </p>
+          <div className="lg:col-span-5 space-y-3 sm:space-y-6 text-left">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-display font-bold text-lg sm:text-2xl text-white mb-0.5">
+                  Explore os recursos
+                </h3>
+                <p className="text-slate-400 font-light text-xs sm:text-sm mb-2 sm:mb-4 leading-relaxed">
+                  Toque nos recursos abaixo para simular a funcionalidade.
+                </p>
+              </div>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-1 gap-2.5 sm:gap-4">
+            {/* MOBILE COMPACT TAB VIEW (< lg) */}
+            <div className="lg:hidden space-y-3">
+              {/* Horizontal Pill Selector */}
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                {features.map((feat) => {
+                  const isActive = activeFeature === feat.id;
+                  return (
+                    <button
+                      key={feat.id}
+                      onClick={() => {
+                        setActiveFeature(feat.id as any);
+                        setIsAutoPlaying(false);
+                      }}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${
+                        isActive 
+                          ? 'text-white bg-brand-blue shadow-md' 
+                          : 'text-slate-400 bg-[#171A21] border border-[#262B37] hover:text-white'
+                      }`}
+                    >
+                      {feat.shortTitle}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Compact Active Feature Card */}
+              <div className="relative overflow-hidden rounded-2xl border border-[#262B37] bg-[#1D212B] p-4 shadow-xl">
+                <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-gradient-to-b from-brand-blue/20 via-blue-500/5 to-transparent blur-2xl pointer-events-none opacity-80" />
+
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeFeature}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="relative z-10 flex items-start gap-3"
+                  >
+                    <div className="w-9 h-9 rounded-xl bg-[#0F1115] flex-shrink-0 flex items-center justify-center border border-[#262B37]">
+                      {cloneElement(currentFeatureObj.icon as ReactElement, { className: 'w-4 h-4 text-brand-blue' })}
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white text-sm flex items-center gap-2">
+                        {currentFeatureObj.title}
+                        <span className="h-1.5 w-1.5 bg-brand-blue rounded-full animate-pulse" />
+                      </h4>
+                      <p className="text-xs text-slate-300 font-light mt-0.5 leading-relaxed">
+                        {currentFeatureObj.desc}
+                      </p>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* DESKTOP VERTICAL BUTTONS LIST (>= lg) */}
+            <div className="hidden lg:grid grid-cols-1 gap-2.5 sm:gap-4">
               {features.map((feat) => {
                 const isActive = activeFeature === feat.id;
                 return (
@@ -255,34 +324,100 @@ export default function MobileAppShowcase() {
                 />
 
                 {/* Notifications Screen Mockup */}
-                <div className={`absolute inset-0 bg-slate-950 flex flex-col pt-16 px-4 transition-opacity duration-500 ${activeFeature === 'notifications' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
+                <div className={`absolute inset-0 bg-slate-950 flex flex-col pt-10 sm:pt-14 px-3 sm:px-3.5 transition-opacity duration-500 ${activeFeature === 'notifications' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
                    {/* Lock screen style background */}
-                   <img src="https://vroom-images.b-cdn.net/IMAGENS_EVENTOS_CORRIDAS/A%20ALGARVE/algarve_2.jpg" className="absolute inset-0 w-full h-full object-cover opacity-30" />
-                   <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/80 to-slate-950" />
+                   <img 
+                     src="https://vroom-images.b-cdn.net/IMAGENS_EVENTOS_CORRIDAS/A%20ALGARVE/algarve_2.jpg" 
+                     className="absolute inset-0 w-full h-full object-cover opacity-25 filter blur-[2px] scale-105" 
+                     alt="Background"
+                   />
+                   <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/75 to-slate-950" />
                    
-                   <div className="relative z-10 flex flex-col h-full">
-                     <span className="text-white text-5xl font-light text-center mt-4 mb-2">09:41</span>
-                     <span className="text-slate-300 text-sm text-center mb-8 font-medium">Domingo, 19 de Julho</span>
-                     
-                     <div className="bg-slate-900/70 backdrop-blur-xl rounded-3xl p-3.5 shadow-2xl border border-white/10 flex gap-3.5 items-center">
-                       <img 
-                         src="https://vroom-images.b-cdn.net/IMAGENS_EVENTOS_CORRIDAS/A%20ALGARVE/algarve_2.jpg" 
-                         alt="Autódromo do Algarve" 
-                         className="w-14 h-14 rounded-2xl object-cover shadow-sm"
-                       />
-                       <div className="flex-1">
-                         <div className="flex justify-between items-center mb-1">
-                            <div className="flex items-center gap-1.5">
-                               <div className="bg-brand-blue/20 p-1 rounded-md">
-                                 <Bell className="w-2.5 h-2.5 text-brand-blue" />
-                               </div>
-                               <span className="text-white/60 text-xs font-semibold tracking-wider">Vroom.pt</span>
-                            </div>
-                            <span className="text-white/40 text-xs">agora</span>
+                   <div className="relative z-10 flex flex-col h-full overflow-hidden">
+                     {/* Lockscreen Time & Date */}
+                     <div className="text-center mt-1 sm:mt-2 mb-3 sm:mb-4 select-none">
+                       <span className="text-white text-3xl sm:text-4xl font-extralight tracking-tight block">09:41</span>
+                       <span className="text-slate-300 text-[11px] sm:text-xs font-medium mt-0.5 block">Domingo, 19 de Julho</span>
+                     </div>
+
+                     {/* Notification Center Label */}
+                     <div className="flex items-center justify-between px-1 mb-2 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                       <span>Notificações</span>
+                       <span className="bg-brand-blue/30 text-blue-300 px-1.5 py-0.5 rounded-full text-[9px] font-mono font-bold">
+                         3 novas
+                       </span>
+                     </div>
+
+                     {/* Stacked Notifications list */}
+                     <div className="space-y-2 overflow-y-auto no-scrollbar pb-8">
+                       
+                       {/* Notification 1 */}
+                       <div className="bg-[#141822]/90 backdrop-blur-xl rounded-2xl p-2.5 sm:p-3 border border-white/10 shadow-xl text-left transform transition-all duration-300 hover:scale-[1.01]">
+                         <div className="flex items-center justify-between mb-1">
+                           <div className="flex items-center gap-1.5 min-w-0">
+                             <img 
+                               src={vroomLogoImg} 
+                               alt="Vroom" 
+                               className="w-3.5 h-3.5 rounded-md object-contain border border-white/10 shrink-0"
+                               referrerPolicy="no-referrer"
+                             />
+                             <span className="text-white/80 text-[10px] font-bold truncate">Vroom.pt</span>
+                             <span className="w-1 h-1 rounded-full bg-brand-blue shrink-0" />
+                           </div>
+                           <span className="text-slate-400 text-[9px] font-mono shrink-0">agora</span>
                          </div>
-                         <h5 className="text-white font-bold text-sm mb-0.5">O evento está a começar!</h5>
-                         <p className="text-slate-300 text-xs leading-tight">O circuito do Algarve aguarda. Prepare-se para a adrenalina.</p>
+                         <h5 className="text-white font-bold text-xs leading-tight mb-0.5">
+                           🏁 O evento está a começar!
+                         </h5>
+                         <p className="text-slate-300 text-[10px] leading-snug line-clamp-2 font-light">
+                           Autódromo do Algarve: Warm-up oficial iniciado com acesso livre às bancadas.
+                         </p>
                        </div>
+
+                       {/* Notification 2 */}
+                       <div className="bg-[#141822]/85 backdrop-blur-xl rounded-2xl p-2.5 sm:p-3 border border-white/10 shadow-xl text-left transform transition-all duration-300 hover:scale-[1.01]">
+                         <div className="flex items-center justify-between mb-1">
+                           <div className="flex items-center gap-1.5 min-w-0">
+                             <img 
+                               src={vroomLogoImg} 
+                               alt="Vroom" 
+                               className="w-3.5 h-3.5 rounded-md object-contain border border-white/10 shrink-0"
+                               referrerPolicy="no-referrer"
+                             />
+                             <span className="text-white/80 text-[10px] font-bold truncate">Vroom.pt</span>
+                           </div>
+                           <span className="text-slate-400 text-[9px] font-mono shrink-0">12m</span>
+                         </div>
+                         <h5 className="text-white font-bold text-xs leading-tight mb-0.5">
+                           ⏱️ Horário Atualizado
+                         </h5>
+                         <p className="text-slate-300 text-[10px] leading-snug line-clamp-2 font-light">
+                           Rali de Portugal: PEC 4 Arganil com arranque antecipado para as 14:30.
+                         </p>
+                       </div>
+
+                       {/* Notification 3 */}
+                       <div className="bg-[#141822]/80 backdrop-blur-xl rounded-2xl p-2.5 sm:p-3 border border-white/10 shadow-xl text-left transform transition-all duration-300 hover:scale-[1.01]">
+                         <div className="flex items-center justify-between mb-1">
+                           <div className="flex items-center gap-1.5 min-w-0">
+                             <img 
+                               src={vroomLogoImg} 
+                               alt="Vroom" 
+                               className="w-3.5 h-3.5 rounded-md object-contain border border-white/10 shrink-0"
+                               referrerPolicy="no-referrer"
+                             />
+                             <span className="text-white/80 text-[10px] font-bold truncate">Vroom.pt</span>
+                           </div>
+                           <span className="text-slate-400 text-[9px] font-mono shrink-0">1h</span>
+                         </div>
+                         <h5 className="text-white font-bold text-xs leading-tight mb-0.5">
+                           ❤️ Prova Guardada nos Favoritos
+                         </h5>
+                         <p className="text-slate-300 text-[10px] leading-snug line-clamp-2 font-light">
+                           500 Km do Estoril guardado. Alertas ativos para os tempos em direto.
+                         </p>
+                       </div>
+
                      </div>
                    </div>
                 </div>

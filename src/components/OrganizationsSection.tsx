@@ -1,7 +1,8 @@
-import React, { cloneElement, ReactElement } from 'react';
+import React, { cloneElement, ReactElement, useState, TouchEvent } from 'react';
 import { 
-  Bell, FileText, BarChart3, Users, Shield, PlusCircle, Smartphone, ArrowUpRight, CheckCircle, Mail, UserPlus
+  Bell, FileText, BarChart3, Users, Shield, PlusCircle, Smartphone, ArrowUpRight, CheckCircle, Mail, UserPlus, ChevronLeft, ChevronRight
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface OrganizationsSectionProps {
   onOpenPortal: (mode: 'login' | 'register' | 'dashboard') => void;
@@ -12,24 +13,28 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
     {
       num: '01',
       title: 'Criar a sua Organização',
+      shortTitle: '01. Candidatura',
       description: 'Preencha o formulário de candidatura simples com os dados da sua associação ou clube.',
       icon: <UserPlus className="w-5 h-5 text-brand-blue" />
     },
     {
       num: '02',
       title: 'Verificação e Aprovação Manual',
+      shortTitle: '02. Verificação',
       description: 'A nossa equipa valida individualmente cada registo. Esta verificação rigorosa serve para proteger a plataforma contra spam, perfis falsos e assegurar conteúdos oficiais de alta qualidade.',
       icon: <Shield className="w-5 h-5 text-brand-blue" />
     },
     {
       num: '03',
       title: 'E-mail de Confirmação',
+      shortTitle: '03. Ativação',
       description: 'Após validação, receberá um e-mail com as credenciais aprovadas e um link direto de ativação para abrir a aplicação.',
       icon: <Mail className="w-5 h-5 text-emerald-400" />
     },
     {
       num: '04',
       title: 'Gestão Total na Vroom.pt App',
+      shortTitle: '04. Gestão App',
       description: 'Abra a aplicação móvel, inicie sessão e comece a publicar provas, enviar alertas e gerir os seus fãs diretamente no telemóvel.',
       icon: <Smartphone className="w-5 h-5 text-indigo-400" />
     }
@@ -38,38 +43,44 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
   const features = [
     {
       title: 'Publicação de Eventos na App',
+      shortTitle: 'Publicação',
       description: 'Configure ralis, rampas, trackdays, drift ou encontros. Insira datas, localizações e mapas que os fãs acedem na app.',
       icon: <PlusCircle className="w-5 h-5 text-brand-blue" />
     },
     {
       title: 'Alertas Push Oficiais',
+      shortTitle: 'Alertas Push',
       description: 'Envie atualizações vitais como mudanças de horários ou avisos de segurança diretamente para o telemóvel dos seguidores.',
       icon: <Bell className="w-5 h-5 text-brand-blue" />
     },
     {
       title: 'Centralização de Regulamentos',
+      shortTitle: 'Regulamentos',
       description: 'Carregue regulamentos particulares de ralis, tabelas de tempos e tabelas de pontuações de forma simples para acesso móvel.',
       icon: <FileText className="w-5 h-5 text-slate-300" />
     },
     {
       title: 'Acompanhamento de Alcance',
+      shortTitle: 'Estatísticas',
       description: 'Saiba exatamente quantas visualizações cada prova obteve, downloads de regulamentos e pedidos de rota GPS.',
       icon: <BarChart3 className="w-5 h-5 text-emerald-400" />
     },
     {
       title: 'Comunidade Altamente Focada',
+      shortTitle: 'Comunidade',
       description: 'Esqueça grupos dispersos de WhatsApp ou publicações sem alcance no Facebook. Fale com quem realmente ama desporto motorizado.',
       icon: <Users className="w-5 h-5 text-indigo-400" />
     },
     {
       title: 'Selo Oficial Azul Vroom.pt',
+      shortTitle: 'Selo Oficial',
       description: 'Clubes autênticos e homologados recebem o selo oficial de qualidade e autenticidade da comunidade Vroom.pt.',
       icon: <Shield className="w-5 h-5 text-amber-500" />
     }
   ];
 
   return (
-    <section id="organizations-section" className="py-10 sm:py-30 bg-[#171A21] relative border-b border-[#262B37]">
+    <section id="organizations-section" className="py-10 sm:py-30 bg-[#171A21] relative border-b border-[#262B37] overflow-hidden">
       {/* Background glow orbs */}
       <div className="absolute top-1/4 left-1/3 w-80 h-80 bg-brand-red/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none" />
@@ -78,7 +89,7 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-20">
-          <span className="box-decoration-clone leading-loose text-xs font-montserrat font-bold text-brand-red tracking-widest uppercase bg-brand-red/10 px-2 py-0.5 rounded-lg sm:rounded-xl">
+          <span className="box-decoration-clone leading-loose text-xs font-montserrat font-bold text-brand-red tracking-widest uppercase bg-brand-red/10 px-2.5 py-1 rounded-full">
             Para Clubes, Organizadores e Promotores
           </span>
           <h2 className="font-display font-bold text-xl sm:text-4xl lg:text-5xl text-white tracking-tight mt-3 mb-3 sm:mb-6 leading-tight">
@@ -91,14 +102,43 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
 
         {/* NEW ORGANIZATION JOURNEY: "How it works" timeline cards */}
         <div className="mb-10 sm:mb-24">
-          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12">
+          <div className="text-center max-w-2xl mx-auto mb-4 sm:mb-12">
             <h3 className="font-display font-bold text-lg sm:text-2xl text-white leading-tight">Como Funciona</h3>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1.5 font-light">
+            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-light">
               Desenhamos um fluxo focado na fidedignidade.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 relative">
+          {/* MOBILE STEPS HORIZONTAL SCROLL TRACK (< md) */}
+          <div className="md:hidden relative -mx-4 px-4">
+            {/* Left and Right Edge Color Fades */}
+            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-[#171A21] to-transparent z-10" />
+            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-[#171A21] to-transparent z-10" />
+
+            <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar py-1 px-1">
+              {steps.map((st, idx) => (
+                <div 
+                  key={idx}
+                  className="min-w-[85%] sm:min-w-[75%] snap-center shrink-0 relative overflow-hidden rounded-2xl border border-[#262B37] bg-[#1D212B] p-5 shadow-xl flex flex-col justify-between"
+                >
+                  <div className="absolute -top-14 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-gradient-to-b from-brand-blue/20 via-blue-500/5 to-transparent blur-3xl pointer-events-none opacity-60" />
+                  <div className="relative z-10">
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="p-2.5 bg-[#0F1115] rounded-xl border border-[#262B37] shadow-sm">
+                        {cloneElement(st.icon as ReactElement, { className: 'w-5 h-5 text-brand-blue' })}
+                      </div>
+                      <span className="text-2xl font-bold font-mono text-slate-700/80">{st.num}</span>
+                    </div>
+                    <h4 className="font-display font-bold text-white text-base mb-1 text-left">{st.title}</h4>
+                    <p className="text-slate-300 text-xs leading-relaxed font-light text-left">{st.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* DESKTOP STEPS GRID (>= md) */}
+          <div className="hidden md:grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 relative">
             {steps.map((step, idx) => (
               <div 
                 key={idx}
@@ -126,14 +166,40 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
 
         {/* Feature grid explaining what organizations can do inside the app */}
         <div className="mb-10 sm:mb-20">
-          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12">
+          <div className="text-center max-w-2xl mx-auto mb-4 sm:mb-12">
             <h3 className="font-display font-bold text-lg sm:text-2xl text-white leading-tight">Recursos para o seu Clube</h3>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1.5 font-light">
+            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-light">
               Autonomia total diretamente no telemóvel.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8">
+          {/* MOBILE FEATURES HORIZONTAL SCROLL TRACK (< md) */}
+          <div className="md:hidden relative -mx-4 px-4">
+            {/* Left and Right Edge Color Fades */}
+            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-[#171A21] to-transparent z-10" />
+            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-[#171A21] to-transparent z-10" />
+
+            <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar py-1 px-1">
+              {features.map((ft, idx) => (
+                <div 
+                  key={idx}
+                  className="min-w-[85%] sm:min-w-[75%] snap-center shrink-0 relative overflow-hidden rounded-2xl border border-[#262B37] bg-[#1D212B] p-5 shadow-xl flex flex-col justify-between"
+                >
+                  <div className="absolute -top-14 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-gradient-to-b from-brand-red/20 via-red-500/5 to-transparent blur-3xl pointer-events-none opacity-60" />
+                  <div className="relative z-10">
+                    <div className="w-10 h-10 rounded-xl bg-[#0F1115] flex items-center justify-center mb-3 border border-[#262B37] shadow-sm">
+                      {cloneElement(ft.icon as ReactElement, { className: 'w-5 h-5 text-brand-red' })}
+                    </div>
+                    <h3 className="font-display font-bold text-white text-base mb-1 text-left">{ft.title}</h3>
+                    <p className="text-slate-300 text-xs font-light leading-relaxed text-left">{ft.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* DESKTOP FEATURES GRID (>= md) */}
+          <div className="hidden md:grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8">
             {features.map((feat, idx) => (
               <div 
                 key={idx}

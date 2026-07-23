@@ -1,8 +1,11 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import { 
   ArrowLeft, Smartphone, ShieldCheck, Mail, CheckCircle2, Download, Send, Sparkles,
-  Lock, User, Trash2, Edit3, LogOut, ArrowRight, Calendar
+  Lock, User, Trash2, Edit3, LogOut, ArrowRight, Calendar, Building2, Eye, EyeOff,
+  Bell, Shield, KeyRound, AlertTriangle, Check
 } from 'lucide-react';
+// @ts-ignore
+import vroomLogoImg from '../assets/images/vroom_logo_1784301043513.jpg';
 import { authService, OrganizerProfile } from '../services/authService';
 
 interface PortalPageProps {
@@ -13,20 +16,30 @@ interface PortalPageProps {
 export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPageProps) {
   const [activeTab, setActiveTab] = useState<'fan' | 'organizer'>(initialTab === 'organizer' ? 'organizer' : 'fan');
   const [currentUser, setCurrentUser] = useState<OrganizerProfile | null>(null);
+  
+  // Registration state
   const [orgName, setOrgName] = useState('');
   const [orgEmail, setOrgEmail] = useState('');
   const [orgPassword, setOrgPassword] = useState('');
   const [orgConfirmPassword, setOrgConfirmPassword] = useState('');
-  const [showEditPopup, setShowEditPopup] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleteConfirmationText, setDeleteConfirmationText] = useState('');
-  const [deletionOutcomeMessage, setDeletionOutcomeMessage] = useState<{text: string;} | null>(null);
+  
+  // Login state
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [showLoginFields, setShowLoginFields] = useState(false);
+  
+  // Password Visibility toggles
+  const [showLoginPasswordText, setShowLoginPasswordText] = useState(false);
+  const [showOrgPasswordText, setShowOrgPasswordText] = useState(false);
+
+  // Deletion modal state
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteConfirmationText, setDeleteConfirmationText] = useState('');
+  
+  // Feedback / Loading state
   const [isRegisteredNotice, setIsRegisteredNotice] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<{ text: string; type: 'error' | 'success' | 'info' } | null>(null);
 
   useEffect(() => {
     const user = authService.getCurrentUser();
@@ -35,15 +48,25 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
 
   const handleOrgSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (orgPassword.length < 6) { setToastMessage('Mínimo 6 caracteres.'); return; }
-    if (orgPassword !== orgConfirmPassword) { setToastMessage('Palavras-passe não coincidem.'); return; }
+    if (orgPassword.length < 6) { 
+      setToastMessage({ text: 'A palavra-passe deve ter no mínimo 6 caracteres.', type: 'error' }); 
+      return; 
+    }
+    if (orgPassword !== orgConfirmPassword) { 
+      setToastMessage({ text: 'As palavras-passe não coincidem.', type: 'error' }); 
+      return; 
+    }
     setLoading(true);
     try {
       const response = await authService.registerOrganizer({ nome: orgName, email: orgEmail, password: orgPassword });
       setLoading(false);
       setIsRegisteredNotice(true);
       setCurrentUser(response.profile);
-    } catch (err: any) { setLoading(false); setToastMessage(`Erro: ${err.message}`); }
+      setToastMessage({ text: 'Conta criada com sucesso! Bem-vindo ao portal.', type: 'success' });
+    } catch (err: any) { 
+      setLoading(false); 
+      setToastMessage({ text: `Erro no registo: ${err.message}`, type: 'error' }); 
+    }
   };
 
   const handleLoginSubmit = async (e: FormEvent) => {
@@ -53,85 +76,169 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
       const response = await authService.login(loginEmail, loginPassword);
       if (response.success && response.profile) {
         setCurrentUser(response.profile);
-      } else { setToastMessage(response.message || 'Erro.'); }
-    } catch (err: any) { setToastMessage(`Erro: ${err.message}`); }
-    finally { setLoading(false); }
+        setToastMessage({ text: 'Sessão iniciada com sucesso!', type: 'success' });
+      } else { 
+        setToastMessage({ text: response.message || 'Credenciais inválidas.', type: 'error' }); 
+      }
+    } catch (err: any) { 
+      setToastMessage({ text: `Erro ao entrar: ${err.message}`, type: 'error' }); 
+    } finally { 
+      setLoading(false); 
+    }
   };
 
-  const handleLogout = () => { authService.logout(); setCurrentUser(null); };
+  const handleLogout = () => { 
+    authService.logout(); 
+    setCurrentUser(null);
+    setToastMessage({ text: 'Sessão terminada.', type: 'info' });
+  };
 
   const handleAccountDeletionProcess = async () => {
     if (!currentUser) return;
     
     if (deleteConfirmationText.trim().toLowerCase() !== currentUser.nome.toLowerCase()) {
-      setToastMessage('Erro: O nome inserido não corresponde ao nome da sua organização.');
+      setToastMessage({ text: 'Erro: O nome inserido não corresponde ao nome da sua organização.', type: 'error' });
       return;
     }
 
     setLoading(true);
     try {
-      const response = await authService.deleteAccount(currentUser.id, currentUser.jwt);
-      setDeletionOutcomeMessage({ text: response.message });
+      await authService.deleteAccount(currentUser.id, currentUser.jwt);
       setCurrentUser(null);
       setShowDeleteConfirm(false);
       setDeleteConfirmationText('');
-      setToastMessage('Conta eliminada com sucesso.');
+      setToastMessage({ text: 'Conta eliminada com sucesso.', type: 'info' });
     } catch (err: any) {
-      setToastMessage(`Erro ao processar eliminação: ${err.message}`);
+      setToastMessage({ text: `Erro ao processar eliminação: ${err.message}`, type: 'error' });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0F1115] text-white p-4 pt-20 sm:pt-32 sm:p-12">
-      <div className="max-w-4xl mx-auto">
-        <button onClick={onClose} className="flex items-center gap-2 text-slate-400 hover:text-white mb-8 sm:mb-10 transition-colors cursor-pointer text-sm sm:text-base">
-          <ArrowLeft className="w-4 h-4 sm:w-5 h-5" /> Voltar ao Início
-        </button>
+    <div className="min-h-screen bg-[#0A0C10] text-white p-4 pt-20 sm:pt-28 sm:p-10 relative overflow-hidden flex flex-col justify-center items-center">
+      
+      {/* Background Ambient Glowing Orbs */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-blue/15 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[300px] h-[300px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none" />
 
+      <div className="w-full max-w-2xl mx-auto relative z-10">
+        
+        {/* Back button */}
+        <div className="flex items-center justify-between mb-6 sm:mb-8">
+          <button 
+            onClick={onClose} 
+            className="group flex items-center gap-2 text-slate-400 hover:text-white transition-all cursor-pointer text-xs sm:text-sm font-medium bg-[#141722]/80 border border-[#262B37] px-4 py-2 rounded-xl shadow-sm hover:border-slate-500"
+          >
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1 text-brand-blue" /> 
+            <span>Voltar ao Início</span>
+          </button>
+
+          <div className="flex items-center gap-2">
+            <img 
+              src={vroomLogoImg} 
+              alt="Vroom.pt Logo" 
+              className="w-7 h-7 sm:w-8 sm:h-8 object-contain rounded-xl shadow-md"
+              referrerPolicy="no-referrer"
+            />
+            <span className="font-display font-bold text-base sm:text-lg text-white">
+              Vroom<span className="text-white font-bold">.pt</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Floating Toast Message */}
         {toastMessage && (
-          <div className="mb-4 bg-slate-900 border border-brand-blue/40 p-3 rounded-lg text-left text-xs sm:text-sm text-slate-200 shadow-xl flex items-center gap-3 animate-fade-in">
-            <Sparkles className="w-4 h-4 text-brand-blue flex-shrink-0 animate-bounce" />
-            <div className="flex-1 font-light leading-relaxed">{toastMessage}</div>
-            <button onClick={() => setToastMessage(null)} className="text-slate-400 hover:text-white font-bold px-1">✕</button>
+          <div className={`mb-6 p-4 rounded-2xl border backdrop-blur-md shadow-2xl flex items-center justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-200 ${
+            toastMessage.type === 'error' 
+              ? 'bg-red-500/10 border-red-500/30 text-red-300' 
+              : toastMessage.type === 'success'
+                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                : 'bg-brand-blue/10 border-brand-blue/30 text-blue-200'
+          }`}>
+            <div className="flex items-center gap-3 text-xs sm:text-sm">
+              {toastMessage.type === 'error' && <AlertTriangle className="w-5 h-5 text-red-400 shrink-0" />}
+              {toastMessage.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
+              {toastMessage.type === 'info' && <Sparkles className="w-5 h-5 text-brand-blue shrink-0 animate-pulse" />}
+              <span className="font-medium leading-snug">{toastMessage.text}</span>
+            </div>
+            <button 
+              onClick={() => setToastMessage(null)} 
+              className="p-1 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer text-xs font-bold"
+            >
+              ✕
+            </button>
           </div>
         )}
 
-        <div className="bg-[#1D212B] rounded-xl sm:rounded-2xl border border-[#262B37] p-6 sm:p-12">
+        {/* Main Glassmorphic Auth Card */}
+        <div className="bg-gradient-to-b from-[#141822] via-[#10131B] to-[#0D0F15] rounded-2xl sm:rounded-3xl border border-[#262B37] p-6 sm:p-10 shadow-2xl relative">
+          
+          {/* LOGGED IN ORGANIZER VIEW */}
           {currentUser ? (
-            <div className="space-y-6 sm:space-y-8">
-              <h1 className="font-display font-bold text-xl sm:text-3xl text-white">Painel Organizadora</h1>
-              <div className="bg-[#171A21] border border-[#262B37] p-4 sm:p-6 rounded-lg flex items-center justify-between">
-                <div className="flex items-center gap-4 sm:gap-4">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg bg-brand-blue/10 border border-brand-blue/20 flex items-center justify-center text-brand-blue">
-                    <User className="w-6 h-6 sm:w-8 h-8" />
+            <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#262B37]">
+                <div>
+                  <span className="text-[11px] font-mono text-brand-blue uppercase tracking-widest block mb-1">
+                    Painel de Controlo
+                  </span>
+                  <h1 className="font-display font-bold text-2xl sm:text-3xl text-white">
+                    {currentUser.nome}
+                  </h1>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-3 py-1 rounded-full text-xs font-mono font-bold border ${
+                    currentUser.role === 'admin'
+                      ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+                      : currentUser.role === 'unauthorized'
+                        ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-300'
+                        : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                  }`}>
+                    {currentUser.role === 'admin' ? 'Administrador' : currentUser.role === 'unauthorized' ? 'Pendente' : 'Organização Verificada'}
+                  </span>
+                  <button 
+                    onClick={handleLogout} 
+                    className="p-2 bg-[#1A1E29] hover:bg-red-500/20 text-slate-400 hover:text-red-400 rounded-xl transition-all border border-[#262B37] cursor-pointer"
+                    title="Terminar Sessão"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Account Status Card */}
+              <div className="bg-[#151923] border border-[#262B37] p-4 sm:p-6 rounded-2xl flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-brand-blue/10 border border-brand-blue/30 flex items-center justify-center text-brand-blue shrink-0">
+                    <User className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-base sm:text-xl text-white">{currentUser.nome}</h4>
-                    <p className="text-xs sm:text-sm text-slate-400">{currentUser.email}</p>
+                    <h4 className="font-bold text-sm sm:text-base text-white">{currentUser.nome}</h4>
+                    <p className="text-xs text-slate-400">{currentUser.email}</p>
                   </div>
                 </div>
-                <button onClick={handleLogout} className="px-3 py-1.5 bg-[#0F1115] hover:bg-red-900/20 text-slate-400 hover:text-red-400 rounded-lg transition-all border border-[#262B37] text-xs sm:text-sm">
-                  Sair
-                </button>
               </div>
-              <div className="bg-[#171A21] border border-[#262B37] p-6 sm:p-8 rounded-lg text-center space-y-5 sm:space-y-6">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-brand-blue/10 rounded-full flex items-center justify-center mx-auto">
-                  <Smartphone className="w-7 h-7 sm:w-8 h-8 text-brand-blue" />
+
+              {/* App Download Prompt */}
+              <div className="bg-gradient-to-r from-brand-blue/10 via-[#151923] to-[#151923] border border-brand-blue/30 p-6 rounded-2xl text-center space-y-4 relative overflow-hidden">
+                <div className="w-12 h-12 bg-brand-blue/20 border border-brand-blue/40 rounded-2xl flex items-center justify-center mx-auto text-brand-blue shadow-lg">
+                  <Smartphone className="w-6 h-6" />
                 </div>
-                <div className="space-y-2 sm:space-y-2">
-                  <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">Gestão de Eventos na App</h3>
-                  <p className="text-slate-400 max-w-md mx-auto text-xs sm:text-sm leading-relaxed">
-                    A publicação de provas e ferramentas de cronometragem são exclusivas da <strong>Vroom.pt App</strong>.
+                
+                <div className="space-y-1">
+                  <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">Gestão de Provas na App Móvel</h3>
+                  <p className="text-slate-300 max-w-md mx-auto text-xs sm:text-sm leading-relaxed">
+                    A criação de eventos, tempos e cronometragem oficial são geridos diretamente na <strong>Vroom.pt App</strong>.
                   </p>
                 </div>
-                <div className="flex flex-wrap justify-center gap-3 sm:gap-4 pt-2 sm:pt-2">
+
+                <div className="flex flex-wrap justify-center gap-3 pt-2">
                   <a 
                     href="https://apps.apple.com/pt/app/vroom-pt/id6751053867"
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="transition-all hover:scale-[1.03] active:scale-95 inline-flex items-center justify-center h-[38px] w-[128px] sm:h-[44px] sm:w-[148px] rounded-lg bg-black overflow-hidden relative border border-slate-800"
+                    className="transition-transform hover:scale-105 active:scale-95 inline-flex items-center justify-center h-[42px] w-[140px] rounded-xl bg-black overflow-hidden relative border border-[#262B37] shadow-md"
                   >
                     <img 
                       src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/pt-pt" 
@@ -145,7 +252,7 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
                     href="https://play.google.com/store/apps/details?id=com.baseguy.shedulebase&hl=pt_PT"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="transition-all hover:scale-[1.03] active:scale-95 inline-flex items-center justify-center h-[38px] w-[128px] sm:h-[44px] sm:w-[148px] rounded-lg bg-black overflow-hidden relative border border-slate-800"
+                    className="transition-transform hover:scale-105 active:scale-95 inline-flex items-center justify-center h-[42px] w-[140px] rounded-xl bg-black overflow-hidden relative border border-[#262B37] shadow-md"
                   >
                     <img 
                       src="https://play.google.com/intl/en_us/badges/static/images/badges/pt_badge_web_generic.png" 
@@ -157,192 +264,343 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
                 </div>
               </div>
 
-              <div className="bg-red-500/5 border border-red-500/20 rounded-lg p-4 space-y-3">
-                <h5 className="font-bold text-red-400 text-sm sm:text-lg flex items-center gap-2">
-                    <Trash2 className="w-4 h-4 sm:w-5 h-5" /> Zona de Risco
+              {/* Danger Zone */}
+              <div className="bg-red-500/5 border border-red-500/20 rounded-2xl p-5 space-y-3">
+                <h5 className="font-bold text-red-400 text-xs sm:text-sm flex items-center gap-2">
+                  <Trash2 className="w-4 h-4" /> Eliminar Conta de Organizador
                 </h5>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Esta ação é irreversível. Todos os dados associados à sua organização serão permanentemente removidos.
+                </p>
+
                 {showDeleteConfirm ? (
-                    <div className="space-y-3">
-                        <input 
-                            type="text"
-                            className="w-full bg-[#0F1115] border border-[#262B37] rounded-lg px-3 py-2 text-xs sm:text-sm text-white"
-                            placeholder={currentUser.nome}
-                            value={deleteConfirmationText}
-                            onChange={(e) => setDeleteConfirmationText(e.target.value)}
-                        />
-                        <div className="flex gap-2">
-                            <button onClick={() => setShowDeleteConfirm(false)} className="px-3 py-1.5 bg-slate-800 rounded-lg text-xs">Cancelar</button>
-                            <button onClick={handleAccountDeletionProcess} className="px-3 py-1.5 bg-red-600 rounded-lg text-xs">Confirmar</button>
-                        </div>
+                  <div className="space-y-3 pt-2">
+                    <input 
+                      type="text"
+                      className="w-full bg-[#0D0F15] border border-red-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-red-500"
+                      placeholder={`Escreva "${currentUser.nome}" para confirmar`}
+                      value={deleteConfirmationText}
+                      onChange={(e) => setDeleteConfirmationText(e.target.value)}
+                    />
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => setShowDeleteConfirm(false)} 
+                        className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs text-slate-300 font-bold transition-colors cursor-pointer"
+                      >
+                        Cancelar
+                      </button>
+                      <button 
+                        onClick={handleAccountDeletionProcess} 
+                        disabled={loading}
+                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-xs transition-colors cursor-pointer shadow-md"
+                      >
+                        {loading ? 'A eliminar...' : 'Confirmar Eliminação'}
+                      </button>
                     </div>
+                  </div>
                 ) : (
-                    <button onClick={() => setShowDeleteConfirm(true)} className="px-4 py-2 bg-red-600/10 text-red-400 rounded-lg text-xs sm:text-sm">Eliminar Conta</button>
+                  <button 
+                    onClick={() => setShowDeleteConfirm(true)} 
+                    className="px-4 py-2 bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 font-bold rounded-xl text-xs transition-all cursor-pointer"
+                  >
+                    Eliminar Conta
+                  </button>
                 )}
               </div>
             </div>
           ) : (
-             <div className="space-y-4 sm:space-y-8">
-                <div className="flex bg-[#171A21] p-1 rounded-lg sm:rounded-xl gap-1 border border-[#262B37]">
-                  <button 
-                    onClick={() => setActiveTab('fan')} 
-                    className={`flex-1 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-bold transition-all ${activeTab === 'fan' ? 'bg-[#025bc5] text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-[#1D212B]'}`}
-                  >
-                    Fãs
-                  </button>
-                  <button 
-                    onClick={() => setActiveTab('organizer')} 
-                    className={`flex-1 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-bold transition-all ${activeTab === 'organizer' ? 'bg-[#025bc5] text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-[#1D212B]'}`}
-                  >
-                    Organizações
-                  </button>
-                </div>
+            
+            /* LOGGED OUT VIEW - FAN & ORGANIZER TABS */
+            <div className="space-y-6 animate-in fade-in duration-300">
+              
+              {/* Modern Segmented Tab Switcher */}
+              <div className="bg-[#0E1117] p-1.5 rounded-2xl border border-[#262B37] grid grid-cols-2 gap-1.5 shadow-inner">
+                <button 
+                  onClick={() => setActiveTab('fan')} 
+                  className={`flex items-center justify-center gap-2 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                    activeTab === 'fan' 
+                      ? 'bg-brand-blue text-white shadow-lg shadow-brand-blue/20' 
+                      : 'text-slate-400 hover:text-white hover:bg-[#161B26]'
+                  }`}
+                >
+                  <Smartphone className="w-4 h-4" />
+                  <span>Fãs & Adeptos</span>
+                </button>
 
-                {activeTab === 'fan' ? (
-                  <div className="space-y-4 text-center py-4 sm:py-8">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-brand-blue/10 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                      <Smartphone className="w-8 h-8 sm:w-10 sm:h-10 text-brand-blue" />
-                    </div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-white">A Área de Fãs é na App</h2>
-                    <p className="text-slate-400 max-w-sm mx-auto text-xs sm:text-sm">
-                      Para seguir provas e gerir o seu perfil de adepto, utilize a nossa aplicação móvel.
-                    </p>
-                <div className="flex flex-wrap justify-center gap-2 sm:gap-4 pt-2 sm:pt-4">
-                  <a 
-                    href="https://apps.apple.com/pt/app/vroom-pt/id6751053867"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="transition-all hover:scale-[1.03] active:scale-95 inline-flex items-center justify-center h-[36px] w-[120px] sm:h-[44px] sm:w-[148px] rounded-lg bg-black overflow-hidden relative border border-slate-800"
-                  >
-                    <img 
-                      src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/pt-pt" 
-                      alt="App Store" 
-                      className="absolute h-[118%] w-auto max-w-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                      referrerPolicy="no-referrer"
-                    />
-                  </a>
-                  
-                  <a 
-                    href="https://play.google.com/store/apps/details?id=com.baseguy.shedulebase&hl=pt_PT"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="transition-all hover:scale-[1.03] active:scale-95 inline-flex items-center justify-center h-[36px] w-[120px] sm:h-[44px] sm:w-[148px] rounded-lg bg-black overflow-hidden relative border border-slate-800"
-                  >
-                    <img 
-                      src="https://play.google.com/intl/en_us/badges/static/images/badges/pt_badge_web_generic.png" 
-                      alt="Google Play" 
-                      className="absolute h-[142%] w-auto max-w-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                      referrerPolicy="no-referrer"
-                    />
-                  </a>
-                </div>
+                <button 
+                  onClick={() => setActiveTab('organizer')} 
+                  className={`flex items-center justify-center gap-2 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                    activeTab === 'organizer' 
+                      ? 'bg-brand-blue text-white shadow-lg shadow-brand-blue/20' 
+                      : 'text-slate-400 hover:text-white hover:bg-[#161B26]'
+                  }`}
+                >
+                  <Building2 className="w-4 h-4" />
+                  <span>Organizações</span>
+                </button>
+              </div>
+
+              {/* TAB CONTENT: Fãs */}
+              {activeTab === 'fan' ? (
+                <div className="text-center py-6 sm:py-10 space-y-6 animate-in fade-in duration-200">
+                  <div className="w-20 h-20 bg-brand-blue/15 border border-brand-blue/30 rounded-3xl flex items-center justify-center mx-auto text-brand-blue shadow-xl shadow-brand-blue/10">
+                    <Smartphone className="w-10 h-10" />
                   </div>
-                ) : (
-                  <div className="space-y-4">
-                    {showLoginFields ? (
-                      <form onSubmit={handleLoginSubmit} className="space-y-3">
-                        <div className="space-y-1">
-                          <label className="text-xs font-mono text-slate-400 uppercase tracking-widest">E-mail</label>
+
+                  <div className="space-y-2 max-w-sm mx-auto">
+                    <h2 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-tight">
+                      Instale a App Vroom.pt
+                    </h2>
+                    <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                      Siga eventos automobilísticos em tempo real, guarde itinerários e receba notificações diretas no seu telemóvel.
+                    </p>
+                  </div>
+
+                  {/* Feature badges */}
+                  <div className="grid grid-cols-3 gap-2 max-w-md mx-auto pt-2 text-left">
+                    <div className="p-2.5 bg-[#141722] border border-[#262B37] rounded-xl flex flex-col items-center text-center gap-1">
+                      <Bell className="w-4 h-4 text-brand-blue" />
+                      <span className="text-[10px] font-bold text-slate-200">Notificações</span>
+                    </div>
+                    <div className="p-2.5 bg-[#141722] border border-[#262B37] rounded-xl flex flex-col items-center text-center gap-1">
+                      <Calendar className="w-4 h-4 text-emerald-400" />
+                      <span className="text-[10px] font-bold text-slate-200">Calendário</span>
+                    </div>
+                    <div className="p-2.5 bg-[#141722] border border-[#262B37] rounded-xl flex flex-col items-center text-center gap-1">
+                      <Shield className="w-4 h-4 text-purple-400" />
+                      <span className="text-[10px] font-bold text-slate-200">Tempos App</span>
+                    </div>
+                  </div>
+
+                  {/* App Download Store Badges */}
+                  <div className="flex flex-wrap justify-center items-center gap-3 pt-4">
+                    <a 
+                      href="https://apps.apple.com/pt/app/vroom-pt/id6751053867"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="transition-transform hover:scale-105 active:scale-95 inline-flex items-center justify-center h-[46px] w-[150px] rounded-xl bg-black border border-[#262B37] overflow-hidden relative shadow-lg"
+                    >
+                      <img 
+                        src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/pt-pt" 
+                        alt="Descarregar na App Store" 
+                        className="absolute h-[118%] w-auto max-w-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                        referrerPolicy="no-referrer"
+                      />
+                    </a>
+                    
+                    <a 
+                      href="https://play.google.com/store/apps/details?id=com.baseguy.shedulebase&hl=pt_PT"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="transition-transform hover:scale-105 active:scale-95 inline-flex items-center justify-center h-[46px] w-[150px] rounded-xl bg-black border border-[#262B37] overflow-hidden relative shadow-lg"
+                    >
+                      <img 
+                        src="https://play.google.com/intl/en_us/badges/static/images/badges/pt_badge_web_generic.png" 
+                        alt="Disponível no Google Play" 
+                        className="absolute h-[142%] w-auto max-w-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                        referrerPolicy="no-referrer"
+                      />
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                
+                /* TAB CONTENT: Organizações (Login or Register) */
+                <div className="space-y-6 pt-2 animate-in fade-in duration-200">
+                  
+                  {/* Mode Selector Header */}
+                  <div className="flex items-center justify-between border-b border-[#262B37] pb-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-white">
+                        {showLoginFields ? 'Iniciar Sessão de Organizador' : 'Criar Conta de Organizador'}
+                      </h3>
+                      <p className="text-xs text-slate-400">
+                        {showLoginFields 
+                          ? 'Aceda ao seu painel de gestão Vroom.pt' 
+                          : 'Registe a sua organização para publicar provas na plataforma'}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowLoginFields(!showLoginFields)}
+                      className="text-xs font-bold text-brand-blue hover:text-blue-400 underline underline-offset-4 cursor-pointer transition-colors"
+                    >
+                      {showLoginFields ? 'Criar Conta' : 'Iniciar Sessão'}
+                    </button>
+                  </div>
+
+                  {/* LOGIN FORM */}
+                  {showLoginFields ? (
+                    <form onSubmit={handleLoginSubmit} className="space-y-4">
+                      
+                      {/* Email Input */}
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-mono text-slate-300 uppercase tracking-wider block">
+                          E-mail
+                        </label>
+                        <div className="relative">
+                          <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                           <input 
                             type="email" 
                             required
-                            className="w-full bg-[#171A21] border border-[#262B37] rounded-lg px-3 py-2 text-xs text-white focus:border-brand-blue outline-none transition-colors"
+                            placeholder="exemplo@organizacao.pt"
+                            className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-4 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                             value={loginEmail}
                             onChange={(e) => setLoginEmail(e.target.value)}
                           />
                         </div>
-                        <div className="space-y-1">
-                          <label className="text-xs font-mono text-slate-400 uppercase tracking-widest">Senha</label>
+                      </div>
+
+                      {/* Password Input */}
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-mono text-slate-300 uppercase tracking-wider block">
+                          Palavra-passe
+                        </label>
+                        <div className="relative">
+                          <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                           <input 
-                            type="password" 
+                            type={showLoginPasswordText ? "text" : "password"} 
                             required
-                            className="w-full bg-[#171A21] border border-[#262B37] rounded-lg px-3 py-2 text-xs text-white focus:border-brand-blue outline-none transition-colors"
+                            placeholder="••••••••"
+                            className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-10 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                             value={loginPassword}
                             onChange={(e) => setLoginPassword(e.target.value)}
                           />
+                          <button
+                            type="button"
+                            onClick={() => setShowLoginPasswordText(!showLoginPasswordText)}
+                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+                          >
+                            {showLoginPasswordText ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
                         </div>
-                        <button 
-                          type="submit" 
-                          disabled={loading}
-                          className="w-full bg-[#025bc5] hover:bg-blue-600 text-white font-bold py-3 rounded-lg text-xs sm:text-sm shadow-lg transition-all flex items-center justify-center gap-2"
-                        >
-                          {loading ? 'A processar...' : 'Entrar no Painel'}
-                        </button>
-                        <button 
-                          type="button"
-                          onClick={() => setShowLoginFields(false)}
-                          className="w-full text-slate-400 text-xs hover:text-white transition-colors"
-                        >
-                          Não tem conta? Registe-se
-                        </button>
-                      </form>
-                    ) : (
-                      <form onSubmit={handleOrgSubmit} className="space-y-3">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <div className="space-y-1">
-                            <label className="text-xs font-mono text-slate-400 uppercase tracking-widest">Nome da Organização</label>
+                      </div>
+
+                      <button 
+                        type="submit" 
+                        disabled={loading}
+                        className="w-full bg-brand-blue hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl text-xs sm:text-sm shadow-xl shadow-brand-blue/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+                      >
+                        {loading ? (
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : (
+                          <>
+                            <KeyRound className="w-4 h-4" />
+                            <span>Entrar no Painel</span>
+                          </>
+                        )}
+                      </button>
+                    </form>
+                  ) : (
+                    
+                    /* REGISTER FORM */
+                    <form onSubmit={handleOrgSubmit} className="space-y-4">
+                      
+                      {/* Name & Email inputs */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-mono text-slate-300 uppercase tracking-wider block">
+                            Nome da Organização
+                          </label>
+                          <div className="relative">
+                            <Building2 className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                             <input 
                               type="text" 
                               required
-                              className="w-full bg-[#171A21] border border-[#262B37] rounded-lg px-3 py-2 text-xs text-white focus:border-brand-blue outline-none transition-colors"
+                              placeholder="ex: Clube Automóvel de..."
+                              className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-4 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                               value={orgName}
                               onChange={(e) => setOrgName(e.target.value)}
                             />
                           </div>
-                          <div className="space-y-1">
-                            <label className="text-xs font-mono text-slate-400 uppercase tracking-widest">E-mail</label>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-mono text-slate-300 uppercase tracking-wider block">
+                            E-mail Oficial
+                          </label>
+                          <div className="relative">
+                            <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                             <input 
                               type="email" 
                               required
-                              className="w-full bg-[#171A21] border border-[#262B37] rounded-lg px-3 py-2 text-xs text-white focus:border-brand-blue outline-none transition-colors"
+                              placeholder="contacto@clube.pt"
+                              className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-4 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                               value={orgEmail}
                               onChange={(e) => setOrgEmail(e.target.value)}
                             />
                           </div>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <div className="space-y-1">
-                            <label className="text-xs font-mono text-slate-400 uppercase tracking-widest">Senha</label>
+                      </div>
+
+                      {/* Password & Confirm inputs */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-mono text-slate-300 uppercase tracking-wider block">
+                            Palavra-passe
+                          </label>
+                          <div className="relative">
+                            <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                             <input 
-                              type="password" 
+                              type={showOrgPasswordText ? "text" : "password"} 
                               required
-                              className="w-full bg-[#171A21] border border-[#262B37] rounded-lg px-3 py-2 text-xs text-white focus:border-brand-blue outline-none transition-colors"
+                              placeholder="Mínimo 6 caracteres"
+                              className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-10 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                               value={orgPassword}
                               onChange={(e) => setOrgPassword(e.target.value)}
                             />
+                            <button
+                              type="button"
+                              onClick={() => setShowOrgPasswordText(!showOrgPasswordText)}
+                              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+                            >
+                              {showOrgPasswordText ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
                           </div>
-                          <div className="space-y-1">
-                            <label className="text-xs font-mono text-slate-400 uppercase tracking-widest">Confirmar</label>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-mono text-slate-300 uppercase tracking-wider block">
+                            Confirmar Palavra-passe
+                          </label>
+                          <div className="relative">
+                            <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                             <input 
-                              type="password" 
+                              type={showOrgPasswordText ? "text" : "password"} 
                               required
-                              className="w-full bg-[#171A21] border border-[#262B37] rounded-lg px-3 py-2 text-xs text-white focus:border-brand-blue outline-none transition-colors"
+                              placeholder="Repita a palavra-passe"
+                              className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-4 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                               value={orgConfirmPassword}
                               onChange={(e) => setOrgConfirmPassword(e.target.value)}
                             />
                           </div>
                         </div>
-                        <button 
-                          type="submit" 
-                          disabled={loading}
-                          className="w-full bg-[#025bc5] hover:bg-blue-600 text-white font-bold py-3 rounded-lg text-xs sm:text-sm shadow-lg transition-all flex items-center justify-center gap-2"
-                        >
-                          {loading ? 'A processar...' : 'Criar Conta'}
-                        </button>
-                        <button 
-                          type="button"
-                          onClick={() => setShowLoginFields(true)}
-                          className="w-full text-slate-400 text-xs hover:text-white transition-colors"
-                        >
-                          Já tem conta? Inicie sessão
-                        </button>
-                      </form>
-                    )}
-                  </div>
-                )}
-             </div>
+                      </div>
+
+                      <button 
+                        type="submit" 
+                        disabled={loading}
+                        className="w-full bg-brand-blue hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl text-xs sm:text-sm shadow-xl shadow-brand-blue/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+                      >
+                        {loading ? (
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : (
+                          <>
+                            <ShieldCheck className="w-4 h-4" />
+                            <span>Criar Conta de Organizador</span>
+                          </>
+                        )}
+                      </button>
+                    </form>
+                  )}
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>
     </div>
   );
 }
+

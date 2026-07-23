@@ -1,32 +1,32 @@
 export interface DatabaseEvent {
   id: string;
   nome: string;
-  natureza: string | null;
-  modalidade: string | null;
-  veiculo_alvo: string | null;
-  plano_destaque: string | null;
-  ambito: string | null;
-  data_inicio: string | null;
-  data_fim: string | null;
-  meses: string[] | null;
-  local: string | null;
-  organizadora_default: string | null;
-  cor: string | null;
-  descricao: string | null;
-  site_evento: string | null;
-  logo_organizadora_default: string | null;
+  natureza?: string | null;
+  modalidade?: string | null;
+  veiculo_alvo?: string | null;
+  plano_destaque?: string | null;
+  ambito?: string | null;
+  data_inicio?: string | null;
+  data_fim?: string | null;
+  meses?: string[] | null;
+  local?: string | null;
+  organizadora_default?: string | null;
+  cor?: string | null;
+  descricao?: string | null;
+  site_evento?: string | null;
+  logo_organizadora_default?: string | null;
   logo_url?: string | null;
-  imagem_evento: string | null;
-  latitude: number | null;
-  longitude: number | null;
-  is_mensal: boolean | null;
-  imagens_extra: string[] | null;
-  notificacao_48h_enviada: boolean | null;
-  notificacao_premium_enviada: boolean | null;
-  views_count: number;
-  organizer_id: string | null;
-  status: string | null;
-  likes_count: number;
+  imagem_evento?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  is_mensal?: boolean | null;
+  imagens_extra?: string[] | null;
+  notificacao_48h_enviada?: boolean | null;
+  notificacao_premium_enviada?: boolean | null;
+  views_count?: number;
+  organizer_id?: string | null;
+  status?: string | null;
+  likes_count?: number;
 }
 
 export interface MotorsportEvent {

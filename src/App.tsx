@@ -15,6 +15,7 @@ import PrivacyPolicyPage from './components/PrivacyPolicyPage';
 import TermsOfUsePage from './components/TermsOfUsePage';
 import DeleteAccountPage from './components/DeleteAccountPage';
 import EventDetailPage from './components/EventDetailPage';
+import DeeplinkPage from './components/DeeplinkPage';
 import MobileSmartBanner from './components/MobileSmartBanner';
 import { DatabaseEvent } from './types';
 
@@ -25,11 +26,12 @@ export default function App() {
   const [showPrivacyPage, setShowPrivacyPage] = useState(false);
   const [showTermsPage, setShowTermsPage] = useState(false);
   const [showDeleteAccountPage, setShowDeleteAccountPage] = useState(false);
+  const [showDeeplinkPage, setShowDeeplinkPage] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<DatabaseEvent | null>(null);
   const scrollPosRef = useRef(0);
 
   // Professional UX: Handle sub-page navigation state and scroll restoration
-  const openSubPage = (type: 'event' | 'privacy' | 'terms' | 'delete-account' | 'portal', data?: any) => {
+  const openSubPage = (type: 'event' | 'privacy' | 'terms' | 'delete-account' | 'portal' | 'deeplink', data?: any) => {
     scrollPosRef.current = window.scrollY;
     
     // Clear all sub-page states first
@@ -38,8 +40,10 @@ export default function App() {
     setShowTermsPage(false);
     setShowDeleteAccountPage(false);
     setShowPortalPage(false);
+    setShowDeeplinkPage(false);
 
     if (type === 'event') setSelectedEvent(data);
+    if (type === 'deeplink') setShowDeeplinkPage(true);
     if (type === 'privacy') {
       setShowPrivacyPage(true);
       window.location.hash = 'privacidade';
@@ -67,9 +71,10 @@ export default function App() {
     setShowTermsPage(false);
     setShowDeleteAccountPage(false);
     setShowPortalPage(false);
+    setShowDeeplinkPage(false);
     
     // Clear hash if we are on a sub-page hash
-    if (['#privacidade', '#termos', '#eliminar-conta', '#portal'].includes(window.location.hash)) {
+    if (['#privacidade', '#termos', '#eliminar-conta', '#portal', '#deeplink'].includes(window.location.hash)) {
       window.history.replaceState(null, '', window.location.pathname + window.location.search);
     }
     
@@ -82,13 +87,21 @@ export default function App() {
     }, 10);
   };
 
-  // Sync state with URL hash for direct linking and back button support
+  // Sync state with URL hash & query params for direct linking and deeplinks
   useEffect(() => {
-    const handleHashChange = () => {
+    const handleLocationChange = () => {
       const hash = window.location.hash;
-      
-      // If we're at a sub-page hash and not already showing it
-      if (hash === '#privacidade' && !showPrivacyPage) {
+      const pathname = window.location.pathname;
+      const params = new URLSearchParams(window.location.search);
+
+      if (pathname.includes('deeplink') || hash === '#deeplink' || params.has('eventoID')) {
+        setShowDeeplinkPage(true);
+      } else if (params.get('event')) {
+        const eventId = params.get('event');
+        if (eventId) {
+          openSubPage('event', { id: eventId });
+        }
+      } else if (hash === '#privacidade' && !showPrivacyPage) {
         openSubPage('privacy');
       } else if (hash === '#termos' && !showTermsPage) {
         openSubPage('terms');
@@ -97,19 +110,17 @@ export default function App() {
       } else if (hash === '#portal' && !showPortalPage) {
         openSubPage('portal');
       } else if (!hash || hash === '#home') {
-        // If we were in a sub-page and user clicked back to main
-        if (showPrivacyPage || showTermsPage || showDeleteAccountPage || showPortalPage) {
+        if (showPrivacyPage || showTermsPage || showDeleteAccountPage || showPortalPage || showDeeplinkPage) {
           closeSubPage();
         }
       }
     };
 
-    // Handle initial load
-    handleHashChange();
+    handleLocationChange();
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [showPrivacyPage, showTermsPage, showDeleteAccountPage, showPortalPage]);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => window.removeEventListener('hashchange', handleLocationChange);
+  }, []);
 
   // Tracking active section with scroll position
   useEffect(() => {
@@ -183,7 +194,7 @@ export default function App() {
     <div className="min-h-screen bg-dark-bg font-sans antialiased text-slate-100 overflow-x-hidden">
       
       {/* Navigation Header */}
-      {!showPrivacyPage && !showTermsPage && !showDeleteAccountPage && !selectedEvent && !showPortalPage && (
+      {!showPrivacyPage && !showTermsPage && !showDeleteAccountPage && !selectedEvent && !showPortalPage && !showDeeplinkPage && (
         <Navbar 
           onOpenPortal={handleOpenPortal} 
           activeSection={activeSection} 
@@ -191,7 +202,9 @@ export default function App() {
       )}
 
       {/* Main Content Sections */}
-      {selectedEvent ? (
+      {showDeeplinkPage ? (
+        <DeeplinkPage onClose={closeSubPage} onOpenEvent={(ev) => openSubPage('event', ev)} />
+      ) : selectedEvent ? (
         <EventDetailPage event={selectedEvent} onClose={closeSubPage} />
       ) : showPrivacyPage ? (
         <PrivacyPolicyPage onClose={closeSubPage} />
@@ -240,7 +253,7 @@ export default function App() {
         </main>
       )}
 
-      {!showPrivacyPage && !showTermsPage && !showDeleteAccountPage && !selectedEvent && !showPortalPage && (
+      {!showPrivacyPage && !showTermsPage && !showDeleteAccountPage && !selectedEvent && !showPortalPage && !showDeeplinkPage && (
         <>
           {/* Footer & Contact */}
           <Footer 

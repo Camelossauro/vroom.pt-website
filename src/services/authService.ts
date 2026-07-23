@@ -178,7 +178,7 @@ export const authService = {
     if (isReal) {
       console.log(`Sending real Supabase profiles query: id=eq.${userId}`);
       try {
-        const response = await fetch(`${supabaseUrl}/rest/v1/profiles?id=eq.${userId}`, {
+        const response = await fetch(`${supabaseUrl}/rest/v1/profiles?id=eq.${userId}&select=id,full_name,logo_url,siteOficial,email_contacto,telefone,instagram_url,facebook_url,biografia,sede_localizacao,regiao,role,account_deletion_requested,has_transactions,created_at`, {
           method: 'GET',
           headers: {
             'apikey': supabaseAnonKey,

@@ -39,6 +39,10 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
                 <Mail className="w-3 h-3 text-brand-blue" />
                 <span>contacto@vroomapp.pt</span>
               </div>
+              <div className="flex items-center gap-2 text-xs text-slate-400 text-left">
+                <MapPin className="w-3 h-3 text-brand-blue" />
+                <span>Feito em Vila Real, Portugal 🇵🇹</span>
+              </div>
             </div>
           </div>
 
@@ -102,9 +106,11 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
 
         {/* Bottom Bar: Copyright and disclaimer */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-xs">
-          <span>
-            © {new Date().getFullYear()} Vroom.pt Portugal. Todos os direitos reservados.
-          </span>
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 text-center md:text-left">
+            <span>© {new Date().getFullYear()} Vroom.pt Portugal. Todos os direitos reservados.</span>
+            <span className="hidden md:inline text-slate-600">•</span>
+            <span className="text-slate-400 font-medium">Feito em Vila Real, Portugal 🇵🇹</span>
+          </div>
           <div className="flex gap-4">
             <button onClick={onOpenTerms} className="hover:text-slate-300 cursor-pointer">Termos de Utilização</button>
             <button onClick={onOpenPrivacy} className="hover:text-slate-300 cursor-pointer">Política de Privacidade</button>
