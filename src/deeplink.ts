@@ -5,8 +5,11 @@ export const LINK_ANDROID = "https://play.google.com/store/apps/details?id=com.b
 export const LINK_IOS = "https://apps.apple.com/pt/app/vroom-pt/id6751053867?l=en-GB";
 
 export function getNativeDeepLink(eventoID: string | number, rota?: string): string {
-  const rotaFinal = rota || 'Encontros_Corridas_Geral';
-  return `vroomapp://vroomapp.pt/Check?eventoID=${eventoID}&rota=${rotaFinal}`;
+  let rotaFinal = rota || 'Encontros_Corridas_Geral';
+  if (rotaFinal.startsWith('/')) {
+    rotaFinal = rotaFinal.substring(1);
+  }
+  return `vroomapp://vroomapp.pt/${rotaFinal}?eventoID=${eventoID}`;
 }
 
 export function loadHeader() {
@@ -52,7 +55,7 @@ export function renderDeeplinkUI() {
   // 2. Validação da presença do eventoID
   if (eventoID) {
     // 3. Construção do Custom URI Scheme Nativo
-    const deepLink = `vroomapp://vroomapp.pt/Check?eventoID=${eventoID}&rota=${rotaRecebida}`;
+    const deepLink = getNativeDeepLink(eventoID, rotaRecebida);
 
     // Injeção do layout e botões de ação
     container.innerHTML = `

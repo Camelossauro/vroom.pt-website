@@ -7,6 +7,7 @@ import {
 import { DatabaseEvent } from '../types';
 import { getEventImage } from '../lib/utils';
 import { supabase } from '../lib/supabase';
+import { getNativeDeepLink } from '../deeplink';
 
 interface EventDetailPageProps {
   event?: DatabaseEvent;
@@ -53,6 +54,20 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
     };
   }, [targetEventId]);
 
+  // Bloqueio de scroll na página enquanto os detalhes do evento estão abertos
+  useEffect(() => {
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalDocOverflow = document.documentElement.style.overflow;
+
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = originalBodyOverflow;
+      document.documentElement.style.overflow = originalDocOverflow;
+    };
+  }, []);
+
   const handleShare = () => {
     const url = window.location.href;
     if (navigator.clipboard) {
@@ -60,6 +75,12 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
       setCopiedShare(true);
       setTimeout(() => setCopiedShare(false), 3000);
     }
+  };
+
+  const handleOpenInApp = () => {
+    if (!currentEvent) return;
+    const deepLinkUrl = getNativeDeepLink(currentEvent.id, currentEvent.natureza || 'Encontros_Corridas_Geral');
+    window.location.href = deepLinkUrl;
   };
 
   const formatDateRange = (startStr?: string | null, endStr?: string | null) => {
@@ -130,36 +151,42 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
   const likesCount = currentEvent.likes_count ?? 0;
 
   return (
-    <div className="min-h-screen bg-[#0D0D0F] text-[#E2E2E6] font-sans antialiased selection:bg-brand-blue selection:text-white relative">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#0D0D0F] text-[#E2E2E6] font-sans antialiased selection:bg-brand-blue selection:text-white">
       {/* Top Bar Header */}
-      <div className="sticky top-0 z-30 bg-[#0D0D0F]/90 backdrop-blur-md border-b border-[#262B37] px-4 py-3 sm:px-6">
+      <div className="sticky top-0 z-30 bg-[#0D0D0F]/90 backdrop-blur-md border-b border-[#262B37] px-4 py-3.5 sm:px-6">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
           <button 
             onClick={onClose}
-            className="flex items-center gap-2 text-slate-300 hover:text-white bg-[#141418] hover:bg-[#202028] px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl transition-all border border-[#262B37] text-xs font-semibold cursor-pointer group"
+            className="flex items-center gap-2 text-slate-300 hover:text-white bg-[#141418] hover:bg-[#202028] px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl transition-all border border-[#262B37] text-sm font-semibold cursor-pointer group"
           >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform text-brand-blue" />
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-x-0.5 transition-transform text-brand-blue" />
             <span className="hidden sm:inline">Voltar ao Calendário</span>
             <span className="sm:hidden">Voltar</span>
           </button>
 
-          <h2 className="hidden sm:block text-xs sm:text-sm font-mono font-bold tracking-wider uppercase text-slate-400 truncate max-w-[200px] sm:max-w-md">
-            Detalhes do Evento
-          </h2>
-
-          <div className="relative">
+          <div className="flex items-center gap-2.5">
             <button 
-              onClick={handleShare}
-              className="flex items-center gap-1.5 text-slate-300 hover:text-white bg-[#141418] hover:bg-[#202028] px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl transition-all border border-[#262B37] text-xs font-semibold cursor-pointer"
+              onClick={handleOpenInApp}
+              className="flex items-center gap-2 bg-brand-blue hover:bg-brand-blue-hover text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl transition-all text-sm font-bold cursor-pointer shadow-md shadow-brand-blue/20 active:scale-95"
             >
-              {copiedShare ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5 text-brand-blue" />}
-              <span className="hidden sm:inline">{copiedShare ? 'Copiado!' : 'Partilhar'}</span>
+              <Smartphone className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              <span>Abrir na App</span>
             </button>
-            {copiedShare && (
-              <div className="absolute right-0 top-full mt-2 bg-emerald-500 text-black font-bold text-[10px] px-2.5 py-1 rounded-md shadow-lg whitespace-nowrap z-50">
-                Link do evento copiado!
-              </div>
-            )}
+
+            <div className="relative">
+              <button 
+                onClick={handleShare}
+                className="flex items-center gap-2 text-slate-300 hover:text-white bg-[#141418] hover:bg-[#202028] px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl transition-all border border-[#262B37] text-sm font-semibold cursor-pointer"
+              >
+                {copiedShare ? <Check className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" /> : <Share2 className="w-4 h-4 sm:w-5 sm:h-5 text-brand-blue" />}
+                <span className="hidden sm:inline">{copiedShare ? 'Copiado!' : 'Partilhar'}</span>
+              </button>
+              {copiedShare && (
+                <div className="absolute right-0 top-full mt-2 bg-emerald-500 text-black font-bold text-[10px] px-2.5 py-1 rounded-md shadow-lg whitespace-nowrap z-50">
+                  Link do evento copiado!
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -220,13 +247,23 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
             </div>
           </div>
 
-          <button
-            onClick={() => setShowInstallModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#1C1C22] text-slate-300 border border-[#262B37] hover:bg-[#262B37] hover:text-white rounded-xl text-xs font-bold font-mono transition-all duration-200 cursor-pointer group"
-          >
-            <Heart className="w-4 h-4 text-slate-400 group-hover:text-red-500 group-hover:fill-red-500 transition-colors" />
-            <span>Gostar do Evento</span>
-          </button>
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <button
+              onClick={handleOpenInApp}
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-2.5 px-5 py-2.5 sm:px-6 sm:py-3 bg-brand-blue hover:bg-brand-blue-hover text-white rounded-xl text-sm font-bold transition-all duration-200 cursor-pointer shadow-md shadow-brand-blue/20 active:scale-95"
+            >
+              <Smartphone className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              <span>Abrir na App Vroom</span>
+            </button>
+
+            <button
+              onClick={() => setShowInstallModal(true)}
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-2.5 px-5 py-2.5 sm:px-6 sm:py-3 bg-[#1C1C22] text-slate-300 border border-[#262B37] hover:bg-[#262B37] hover:text-white rounded-xl text-sm font-bold font-mono transition-all duration-200 cursor-pointer group"
+            >
+              <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 group-hover:text-red-500 group-hover:fill-red-500 transition-colors" />
+              <span>Gostar do Evento</span>
+            </button>
+          </div>
         </div>
 
         {/* Key Info Grid */}

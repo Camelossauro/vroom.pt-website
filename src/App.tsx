@@ -204,8 +204,6 @@ export default function App() {
       {/* Main Content Sections */}
       {showDeeplinkPage ? (
         <DeeplinkPage onClose={closeSubPage} onOpenEvent={(ev) => openSubPage('event', ev)} />
-      ) : selectedEvent ? (
-        <EventDetailPage event={selectedEvent} onClose={closeSubPage} />
       ) : showPrivacyPage ? (
         <PrivacyPolicyPage onClose={closeSubPage} />
       ) : showTermsPage ? (
@@ -251,6 +249,11 @@ export default function App() {
           {/* Accordion FAQ by Audience Segment */}
           <FAQ />
         </main>
+      )}
+
+      {/* Render EventDetailPage overlay when an event is selected */}
+      {selectedEvent && (
+        <EventDetailPage event={selectedEvent} onClose={closeSubPage} />
       )}
 
       {!showPrivacyPage && !showTermsPage && !showDeleteAccountPage && !selectedEvent && !showPortalPage && !showDeeplinkPage && (
