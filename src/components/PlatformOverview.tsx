@@ -110,7 +110,13 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-3xl mx-auto mb-6 sm:mb-20"
+        >
           <span className="box-decoration-clone leading-loose text-xs font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-3 py-1 rounded-full">
             Um Único Ecossistema
           </span>
@@ -120,7 +126,7 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
           <p className="text-slate-400 text-xs sm:text-lg font-light leading-relaxed">
             Ligamos todas as pontas do Motorsport nacional.
           </p>
-        </div>
+        </motion.div>
 
         {/* MOBILE CAROUSEL VIEW (< md) */}
         <div className="md:hidden space-y-4 relative">
@@ -248,9 +254,13 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
 
         {/* DESKTOP GRID VIEW (>= md) */}
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {pillars.map((pillar) => (
-            <div
+          {pillars.map((pillar, pIdx) => (
+            <motion.div
               key={pillar.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: pIdx * 0.12 }}
               className={`bg-[#1D212B] rounded-2xl border border-[#262B37] p-6 lg:p-8 shadow-sm transition-all duration-300 flex flex-col justify-between ${pillar.colorTheme}`}
               id={`overview-pillar-${pillar.id}`}
             >
@@ -299,12 +309,18 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
                 {pillar.id !== 'drivers' && <ArrowRight className="w-3.5 h-3.5" />}
               </button>
 
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* Short inline summary banner */}
-        <div className="mt-8 sm:mt-16 bg-[#1D212B] border border-[#262B37] rounded-2xl p-4 sm:p-6 md:p-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 sm:gap-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-8 sm:mt-16 bg-[#1D212B] border border-[#262B37] rounded-2xl p-4 sm:p-6 md:p-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 sm:gap-6"
+        >
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
             <div className="p-2.5 bg-[#0F1115] rounded-xl shadow-sm text-brand-blue flex-shrink-0 border border-[#262B37]">
               <Radio className="w-5 h-5" />
@@ -324,7 +340,7 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
           >
             Iniciar Registo de Organizador
           </button>
-        </div>
+        </motion.div>
 
       </div>
     </section>

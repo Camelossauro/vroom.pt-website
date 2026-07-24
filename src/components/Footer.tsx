@@ -1,8 +1,24 @@
+import { MouseEvent } from 'react';
 import { Mail, MapPin } from 'lucide-react';
 // @ts-ignore
 import vroomLogoImg from '../assets/images/vroom_logo_1784301043513.jpg';
 
 export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: () => void, onOpenTerms: () => void }) {
+
+  const handleScrollTo = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      const offset = 80;
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = Math.max(0, elementPosition - offset);
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   return (
     <footer id="contact" className="bg-[#0F1115] text-white pt-12 sm:pt-20 pb-10 border-t border-[#262B37] relative overflow-hidden">
@@ -17,7 +33,7 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
           
           {/* Column 1: Brand details */}
           <div className="col-span-2 md:col-span-4 flex flex-col items-start gap-3 sm:gap-4 text-left">
-            <a href="#home" className="flex items-center gap-2 group">
+            <a href="#home" onClick={(e) => handleScrollTo(e, '#home')} className="flex items-center gap-2 group">
               <div className="text-white group-hover:text-brand-blue transition-colors flex items-center">
                 <img 
                   src={vroomLogoImg} 
@@ -50,10 +66,10 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
           <div className="col-span-1 md:col-span-2 text-left">
             <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-3">Plataforma</h4>
             <ul className="space-y-1.5 text-xs text-slate-400">
-              <li><a href="#home" className="hover:text-white transition-colors">Início</a></li>
-              <li><a href="#overview" className="hover:text-white transition-colors">O Ecossistema</a></li>
-              <li><a href="#organizations-section" className="hover:text-white transition-colors">Como Funciona</a></li>
-              <li><a href="#drivers" className="hover:text-white transition-colors">Perfil de Pilotos</a></li>
+              <li><a href="#home" onClick={(e) => handleScrollTo(e, '#home')} className="hover:text-white transition-colors cursor-pointer">Início</a></li>
+              <li><a href="#overview" onClick={(e) => handleScrollTo(e, '#overview')} className="hover:text-white transition-colors cursor-pointer">O Ecossistema</a></li>
+              <li><a href="#organizations-section" onClick={(e) => handleScrollTo(e, '#organizations-section')} className="hover:text-white transition-colors cursor-pointer">Como Funciona</a></li>
+              <li><a href="#drivers" onClick={(e) => handleScrollTo(e, '#drivers')} className="hover:text-white transition-colors cursor-pointer">Perfil de Pilotos</a></li>
             </ul>
           </div>
 
@@ -61,9 +77,9 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
           <div className="col-span-1 md:col-span-2 text-left">
             <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-3">Parceiros</h4>
             <ul className="space-y-1.5 text-xs text-slate-400">
-              <li><a href="#organizations-section" className="hover:text-white transition-colors">Registar Clube</a></li>
-              <li><a href="#why-vroom" className="hover:text-white transition-colors">Verificação</a></li>
-              <li><a href="#faq" className="hover:text-white transition-colors">Dúvidas Gerais</a></li>
+              <li><a href="#organizations-section" onClick={(e) => handleScrollTo(e, '#organizations-section')} className="hover:text-white transition-colors cursor-pointer">Registar Clube</a></li>
+              <li><a href="#why-vroom" onClick={(e) => handleScrollTo(e, '#why-vroom')} className="hover:text-white transition-colors cursor-pointer">Verificação</a></li>
+              <li><a href="#faq" onClick={(e) => handleScrollTo(e, '#faq')} className="hover:text-white transition-colors cursor-pointer">Dúvidas Gerais</a></li>
             </ul>
           </div>
 

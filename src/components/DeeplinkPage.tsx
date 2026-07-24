@@ -3,6 +3,8 @@ import { Smartphone, ExternalLink, ArrowLeft, ShieldCheck, Check } from 'lucide-
 import { getNativeDeepLink, LINK_ANDROID, LINK_IOS } from '../deeplink';
 import { supabase } from '../lib/supabase';
 import { DatabaseEvent } from '../types';
+// @ts-ignore
+import vroomLogoImg from '../assets/images/vroom_logo_1784301043513.jpg';
 
 interface DeeplinkPageProps {
   onClose?: () => void;
@@ -75,36 +77,41 @@ export default function DeeplinkPage({ onClose, onOpenEvent }: DeeplinkPageProps
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-600/5 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Top Header */}
-      <header className="p-4 sm:p-6 border-b border-[#262B37] bg-[#12151D]/80 backdrop-blur-md relative z-10">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <a href="/" className="flex items-center gap-3 group">
-            <img 
-              src="/vroom-logo.jpg" 
-              alt="Vroom.pt Logo" 
-              className="w-10 h-10 rounded-xl border border-[#262B37] object-cover group-hover:scale-105 transition-transform" 
-            />
-            <div>
-              <span className="text-[10px] font-mono font-bold text-brand-blue uppercase tracking-widest block">Vroom.pt</span>
-              <span className="text-sm font-bold text-white tracking-tight">Motorsport Hub Portugal</span>
+      {/* Top App Bar Header */}
+      <header className="sticky top-0 z-50 py-3.5 sm:py-4 px-4 sm:px-6 border-b border-[#262B37] bg-[#0D0F14]/95 backdrop-blur-md shadow-xl">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <a href="/" className="flex items-center gap-2 group">
+            <div className="text-white group-hover:text-brand-blue transition-colors flex items-center">
+              <img 
+                src={vroomLogoImg} 
+                alt="Vroom.pt Logo" 
+                className="w-7 h-7 sm:w-8 h-8 object-contain transition-transform duration-300 rounded-xl shadow-md group-hover:scale-105" 
+                referrerPolicy="no-referrer"
+              />
             </div>
+            <span className="font-display font-bold text-lg sm:text-xl tracking-tighter text-white">
+              Vroom<span className="text-white font-bold">.pt</span>
+            </span>
           </a>
-
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="flex items-center gap-2 px-3.5 py-1.5 bg-[#171A21] hover:bg-[#262B37] text-slate-300 hover:text-white rounded-xl border border-[#262B37] text-xs font-semibold transition-all cursor-pointer"
-            >
-              <ArrowLeft className="w-4 h-4 text-brand-blue" />
-              <span>Voltar</span>
-            </button>
-          )}
         </div>
       </header>
 
       {/* Main Deeplink Engine Card */}
       <main className="flex-1 flex items-center justify-center p-4 sm:p-8 relative z-10">
-        <div className="max-w-lg w-full bg-[#171A21] border border-[#262B37] rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
+        <div className="max-w-lg w-full space-y-3">
+          {onClose && (
+            <div className="flex items-center justify-start px-1">
+              <button
+                onClick={onClose}
+                className="flex items-center gap-2 px-3.5 py-1.5 bg-[#171A21] hover:bg-[#262B37] text-slate-300 hover:text-white rounded-xl border border-[#262B37] text-xs font-semibold transition-all cursor-pointer shadow-md"
+              >
+                <ArrowLeft className="w-4 h-4 text-brand-blue" />
+                <span>Voltar</span>
+              </button>
+            </div>
+          )}
+
+          <div className="bg-[#171A21] border border-[#262B37] rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
           
           {/* Subtle Accent Glow */}
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-72 h-72 bg-gradient-to-b from-brand-blue/30 via-blue-500/10 to-transparent rounded-full blur-2xl pointer-events-none" />
@@ -242,6 +249,7 @@ export default function DeeplinkPage({ onClose, onOpenEvent }: DeeplinkPageProps
             </>
           )}
 
+        </div>
         </div>
       </main>
 

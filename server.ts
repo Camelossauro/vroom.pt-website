@@ -344,6 +344,28 @@ async function startServer() {
     }
   });
 
+  // Deeplink & Event HTML routes redirect/rewrite
+  app.get(["/deeplink", "/deeplink.html"], (req, res, next) => {
+    if (process.env.NODE_ENV === "production") {
+      return res.sendFile(path.join(process.cwd(), "dist", "deeplink.html"));
+    }
+    // In dev, if URL is /deeplink without .html, redirect or let Vite handle
+    if (req.path === "/deeplink") {
+      return res.redirect(302, "/deeplink.html" + (req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : ""));
+    }
+    next();
+  });
+
+  app.get(["/evento", "/evento.html"], (req, res, next) => {
+    if (process.env.NODE_ENV === "production") {
+      return res.sendFile(path.join(process.cwd(), "dist", "evento.html"));
+    }
+    if (req.path === "/evento") {
+      return res.redirect(302, "/evento.html" + (req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : ""));
+    }
+    next();
+  });
+
   // Vite middleware setup for assets/front-end
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

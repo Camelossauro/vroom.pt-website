@@ -1,6 +1,7 @@
 import { 
   Users, User
 } from 'lucide-react';
+import { motion } from 'motion/react';
 import { mockDrivers } from '../data';
 
 export default function DriverEcosystem() {
@@ -13,7 +14,13 @@ export default function DriverEcosystem() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 mb-10 sm:mb-16 items-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 mb-10 sm:mb-16 items-center"
+        >
           <div className="lg:col-span-6 text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/10 border border-brand-blue/20 rounded-full mb-4">
               <span className="flex h-2 w-2 relative">
@@ -101,7 +108,7 @@ export default function DriverEcosystem() {
 
             </div>
           </div>
-        </div>
+        </motion.div>
 
       </div>
     </section>

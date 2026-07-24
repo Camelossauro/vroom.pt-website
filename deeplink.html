@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,18 +19,6 @@
     <meta property="og:image" content="/vroom-logo.jpg" />
 
     <style>
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: #0F1115;
-        color: #F1F5F9;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
       .fade-in {
         animation: fadeIn 0.3s ease-out forwards;
       }
@@ -40,8 +28,14 @@
       }
     </style>
   </head>
-  <body class="bg-[#0F1115] text-slate-100 p-4">
-    <div id="deeplink-ui" class="w-full max-w-lg mx-auto"></div>
+  <body class="bg-[#0F1115] text-slate-100 min-h-screen flex flex-col justify-between font-sans antialiased selection:bg-brand-blue selection:text-white">
+    <header id="header-container" class="border-b border-[#262B37] bg-[#12151D]/90 backdrop-blur-md sticky top-0 z-50 px-4 py-3 sm:px-8"></header>
+
+    <main class="flex-1 flex items-center justify-center p-4 sm:p-8 relative">
+      <div id="deeplink-ui" class="w-full max-w-lg mx-auto"></div>
+    </main>
+
+    <footer id="footer-container" class="border-t border-[#262B37] bg-[#12151D]/60 py-6 px-4 text-center text-xs text-slate-400 font-mono"></footer>
 
     <script type="module" src="/src/deeplink.ts"></script>
   </body>

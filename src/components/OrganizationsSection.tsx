@@ -9,6 +9,17 @@ interface OrganizationsSectionProps {
 }
 
 export default function OrganizationsSection({ onOpenPortal }: OrganizationsSectionProps) {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [currentFeature, setCurrentFeature] = useState(0);
+
+  // Swipe support for Steps
+  const [stepTouchStart, setStepTouchStart] = useState<number | null>(null);
+  const [stepTouchEnd, setStepTouchEnd] = useState<number | null>(null);
+
+  // Swipe support for Features
+  const [featureTouchStart, setFeatureTouchStart] = useState<number | null>(null);
+  const [featureTouchEnd, setFeatureTouchEnd] = useState<number | null>(null);
+
   const steps = [
     {
       num: '01',
@@ -79,6 +90,50 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
     }
   ];
 
+  const minSwipeDistance = 40;
+
+  const handleStepTouchStart = (e: TouchEvent) => {
+    setStepTouchEnd(null);
+    setStepTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleStepTouchMove = (e: TouchEvent) => {
+    setStepTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleStepTouchEnd = () => {
+    if (!stepTouchStart || !stepTouchEnd) return;
+    const distance = stepTouchStart - stepTouchEnd;
+    if (distance > minSwipeDistance) {
+      // Swipe left -> next
+      setCurrentStep(prev => (prev === steps.length - 1 ? 0 : prev + 1));
+    } else if (distance < -minSwipeDistance) {
+      // Swipe right -> prev
+      setCurrentStep(prev => (prev === 0 ? steps.length - 1 : prev - 1));
+    }
+  };
+
+  const handleFeatureTouchStart = (e: TouchEvent) => {
+    setFeatureTouchEnd(null);
+    setFeatureTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleFeatureTouchMove = (e: TouchEvent) => {
+    setFeatureTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleFeatureTouchEnd = () => {
+    if (!featureTouchStart || !featureTouchEnd) return;
+    const distance = featureTouchStart - featureTouchEnd;
+    if (distance > minSwipeDistance) {
+      // Swipe left -> next
+      setCurrentFeature(prev => (prev === features.length - 1 ? 0 : prev + 1));
+    } else if (distance < -minSwipeDistance) {
+      // Swipe right -> prev
+      setCurrentFeature(prev => (prev === 0 ? features.length - 1 : prev - 1));
+    }
+  };
+
   return (
     <section id="organizations-section" className="py-10 sm:py-30 bg-[#171A21] relative border-b border-[#262B37] overflow-hidden">
       {/* Background glow orbs */}
@@ -88,7 +143,13 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-3xl mx-auto mb-8 sm:mb-20"
+        >
           <span className="box-decoration-clone leading-loose text-xs font-montserrat font-bold text-brand-red tracking-widest uppercase bg-brand-red/10 px-2.5 py-1 rounded-full">
             Para Clubes, Organizadores e Promotores
           </span>
@@ -98,7 +159,7 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
           <p className="text-slate-400 text-sm sm:text-lg font-light leading-relaxed">
             O Vroom.pt centraliza a informação das maiores provas e eventos de automobilismo em Portugal numa app móvel intuitiva.
           </p>
-        </div>
+        </motion.div>
 
         {/* NEW ORGANIZATION JOURNEY: "How it works" timeline cards */}
         <div className="mb-10 sm:mb-24">
@@ -109,39 +170,80 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
             </p>
           </div>
 
-          {/* MOBILE STEPS HORIZONTAL SCROLL TRACK (< md) */}
-          <div className="md:hidden relative -mx-4 px-4">
-            {/* Left and Right Edge Color Fades */}
-            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-[#171A21] to-transparent z-10" />
-            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-[#171A21] to-transparent z-10" />
-
-            <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar py-1 px-1">
-              {steps.map((st, idx) => (
-                <div 
-                  key={idx}
-                  className="min-w-[85%] sm:min-w-[75%] snap-center shrink-0 relative overflow-hidden rounded-2xl border border-[#262B37] bg-[#1D212B] p-5 shadow-xl flex flex-col justify-between"
+          {/* MOBILE STEPS CAROUSEL (< md) */}
+          <div className="md:hidden relative max-w-md mx-auto">
+            <div 
+              onTouchStart={handleStepTouchStart}
+              onTouchMove={handleStepTouchMove}
+              onTouchEnd={handleStepTouchEnd}
+              className="relative overflow-hidden rounded-2xl border border-[#262B37] bg-[#1D212B] p-5 shadow-2xl min-h-[190px] flex flex-col justify-between"
+            >
+              <div className="absolute -top-14 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-gradient-to-b from-brand-blue/20 via-blue-500/5 to-transparent blur-3xl pointer-events-none opacity-60" />
+              
+              <AnimatePresence mode="wait">
+                <motion.div 
+                  key={currentStep}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.25 }}
+                  className="relative z-10"
                 >
-                  <div className="absolute -top-14 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-gradient-to-b from-brand-blue/20 via-blue-500/5 to-transparent blur-3xl pointer-events-none opacity-60" />
-                  <div className="relative z-10">
-                    <div className="flex justify-between items-start mb-3">
-                      <div className="p-2.5 bg-[#0F1115] rounded-xl border border-[#262B37] shadow-sm">
-                        {cloneElement(st.icon as ReactElement, { className: 'w-5 h-5 text-brand-blue' })}
-                      </div>
-                      <span className="text-2xl font-bold font-mono text-slate-700/80">{st.num}</span>
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="p-2.5 bg-[#0F1115] rounded-xl border border-[#262B37] shadow-sm">
+                      {cloneElement(steps[currentStep].icon as ReactElement, { className: 'w-5 h-5 text-brand-blue' })}
                     </div>
-                    <h4 className="font-display font-bold text-white text-base mb-1 text-left">{st.title}</h4>
-                    <p className="text-slate-300 text-xs leading-relaxed font-light text-left">{st.description}</p>
+                    <span className="text-2xl font-bold font-mono text-slate-600">{steps[currentStep].num}</span>
                   </div>
+                  <h4 className="font-display font-bold text-white text-base mb-1 text-left">{steps[currentStep].title}</h4>
+                  <p className="text-slate-300 text-xs leading-relaxed font-light text-left">{steps[currentStep].description}</p>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Navigation Bar */}
+              <div className="flex items-center justify-between pt-4 mt-2 border-t border-[#262B37] z-20">
+                <button
+                  onClick={() => setCurrentStep(prev => (prev === 0 ? steps.length - 1 : prev - 1))}
+                  className="w-8 h-8 rounded-full bg-[#0F1115] border border-[#262B37] flex items-center justify-center text-slate-300 hover:text-white hover:border-brand-blue transition-colors cursor-pointer"
+                  aria-label="Anterior"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+
+                {/* Dots */}
+                <div className="flex items-center gap-1.5">
+                  {steps.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentStep(idx)}
+                      className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                        currentStep === idx ? 'w-6 bg-brand-blue' : 'w-2 bg-slate-700'
+                      }`}
+                      aria-label={`Slide ${idx + 1}`}
+                    />
+                  ))}
                 </div>
-              ))}
+
+                <button
+                  onClick={() => setCurrentStep(prev => (prev === steps.length - 1 ? 0 : prev + 1))}
+                  className="w-8 h-8 rounded-full bg-[#0F1115] border border-[#262B37] flex items-center justify-center text-slate-300 hover:text-white hover:border-brand-blue transition-colors cursor-pointer"
+                  aria-label="Seguinte"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
 
           {/* DESKTOP STEPS GRID (>= md) */}
           <div className="hidden md:grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 relative">
             {steps.map((step, idx) => (
-              <div 
+              <motion.div 
                 key={idx}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.45, delay: idx * 0.1 }}
                 className="bg-[#1D212B] rounded-xl border border-[#262B37] p-4 sm:p-6 relative flex flex-col justify-between hover:border-slate-700 transition-colors"
               >
                 <div>
@@ -159,7 +261,7 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
                     <span className="text-brand-red font-bold text-lg">→</span>
                   </div>
                 )}
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -173,36 +275,82 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
             </p>
           </div>
 
-          {/* MOBILE FEATURES HORIZONTAL SCROLL TRACK (< md) */}
-          <div className="md:hidden relative -mx-4 px-4">
-            {/* Left and Right Edge Color Fades */}
-            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-[#171A21] to-transparent z-10" />
-            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-[#171A21] to-transparent z-10" />
-
-            <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar py-1 px-1">
-              {features.map((ft, idx) => (
-                <div 
-                  key={idx}
-                  className="min-w-[85%] sm:min-w-[75%] snap-center shrink-0 relative overflow-hidden rounded-2xl border border-[#262B37] bg-[#1D212B] p-5 shadow-xl flex flex-col justify-between"
+          {/* MOBILE FEATURES CAROUSEL (< md) */}
+          <div className="md:hidden relative max-w-md mx-auto">
+            <div 
+              onTouchStart={handleFeatureTouchStart}
+              onTouchMove={handleFeatureTouchMove}
+              onTouchEnd={handleFeatureTouchEnd}
+              className="relative overflow-hidden rounded-2xl border border-[#262B37] bg-[#1D212B] p-5 shadow-2xl min-h-[190px] flex flex-col justify-between"
+            >
+              <div className="absolute -top-14 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-gradient-to-b from-brand-red/20 via-red-500/5 to-transparent blur-3xl pointer-events-none opacity-60" />
+              
+              <AnimatePresence mode="wait">
+                <motion.div 
+                  key={currentFeature}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.25 }}
+                  className="relative z-10"
                 >
-                  <div className="absolute -top-14 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-gradient-to-b from-brand-red/20 via-red-500/5 to-transparent blur-3xl pointer-events-none opacity-60" />
-                  <div className="relative z-10">
-                    <div className="w-10 h-10 rounded-xl bg-[#0F1115] flex items-center justify-center mb-3 border border-[#262B37] shadow-sm">
-                      {cloneElement(ft.icon as ReactElement, { className: 'w-5 h-5 text-brand-red' })}
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#0F1115] flex items-center justify-center border border-[#262B37] shadow-sm">
+                      {cloneElement(features[currentFeature].icon as ReactElement, { className: 'w-5 h-5 text-brand-red' })}
                     </div>
-                    <h3 className="font-display font-bold text-white text-base mb-1 text-left">{ft.title}</h3>
-                    <p className="text-slate-300 text-xs font-light leading-relaxed text-left">{ft.description}</p>
+                    <span className="text-xs font-mono font-bold text-slate-500 bg-[#0F1115] px-2 py-1 rounded-md border border-[#262B37]">
+                      0{currentFeature + 1} / 0{features.length}
+                    </span>
                   </div>
+                  <h3 className="font-display font-bold text-white text-base mb-1 text-left">{features[currentFeature].title}</h3>
+                  <p className="text-slate-300 text-xs font-light leading-relaxed text-left">{features[currentFeature].description}</p>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Navigation Bar */}
+              <div className="flex items-center justify-between pt-4 mt-2 border-t border-[#262B37] z-20">
+                <button
+                  onClick={() => setCurrentFeature(prev => (prev === 0 ? features.length - 1 : prev - 1))}
+                  className="w-8 h-8 rounded-full bg-[#0F1115] border border-[#262B37] flex items-center justify-center text-slate-300 hover:text-white hover:border-brand-red transition-colors cursor-pointer"
+                  aria-label="Anterior"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+
+                {/* Dots */}
+                <div className="flex items-center gap-1.5">
+                  {features.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentFeature(idx)}
+                      className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                        currentFeature === idx ? 'w-6 bg-brand-red' : 'w-2 bg-slate-700'
+                      }`}
+                      aria-label={`Recurso ${idx + 1}`}
+                    />
+                  ))}
                 </div>
-              ))}
+
+                <button
+                  onClick={() => setCurrentFeature(prev => (prev === features.length - 1 ? 0 : prev + 1))}
+                  className="w-8 h-8 rounded-full bg-[#0F1115] border border-[#262B37] flex items-center justify-center text-slate-300 hover:text-white hover:border-brand-red transition-colors cursor-pointer"
+                  aria-label="Seguinte"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
 
           {/* DESKTOP FEATURES GRID (>= md) */}
           <div className="hidden md:grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8">
             {features.map((feat, idx) => (
-              <div 
+              <motion.div 
                 key={idx}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.45, delay: idx * 0.08 }}
                 className="bg-[#1D212B] rounded-xl border border-[#262B37] p-4 sm:p-6 shadow-xs hover:border-slate-700 transition-all duration-300 "
               >
                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#0F1115] flex items-center justify-center mb-4 border border-[#262B37]">
@@ -210,13 +358,19 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
                 </div>
                 <h3 className="font-display font-bold text-white text-[14px] sm:text-base mb-1.5 text-left">{feat.title}</h3>
                 <p className="text-slate-400 text-xs sm:text-sm font-light leading-relaxed text-left">{feat.description}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
 
         {/* BOTTOM CALL TO ACTION PANEL (Encouraging mobile installation/access) */}
-        <div className="bg-[#1D212B] rounded-xl border border-[#262B37] p-5 sm:p-8 md:p-12 shadow-xl relative overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.55, delay: 0.15 }}
+          className="bg-[#1D212B] rounded-xl border border-[#262B37] p-5 sm:p-8 md:p-12 shadow-xl relative overflow-hidden"
+        >
           {/* Subtle decoration */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-brand-red/5 rounded-full" />
           
@@ -264,10 +418,11 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
               
               <button 
                 onClick={() => onOpenPortal('register')}
-                className="w-full py-3.5 bg-brand-blue text-white font-bold rounded-xl text-sm sm:text-sm hover:bg-brand-blue-hover transition-all flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.01] active:scale-95"
+                className="group w-full py-3.5 px-4 bg-gradient-to-r from-brand-blue to-blue-600 hover:from-blue-600 hover:to-brand-blue text-white font-bold rounded-xl text-sm tracking-wide shadow-lg shadow-brand-blue/25 hover:shadow-brand-blue/40 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer hover:scale-[1.01] active:scale-[0.98] border border-blue-400/30"
               >
-                Tornar-se Organização Verificada
-                <ArrowUpRight className="w-4 h-4" />
+                <Shield className="w-4 h-4 text-white/90 group-hover:scale-110 transition-transform duration-300" />
+                <span className="font-semibold tracking-tight">Tornar-se Organização Verificada</span>
+                <ArrowUpRight className="w-4 h-4 text-white/80 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
               </button>
 
               <p className="text-xs text-slate-500 font-light text-center">
@@ -275,7 +430,7 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
       </div>
     </section>

@@ -174,7 +174,13 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-14">
+        <motion.div 
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-3xl mx-auto mb-8 sm:mb-14"
+        >
           <span className="box-decoration-clone leading-loose text-xs sm:text-sm font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-3 py-1 rounded-xl">
             Calendário Oficial
           </span>
@@ -184,11 +190,17 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
           <p className="text-slate-400 text-sm sm:text-base font-light leading-relaxed max-w-2xl mx-auto">
             Explore o calendário oficial de automobilismo e motociclismo nacional. Selecione uma prova para ver todos os detalhes e direções no GPS.
           </p>
-        </div>
+        </motion.div>
 
         {/* DEDICATED PLANO DESTAQUE / PREMIUM SHOWCASE SECTION */}
         {!loading && showcaseEvents.length > 0 && (
-          <div className="mb-12 sm:mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mb-12 sm:mb-16"
+          >
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <h3 className="text-lg sm:text-2xl font-display font-bold text-white tracking-tight">
                 Eventos em Destaque
@@ -266,11 +278,17 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
                 );
               })}
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Filters and Search Bar - Clean & Intuitive */}
-        <div className="bg-[#171A21] border border-[#262B37] rounded-2xl p-4 sm:p-6 mb-8 sm:mb-12 shadow-sm">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="bg-[#171A21] border border-[#262B37] rounded-2xl p-4 sm:p-6 mb-8 sm:mb-12 shadow-sm"
+        >
           <div className="flex flex-col md:flex-row gap-3 sm:gap-4 items-center justify-between mb-3">
             {/* Search Input */}
             <div className="relative w-full md:w-96">
@@ -369,7 +387,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
               ))}
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Loading State */}
         {loading && (
@@ -381,7 +399,12 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
 
         {/* Event Cards Grid */}
         {!loading && (
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
               {filteredEvents.slice(0, visibleCount).map((ev) => {
                 const { isHappening } = getEventTimeStatus(ev.data_inicio, ev.data_fim);
@@ -484,7 +507,7 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
                 )}
               </div>
             )}
-          </div>
+          </motion.div>
         )}
 
         {/* Empty state */}

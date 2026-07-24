@@ -1,7 +1,7 @@
 import React, { useState, cloneElement, ReactElement } from 'react';
 import { 
   Smartphone, MapPin, Calendar, Heart, Search, Bell, Navigation, 
-  Compass, ChevronRight, CircleDot, Share2
+  Compass, ChevronRight, ChevronLeft, CircleDot, Share2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 // @ts-ignore
@@ -113,7 +113,13 @@ export default function MobileAppShowcase() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-3xl mx-auto mb-6 sm:mb-20"
+        >
           <span className="box-decoration-clone leading-loose text-xs font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2.5 py-0.5 rounded-lg sm:rounded-xl">
             Para os Adeptos
           </span>
@@ -123,10 +129,16 @@ export default function MobileAppShowcase() {
           <p className="text-slate-400 text-sm sm:text-lg font-light leading-relaxed">
             O ecossistema Vroom.pt traz para o seu smartphone a aplicação de motorsport mais avançada do país.
           </p>
-        </div>
+        </motion.div>
 
         {/* Interactive App Showcase Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center"
+        >
           
           {/* Left: App Features Selector */}
           <div className="lg:col-span-5 space-y-3 sm:space-y-6 text-left">
@@ -141,41 +153,49 @@ export default function MobileAppShowcase() {
               </div>
             </div>
 
-            {/* MOBILE COMPACT TAB VIEW (< lg) */}
+            {/* MOBILE COMPACT CAROUSEL VIEW (< lg) */}
             <div className="lg:hidden space-y-3">
-              {/* Horizontal Pill Selector */}
-              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+              {/* Feature Pill Grid */}
+              <div className="grid grid-cols-4 gap-1 bg-[#171A21] p-1 rounded-xl border border-[#262B37]">
                 {features.map((feat) => {
                   const isActive = activeFeature === feat.id;
                   return (
-                    <button
+                    <motion.button
                       key={feat.id}
                       onClick={() => {
                         setActiveFeature(feat.id as any);
                         setIsAutoPlaying(false);
                       }}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${
+                      whileTap={{ scale: 0.94 }}
+                      className={`relative py-1.5 px-1 rounded-lg text-[11px] font-bold text-center transition-colors duration-200 cursor-pointer overflow-hidden ${
                         isActive 
-                          ? 'text-white bg-brand-blue shadow-md' 
-                          : 'text-slate-400 bg-[#171A21] border border-[#262B37] hover:text-white'
+                          ? 'text-white' 
+                          : 'text-slate-400 hover:text-white'
                       }`}
                     >
-                      {feat.shortTitle}
-                    </button>
+                      {isActive && (
+                        <motion.div
+                          layoutId="mobileActiveFeaturePill"
+                          className="absolute inset-0 bg-brand-blue rounded-lg shadow-md"
+                          transition={{ type: "spring", stiffness: 450, damping: 30 }}
+                        />
+                      )}
+                      <span className="relative z-10">{feat.shortTitle}</span>
+                    </motion.button>
                   );
                 })}
               </div>
 
-              {/* Compact Active Feature Card */}
-              <div className="relative overflow-hidden rounded-2xl border border-[#262B37] bg-[#1D212B] p-4 shadow-xl">
+              {/* Compact Active Feature Carousel Card */}
+              <div className="relative overflow-hidden rounded-2xl border border-[#262B37] bg-[#1D212B] p-4 shadow-xl flex flex-col justify-between min-h-[140px]">
                 <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-gradient-to-b from-brand-blue/20 via-blue-500/5 to-transparent blur-2xl pointer-events-none opacity-80" />
 
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeFeature}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
                     className="relative z-10 flex items-start gap-3"
                   >
@@ -193,6 +213,25 @@ export default function MobileAppShowcase() {
                     </div>
                   </motion.div>
                 </AnimatePresence>
+
+                {/* Controls Bar / Indicator Dots */}
+                <div className="flex items-center justify-center pt-2.5 mt-2.5 border-t border-[#262B37] z-20">
+                  <div className="flex items-center gap-1.5">
+                    {features.map((feat, idx) => (
+                      <button
+                        key={feat.id}
+                        onClick={() => {
+                          setActiveFeature(feat.id as any);
+                          setIsAutoPlaying(false);
+                        }}
+                        className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                          activeFeature === feat.id ? 'w-5 bg-brand-blue' : 'w-1.5 bg-slate-700'
+                        }`}
+                        aria-label={`Slide ${idx + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -201,29 +240,38 @@ export default function MobileAppShowcase() {
               {features.map((feat) => {
                 const isActive = activeFeature === feat.id;
                 return (
-                  <button
+                  <motion.button
                     key={feat.id}
                     onClick={() => {
                       setActiveFeature(feat.id as any);
                       setIsAutoPlaying(false);
                     }}
-                    className={`w-full text-left p-3 sm:p-5 rounded-xl border transition-all duration-300 flex gap-3 sm:gap-4 cursor-pointer ${
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`relative w-full text-left p-3 sm:p-5 rounded-xl border transition-all duration-300 flex gap-3 sm:gap-4 cursor-pointer overflow-hidden ${
                       isActive 
-                        ? 'bg-[#1D212B] border-slate-700 shadow-lg scale-[1.01]' 
+                        ? 'bg-[#1D212B] border-slate-700 shadow-lg' 
                         : 'bg-[#171A21] border-[#262B37] hover:border-slate-700 hover:bg-[#1D212B]'
                     }`}
                   >
-                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl flex-shrink-0 flex items-center justify-center bg-[#0F1115]">
+                    {isActive && (
+                      <motion.div
+                        layoutId="desktopActiveFeatureIndicator"
+                        className="absolute left-0 top-0 bottom-0 w-1 bg-brand-blue"
+                        transition={{ type: "spring", stiffness: 450, damping: 30 }}
+                      />
+                    )}
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl flex-shrink-0 flex items-center justify-center bg-[#0F1115] relative z-10">
                       {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-brand-blue' })}
                     </div>
-                    <div>
+                    <div className="relative z-10">
                       <h4 className="font-semibold text-white text-[13px] sm:text-base flex items-center gap-2">
                         {feat.title}
-                        {isActive && <span className="h-1.5 w-1.5 bg-brand-blue rounded-full " />}
+                        {isActive && <span className="h-1.5 w-1.5 bg-brand-blue rounded-full animate-pulse" />}
                       </h4>
                       <p className="text-xs sm:text-sm text-slate-400 font-light mt-0.5 leading-tight sm:leading-relaxed">{feat.desc}</p>
                     </div>
-                  </button>
+                  </motion.button>
                 );
               })}
             </div>
@@ -432,7 +480,7 @@ export default function MobileAppShowcase() {
 
           </div>
 
-        </div>
+        </motion.div>
       </div>
     </section>
   );
