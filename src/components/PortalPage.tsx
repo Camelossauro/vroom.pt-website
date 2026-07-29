@@ -48,9 +48,14 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
 
   const handleOrgSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (orgPassword.length < 6) { 
-      setToastMessage({ text: 'A palavra-passe deve ter no mínimo 6 caracteres.', type: 'error' }); 
+    if (orgPassword.length < 8) { 
+      setToastMessage({ text: 'A palavra-passe deve ter no mínimo 8 caracteres.', type: 'error' }); 
       return; 
+    }
+    const pwdCheck = authService.validatePassword(orgPassword);
+    if (!pwdCheck.valid) {
+      setToastMessage({ text: pwdCheck.message || 'Palavra-passe fraca. Inclua letras e números/símbolos.', type: 'error' });
+      return;
     }
     if (orgPassword !== orgConfirmPassword) { 
       setToastMessage({ text: 'As palavras-passe não coincidem.', type: 'error' }); 
@@ -545,7 +550,7 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
                             <input 
                               type={showOrgPasswordText ? "text" : "password"} 
                               required
-                              placeholder="Mínimo 6 caracteres"
+                              placeholder="Mínimo 8 caracteres"
                               className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-10 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                               value={orgPassword}
                               onChange={(e) => setOrgPassword(e.target.value)}

@@ -10,8 +10,58 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  // Body parser middleware
-  app.use(express.json());
+  // Security: Disable x-powered-by header to prevent backend technology disclosure
+  app.disable("x-powered-by");
+
+  // Global HTTP Security Headers Middleware
+  app.use((req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "SAMEORIGIN");
+    res.setHeader("X-XSS-Protection", "1; mode=block");
+    res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+    res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+    res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    next();
+  });
+
+  // Body parser middleware with strict size limit
+  app.use(express.json({ limit: "1mb" }));
+
+  // In-memory sliding window rate limiter
+  const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+  
+  const createRateLimiter = (maxRequests: number, windowMs: number) => {
+    return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const clientIp = (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || req.ip || "unknown";
+      const now = Date.now();
+      const key = `${req.path}:${clientIp}`;
+
+      const record = rateLimitStore.get(key);
+
+      if (!record || now > record.resetTime) {
+        rateLimitStore.set(key, { count: 1, resetTime: now + windowMs });
+        return next();
+      }
+
+      if (record.count >= maxRequests) {
+        return res.status(429).json({
+          error: "Muitos pedidos enviados em pouco tempo. Por favor, aguarde alguns minutos antes de tentar novamente."
+        });
+      }
+
+      record.count += 1;
+      next();
+    };
+  };
+
+  // General API Rate Limiter: 100 requests per 15 minutes
+  const generalLimiter = createRateLimiter(100, 15 * 60 * 1000);
+  
+  // Strict Auth/Delete Rate Limiter: 5 requests per 15 minutes
+  const strictAuthLimiter = createRateLimiter(5, 15 * 60 * 1000);
+
+  // Apply general limiter to all /api/ routes
+  app.use("/api/", generalLimiter);
 
   // API Routes
   app.get("/api/health", (req, res) => {
@@ -266,31 +316,40 @@ async function startServer() {
     }
   });
 
-  // DELETE account API route
-  app.post("/api/delete-account", async (req, res) => {
+  // DELETE account API route with strict rate limiting and strict token verification
+  app.post("/api/delete-account", strictAuthLimiter, async (req, res) => {
     try {
       const { userId } = req.body;
       const authHeader = req.headers.authorization;
+
+      // 1. Validate payload presence and structure
+      if (!userId || typeof userId !== "string" || !/^[a-zA-Z0-9\-_]{1,128}$/.test(userId)) {
+        return res.status(400).json({ error: "Identificador de utilizador inválido." });
+      }
 
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(401).json({ error: "Cabeçalho Authorization em falta ou inválido." });
       }
 
       const jwt = authHeader.split(" ")[1];
+      if (!jwt || jwt.trim() === "") {
+        return res.status(401).json({ error: "Token de autenticação inválido." });
+      }
+
       const supabaseUrl = process.env.VITE_SUPABASE_URL;
       const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
       if (!supabaseUrl) {
-        return res.status(500).json({ error: "VITE_SUPABASE_URL não configurado no servidor." });
+        return res.status(500).json({ error: "Serviço de autenticação temporariamente indisponível." });
       }
 
       if (!serviceRoleKey) {
-        return res.status(500).json({ error: "SUPABASE_SERVICE_ROLE_KEY não configurado no servidor." });
+        return res.status(500).json({ error: "Chave de administração do servidor não configurada." });
       }
 
-      console.log(`[Vroom API] Verifying JWT token for user: ${userId}`);
+      console.log(`[Vroom API Security] Verifying JWT token for deletion request: ${userId}`);
 
-      // Step 1: Verify the JWT token with Supabase Auth to confirm user identity
+      // Step 1: Verify the JWT token with Supabase Auth to confirm real user identity
       const verifyResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
         method: "GET",
         headers: {
@@ -300,21 +359,21 @@ async function startServer() {
       });
 
       if (!verifyResponse.ok) {
-        const errText = await verifyResponse.text();
-        console.error("[Vroom API] JWT verification failed:", errText);
-        return res.status(401).json({ error: "Token de utilizador inválido ou expirado." });
+        console.error("[Vroom API Security] JWT verification failed");
+        return res.status(401).json({ error: "Token de utilizador inválido ou sessão expirada. Por favor, volte a iniciar sessão." });
       }
 
       const verifiedUser = await verifyResponse.json();
       const verifiedUserId = verifiedUser.id || verifiedUser.sub;
 
-      // Ensure the user is only deleting their own account
+      // Crucial Security Rule: Ensure the user is ONLY deleting their own account
       if (verifiedUserId !== userId) {
-        return res.status(403).json({ error: "Não autorizado a eliminar esta conta." });
+        console.error(`[Vroom API Security] Mismatch: Token ID (${verifiedUserId}) does not match requested userId (${userId})`);
+        return res.status(403).json({ error: "Acesso negado: Não está autorizado a eliminar esta conta." });
       }
 
-      // Step 2: Delete user from auth.users using the service_role key
-      console.log(`[Vroom API] Performing secure admin delete on auth.users for ${userId}...`);
+      // Step 2: Delete user from auth.users using the service_role key server-side
+      console.log(`[Vroom API Security] Performing secure admin delete on auth.users for ${userId}...`);
       const deleteResponse = await fetch(`${supabaseUrl}/auth/v1/admin/users/${userId}`, {
         method: "DELETE",
         headers: {
@@ -325,22 +384,22 @@ async function startServer() {
 
       if (!deleteResponse.ok) {
         const errText = await deleteResponse.text();
-        console.error("[Vroom API] Supabase admin delete user failed:", errText);
+        console.error("[Vroom API Security] Supabase admin delete user failed:", errText);
         return res.status(deleteResponse.status).json({ 
-          error: `Falha ao eliminar conta na API do Supabase: ${errText}` 
+          error: "Falha ao eliminar a conta no servidor. Por favor, tente novamente mais tarde." 
         });
       }
 
-      console.log(`[Vroom API] Account ${userId} successfully hard deleted via CASCADE.`);
+      console.log(`[Vroom API Security] Account ${userId} successfully hard deleted via CASCADE.`);
 
       return res.json({ 
         success: true, 
-        message: "A sua conta foi permanentemente apagada com sucesso. Todos os seus dados pessoais foram eliminados em conformidade com as diretivas do RGPD." 
+        message: "A sua conta foi permanentemente apagada com sucesso. Todos os seus dados pessoais foram eliminados em conformidade com o RGPD." 
       });
 
     } catch (err: any) {
-      console.error("[Vroom API] Error in delete-account route:", err);
-      return res.status(500).json({ error: err.message || "Erro interno do servidor." });
+      console.error("[Vroom API Security] Exception in delete-account route:", err);
+      return res.status(500).json({ error: "Erro interno do servidor ao processar eliminação de conta." });
     }
   });
 

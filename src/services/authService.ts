@@ -76,6 +76,19 @@ export const authService = {
     return !!url && url !== 'undefined' && url !== '' && !!key && key !== 'placeholder' && key !== '';
   },
 
+  // Helper to validate password security standards
+  validatePassword(password: string): { valid: boolean; message?: string } {
+    if (!password || password.length < 8) {
+      return { valid: false, message: 'A palavra-passe deve ter pelo menos 8 caracteres.' };
+    }
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasNumberOrSymbol = /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+    if (!hasLetter || !hasNumberOrSymbol) {
+      return { valid: false, message: 'A palavra-passe deve conter letras e pelo menos um número ou símbolo.' };
+    }
+    return { valid: true };
+  },
+
   // 1. SIGNUP / REGISTER FLOW (Official SDK auth.signUp as specified)
   async registerOrganizer(data: {
     nome: string;
@@ -83,18 +96,26 @@ export const authService = {
     password?: string;
   }): Promise<{ success: boolean; profile: OrganizerProfile; message: string }> {
     
+    // Sanitize inputs
+    const cleanEmail = (data.email || '').trim().toLowerCase();
+    const cleanNome = (data.nome || '').trim();
+    const cleanPassword = data.password || 'VroomTemp123!';
+
+    const pwdCheck = this.validatePassword(cleanPassword);
+    if (!pwdCheck.valid) {
+      throw new Error(pwdCheck.message || 'Palavra-passe demasiado fraca.');
+    }
+
     const isReal = this.isSupabaseConfigured();
-    const temporaryPassword = data.password || 'VroomTemp123!';
     
     if (isReal) {
-      console.log('Sending real Supabase auth signup via official SDK...');
       try {
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-          email: data.email,
-          password: temporaryPassword,
+          email: cleanEmail,
+          password: cleanPassword,
           options: {
             data: {
-              full_name: data.nome
+              full_name: cleanNome
             }
           }
         });
