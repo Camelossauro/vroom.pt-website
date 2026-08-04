@@ -3,7 +3,15 @@ import { Mail, MapPin } from 'lucide-react';
 // @ts-ignore
 import vroomLogoImg from '../assets/images/vroom_logo_1784301043513.jpg';
 
-export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: () => void, onOpenTerms: () => void }) {
+export default function Footer({ 
+  onOpenPrivacy, 
+  onOpenTerms, 
+  onOpenSupport 
+}: { 
+  onOpenPrivacy: () => void, 
+  onOpenTerms: () => void, 
+  onOpenSupport?: () => void 
+}) {
 
   const handleScrollTo = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -51,10 +59,13 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
             </p>
             
             <div className="flex flex-col gap-1.5 mt-1 sm:mt-2">
-              <div className="flex items-center gap-2 text-xs text-slate-400 text-left">
+              <button 
+                onClick={onOpenSupport}
+                className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors text-left cursor-pointer"
+              >
                 <Mail className="w-3 h-3 text-brand-blue" />
                 <span>contacto@vroomapp.pt</span>
-              </div>
+              </button>
               <div className="flex items-center gap-2 text-xs text-slate-400 text-left">
                 <MapPin className="w-3 h-3 text-brand-blue" />
                 <span>Feito em Vila Real, Portugal 🇵🇹</span>
@@ -130,7 +141,7 @@ export default function Footer({ onOpenPrivacy, onOpenTerms }: { onOpenPrivacy: 
           <div className="flex gap-4">
             <button onClick={onOpenTerms} className="hover:text-slate-300 cursor-pointer">Termos de Utilização</button>
             <button onClick={onOpenPrivacy} className="hover:text-slate-300 cursor-pointer">Política de Privacidade</button>
-            <a href="#contact" className="hover:text-slate-300">Contacto Geral</a>
+            <button onClick={onOpenSupport} className="hover:text-slate-300 cursor-pointer">Contacto Geral</button>
           </div>
         </div>
 

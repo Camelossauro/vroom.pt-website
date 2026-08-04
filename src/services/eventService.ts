@@ -14,6 +14,7 @@ export const fallbackDatabaseEvents: DatabaseEvent[] = [
     data_fim: '2026-05-17T18:00:00Z',
     meses: ['Maio'],
     local: 'Fafe & Região Norte',
+    cor: '#ef4444', // Red
     organizadora_default: 'ACP - Automóvel Club de Portugal',
     logo_organizadora_default: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=100&auto=format&fit=crop',
     imagem_evento: 'https://vroom-images.b-cdn.net/IMAGENS_EVENTOS_CORRIDAS/A%20ALGARVE/algarve_2.jpg',
@@ -43,6 +44,7 @@ export const fallbackDatabaseEvents: DatabaseEvent[] = [
     data_fim: '2026-10-14T18:00:00Z',
     meses: ['Outubro'],
     local: 'Autódromo do Estoril',
+    cor: '#f59e0b', // Amber/Gold
     organizadora_default: 'Race Ready',
     logo_organizadora_default: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=100&auto=format&fit=crop',
     imagem_evento: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=800&auto=format&fit=crop',
@@ -71,6 +73,7 @@ export const fallbackDatabaseEvents: DatabaseEvent[] = [
     data_fim: '2026-07-05T19:00:00Z',
     meses: ['Julho'],
     local: 'Circuito de Vila Real',
+    cor: '#0284c7', // Sky blue
     organizadora_default: 'Associação Automóvel de Vila Real',
     logo_organizadora_default: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=100&auto=format&fit=crop',
     imagem_evento: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=800&auto=format&fit=crop',
@@ -96,6 +99,7 @@ export const fallbackDatabaseEvents: DatabaseEvent[] = [
     data_fim: '2026-06-21T18:00:00Z',
     meses: ['Junho'],
     local: 'Eurocircuito de Lousada',
+    cor: '#f97316', // Orange
     organizadora_default: 'Clube Automóvel de Lousada',
     imagem_evento: 'https://images.unsplash.com/photo-1594787318286-3d835c1d207f?q=80&w=800&auto=format&fit=crop',
     latitude: 41.2778,
@@ -119,6 +123,7 @@ export const fallbackDatabaseEvents: DatabaseEvent[] = [
     data_fim: '2026-06-28T13:00:00Z',
     meses: ['Junho'],
     local: 'Sintra / Estoril',
+    cor: '#ec4899', // Pink
     organizadora_default: 'Vroom.pt Club Portugal',
     imagem_evento: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?q=80&w=800&auto=format&fit=crop',
     descricao: 'Um encontro descontraído para proprietários e apaixonados por viaturas desportivas clássicas.',
@@ -140,6 +145,7 @@ export const fallbackDatabaseEvents: DatabaseEvent[] = [
     data_fim: '2026-09-06T17:00:00Z',
     meses: ['Setembro'],
     local: 'Serra de Valongo',
+    cor: '#8b5cf6', // Purple
     organizadora_default: 'FMP - Federação de Motociclismo de Portugal',
     imagem_evento: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=800&auto=format&fit=crop',
     latitude: 41.1894,
@@ -164,6 +170,7 @@ export const fallbackDatabaseEvents: DatabaseEvent[] = [
     data_fim: '2026-10-18T18:00:00Z',
     meses: ['Outubro'],
     local: 'Autódromo Internacional do Algarve',
+    cor: '#10b981', // Emerald green
     organizadora_default: 'Parkalgar / ELMS',
     logo_organizadora_default: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=100&auto=format&fit=crop',
     imagem_evento: 'https://vroom-images.b-cdn.net/IMAGENS_EVENTOS_CORRIDAS/A%20ALGARVE/algarve_2.jpg',
@@ -189,6 +196,7 @@ export const fallbackDatabaseEvents: DatabaseEvent[] = [
     data_fim: '2026-08-01T19:00:00Z',
     meses: ['Julho', 'Agosto'],
     local: 'Funchal & Estradas da Madeira',
+    cor: '#e11d48', // Rose
     organizadora_default: 'Club Automóvel da Madeira',
     imagem_evento: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=800&auto=format&fit=crop',
     latitude: 32.6500,

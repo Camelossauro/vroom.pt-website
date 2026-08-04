@@ -123,10 +123,10 @@ export default function SocialProof() {
         
         {/* DESKTOP VIEW (md:grid) */}
         <motion.div 
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.3 }}
           className="hidden md:grid md:grid-cols-5 gap-6 items-stretch"
         >
           {stats.map((stat, idx) => {

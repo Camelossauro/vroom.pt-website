@@ -15,10 +15,10 @@ export default function DriverEcosystem() {
         
         {/* Section Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.3 }}
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 mb-10 sm:mb-16 items-center"
         >
           <div className="lg:col-span-6 text-left">
@@ -52,17 +52,14 @@ export default function DriverEcosystem() {
           <div className="lg:col-span-6 flex flex-col justify-center">
 
             {/* Immersive interactive Pilot card view */}
-            <div className="bg-[#1D212B] border border-[#262B37] rounded-xl shadow-xl overflow-hidden p-4 sm:p-6 md:p-8 flex flex-col md:flex-row gap-6 relative text-left">
-              {/* Profile Background decorations */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#171A21] rounded-full -z-0 border-l border-b border-[#262B37]/30" />
-
+            <div className="liquid-glass-card rounded-2xl p-4 sm:p-6 md:p-8 flex flex-col md:flex-row gap-6 relative text-left">
               {/* Photo & Basic details */}
               <div className="flex flex-col items-center md:items-start text-center md:text-left md:w-44 flex-shrink-0 relative z-10">
                 <div className="relative mb-4">
-                  <div className="w-24 h-24 rounded-full bg-[#0F1115] border-4 border-brand-blue flex items-center justify-center shadow-md text-brand-blue">
+                  <div className="w-24 h-24 rounded-full bg-white/[0.08] backdrop-blur-md border-4 border-sky-400 flex items-center justify-center shadow-xl text-sky-300">
                     <User className="w-10 h-10" />
                   </div>
-                  <span className="absolute bottom-1 right-1 bg-brand-blue text-white p-1 rounded-full text-[10px] font-bold font-mono">
+                  <span className="absolute bottom-1 right-1 bg-sky-500 text-white p-1 rounded-full text-[10px] font-bold font-mono shadow-lg">
                     ✓
                   </span>
                 </div>
@@ -70,35 +67,35 @@ export default function DriverEcosystem() {
                 <h3 className="font-display font-extrabold text-lg text-white leading-tight">
                   {driver.name}
                 </h3>
-                <span className="text-xs text-slate-400 font-medium mt-1 leading-tight">Jaguar TCS Racing</span>
+                <span className="text-xs text-slate-300 font-medium mt-1 leading-tight">Jaguar TCS Racing</span>
 
-                <div className="bg-[#171A21] border border-[#262B37] px-3 py-1 rounded-xl text-[10px] font-mono font-bold text-slate-300 mt-3">
+                <div className="liquid-glass-pill px-3 py-1 rounded-xl text-[10px] font-mono font-bold text-slate-200 mt-3">
                   NÚMERO {driver.compNumber}
                 </div>
               </div>
 
               {/* Comprehensive Biography and Palmares */}
-              <div className="flex-1 flex flex-col justify-between relative z-10 border-t md:border-t-0 md:border-l border-[#262B37] pt-6 md:pt-0 md:pl-6">
+              <div className="flex-1 flex flex-col justify-between relative z-10 border-t md:border-t-0 md:border-l border-white/10 pt-6 md:pt-0 md:pl-6">
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-bold font-mono text-brand-blue uppercase">
+                    <span className="text-[10px] font-bold font-mono text-sky-400 uppercase tracking-widest">
                       Palmarés Oficial
                     </span>
                   </div>
 
-                  <p className="text-xs text-slate-300 font-light leading-relaxed mb-5 italic">
+                  <p className="text-xs text-slate-200 font-light leading-relaxed mb-5 italic">
                     "{driver.bio}"
                   </p>
 
-                  <div className="mt-6 pt-6 border-t border-[#262B37]">
-                    <p className="text-slate-400 text-[10px] font-medium mb-3 uppercase tracking-wider font-mono">
+                  <div className="mt-6 pt-6 border-t border-white/10">
+                    <p className="text-slate-300 text-[10px] font-medium mb-3 uppercase tracking-wider font-mono">
                       Saber mais na aplicação
                     </p>
                     <div className="flex gap-3">
-                      <button className="flex-1 bg-[#171A21] hover:bg-brand-blue text-white text-[10px] font-bold py-2 rounded-lg border border-[#262B37] transition-all">
+                      <button className="flex-1 liquid-glass-pill hover:bg-brand-blue text-white text-[10px] font-bold py-2.5 rounded-xl transition-all cursor-pointer">
                         App Store
                       </button>
-                      <button className="flex-1 bg-[#171A21] hover:bg-brand-blue text-white text-[10px] font-bold py-2 rounded-lg border border-[#262B37] transition-all">
+                      <button className="flex-1 liquid-glass-pill hover:bg-brand-blue text-white text-[10px] font-bold py-2.5 rounded-xl transition-all cursor-pointer">
                         Google Play
                       </button>
                     </div>

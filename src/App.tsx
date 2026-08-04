@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import Lenis from 'lenis';
+import { MessageSquare, ArrowUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import PlatformOverview from './components/PlatformOverview';
@@ -17,6 +20,7 @@ import DeleteAccountPage from './components/DeleteAccountPage';
 import EventDetailPage from './components/EventDetailPage';
 import DeeplinkPage from './components/DeeplinkPage';
 import MobileSmartBanner from './components/MobileSmartBanner';
+import SupportModal from './components/SupportModal';
 import { DatabaseEvent } from './types';
 
 export default function App() {
@@ -27,8 +31,72 @@ export default function App() {
   const [showTermsPage, setShowTermsPage] = useState(false);
   const [showDeleteAccountPage, setShowDeleteAccountPage] = useState(false);
   const [showDeeplinkPage, setShowDeeplinkPage] = useState(false);
+  const [showSupportModal, setShowSupportModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<DatabaseEvent | null>(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const scrollPosRef = useRef(0);
+  const lenisRef = useRef<Lenis | null>(null);
+
+  // Initialize smooth inertia Lenis scrolling
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 0.9,
+    });
+    lenisRef.current = lenis;
+
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      lenis.destroy();
+      lenisRef.current = null;
+    };
+  }, []);
+
+  const scrollToTop = () => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { duration: 1.2 });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // Lock background scrolling and pause Lenis when modal or detail overlay is open
+  useEffect(() => {
+    if (showSupportModal || selectedEvent) {
+      lenisRef.current?.stop();
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      lenisRef.current?.start();
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+
+    return () => {
+      lenisRef.current?.start();
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [showSupportModal, selectedEvent]);
 
   // Professional UX: Handle sub-page navigation state and scroll restoration
   const openSubPage = (type: 'event' | 'privacy' | 'terms' | 'delete-account' | 'portal' | 'deeplink', data?: any) => {
@@ -197,6 +265,7 @@ export default function App() {
       {!showPrivacyPage && !showTermsPage && !showDeleteAccountPage && !selectedEvent && !showPortalPage && !showDeeplinkPage && (
         <Navbar 
           onOpenPortal={handleOpenPortal} 
+          onOpenSupport={() => setShowSupportModal(true)}
           activeSection={activeSection} 
         />
       )}
@@ -247,7 +316,7 @@ export default function App() {
           <SocialProof />
 
           {/* Accordion FAQ by Audience Segment */}
-          <FAQ />
+          <FAQ onOpenSupport={() => setShowSupportModal(true)} />
         </main>
       )}
 
@@ -262,12 +331,51 @@ export default function App() {
           <Footer 
             onOpenPrivacy={handleOpenPrivacy} 
             onOpenTerms={handleOpenTerms} 
+            onOpenSupport={() => setShowSupportModal(true)}
           />
 
           {/* Smart installation prompt for mobile browsers */}
           <MobileSmartBanner />
         </>
       )}
+
+      {/* Floating Action Buttons Container (Scroll to Top & Support) */}
+      <AnimatePresence>
+        {!showSupportModal && showScrollTop && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 15 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2.5 pointer-events-none"
+          >
+            {/* Scroll To Top Button */}
+            <button
+              onClick={scrollToTop}
+              className="pointer-events-auto p-3 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/15 shadow-xl backdrop-blur-md transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center group"
+              title="Voltar ao topo da página"
+              aria-label="Voltar ao topo"
+            >
+              <ArrowUp className="w-4.5 h-4.5 text-sky-400 group-hover:-translate-y-0.5 transition-transform" />
+            </button>
+
+            {/* Floating Quick Support Trigger */}
+            <button
+              onClick={() => setShowSupportModal(true)}
+              className="pointer-events-auto px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold text-xs sm:text-sm shadow-2xl shadow-sky-500/30 border border-sky-400/40 hover:scale-105 active:scale-95 transition-all cursor-pointer backdrop-blur-md"
+              title="Apoio"
+            >
+              <span>Apoio</span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Interactive Support Inquiry Modal */}
+      <SupportModal 
+        isOpen={showSupportModal} 
+        onClose={() => setShowSupportModal(false)} 
+      />
 
     </div>
   );

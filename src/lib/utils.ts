@@ -251,3 +251,113 @@ export function getEventImage(
 
   return `${baseUrl}/${safeFolder}/${selectedFile}`;
 }
+
+export interface EventColorTheme {
+  hex: string;
+  rgb: string;
+  borderHex: string;
+  bgRgbaLight: string;
+  bgRgbaGlow: string;
+  shadowRgba: string;
+}
+
+export function parseColorToRgb(colorInput: string | null | undefined): { hex: string; rgb: string } {
+  if (!colorInput) return { hex: '#0284c7', rgb: '2, 132, 199' };
+
+  const input = colorInput.trim().toLowerCase();
+
+  const namedColors: Record<string, { hex: string; rgb: string }> = {
+    red: { hex: '#ef4444', rgb: '239, 68, 68' },
+    vermelho: { hex: '#ef4444', rgb: '239, 68, 68' },
+    blue: { hex: '#3b82f6', rgb: '59, 130, 246' },
+    azul: { hex: '#3b82f6', rgb: '59, 130, 246' },
+    sky: { hex: '#0284c7', rgb: '2, 132, 199' },
+    amber: { hex: '#f59e0b', rgb: '245, 158, 11' },
+    amarelo: { hex: '#eab308', rgb: '234, 179, 8' },
+    gold: { hex: '#f59e0b', rgb: '245, 158, 11' },
+    dourado: { hex: '#f59e0b', rgb: '245, 158, 11' },
+    green: { hex: '#10b981', rgb: '16, 185, 129' },
+    verde: { hex: '#10b981', rgb: '16, 185, 129' },
+    emerald: { hex: '#10b981', rgb: '16, 185, 129' },
+    purple: { hex: '#8b5cf6', rgb: '139, 92, 246' },
+    roxo: { hex: '#8b5cf6', rgb: '139, 92, 246' },
+    violet: { hex: '#8b5cf6', rgb: '139, 92, 246' },
+    pink: { hex: '#ec4899', rgb: '236, 72, 153' },
+    rosa: { hex: '#ec4899', rgb: '236, 72, 153' },
+    orange: { hex: '#f97316', rgb: '249, 115, 22' },
+    laranja: { hex: '#f97316', rgb: '249, 115, 22' },
+    cyan: { hex: '#06b6d4', rgb: '6, 182, 212' },
+    teal: { hex: '#14b8a6', rgb: '20, 184, 166' },
+    rose: { hex: '#e11d48', rgb: '225, 29, 72' },
+    indigo: { hex: '#6366f1', rgb: '99, 102, 241' },
+  };
+
+  if (namedColors[input]) {
+    return namedColors[input];
+  }
+
+  if (input.startsWith('#')) {
+    let cleanHex = input.replace('#', '');
+    if (cleanHex.length === 3) {
+      cleanHex = cleanHex.split('').map(c => c + c).join('');
+    }
+    if (cleanHex.length === 6) {
+      const num = parseInt(cleanHex, 16);
+      if (!isNaN(num)) {
+        const r = (num >> 16) & 255;
+        const g = (num >> 8) & 255;
+        const b = num & 255;
+        return {
+          hex: `#${cleanHex}`,
+          rgb: `${r}, ${g}, ${b}`
+        };
+      }
+    }
+  }
+
+  const rgbMatch = input.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (rgbMatch) {
+    const r = parseInt(rgbMatch[1]);
+    const g = parseInt(rgbMatch[2]);
+    const b = parseInt(rgbMatch[3]);
+    const hex = '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+    return { hex, rgb: `${r}, ${g}, ${b}` };
+  }
+
+  return { hex: '#0284c7', rgb: '2, 132, 199' };
+}
+
+export function getEventColorTheme(
+  cor: string | null | undefined,
+  modalidade?: string | null,
+  natureza?: string | null,
+  isPremium?: boolean
+): EventColorTheme {
+  let colorInput = cor;
+
+  if (!colorInput) {
+    const mod = (modalidade || '').toLowerCase();
+    const nat = (natureza || '').toLowerCase();
+
+    if (mod.includes('rali') || mod.includes('rally')) colorInput = '#ef4444';
+    else if (mod.includes('velocid') || mod.includes('circuito') || mod.includes('turismo')) colorInput = '#0284c7';
+    else if (mod.includes('kart')) colorInput = '#10b981';
+    else if (mod.includes('cross') || mod.includes('offroad') || mod.includes('terreno')) colorInput = '#f97316';
+    else if (mod.includes('enduro') || mod.includes('mota') || mod.includes('trial')) colorInput = '#8b5cf6';
+    else if (nat.includes('lazer') || mod.includes('encontro') || mod.includes('passeio')) colorInput = '#ec4899';
+    else if (isPremium) colorInput = '#f59e0b';
+    else colorInput = '#0284c7';
+  }
+
+  const { hex, rgb } = parseColorToRgb(colorInput);
+
+  return {
+    hex,
+    rgb,
+    borderHex: hex,
+    bgRgbaLight: `rgba(${rgb}, 0.12)`,
+    bgRgbaGlow: `rgba(${rgb}, 0.25)`,
+    shadowRgba: `rgba(${rgb}, 0.35)`
+  };
+}
+

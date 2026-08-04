@@ -3,7 +3,7 @@ import { faqData } from '../data';
 import { ChevronDown, Smartphone, LayoutDashboard, UserCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-export default function FAQ() {
+export default function FAQ({ onOpenSupport }: { onOpenSupport?: () => void }) {
   const [selectedCategory, setSelectedCategory] = useState<'fans' | 'organizations' | 'drivers'>('fans');
   const [expandedId, setExpandedId] = useState<string | null>('faq-f1');
 
@@ -31,10 +31,10 @@ export default function FAQ() {
         
         {/* Section Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.3 }}
           className="text-center max-w-3xl mx-auto mb-8 sm:mb-16"
         >
           <span className="text-[10px] font-montserrat font-bold text-slate-400 tracking-widest uppercase">
@@ -48,45 +48,44 @@ export default function FAQ() {
           </p>
         </motion.div>
 
-        {/* Categories Tab Selector with Animated Background Pill */}
-        <div className="flex bg-[#171A21] p-1 rounded-xl gap-1 max-w-lg mx-auto mb-6 sm:mb-12 border border-[#262B37]">
+        {/* Clean Category Selector with Animated Active Pill */}
+        <div className="flex bg-white/[0.04] backdrop-blur-xl p-1.5 rounded-2xl gap-1.5 border border-white/10 shadow-2xl max-w-md mx-auto mb-8 sm:mb-12 relative overflow-hidden">
           {categories.map((cat) => {
             const isActive = selectedCategory === cat.id;
             const Icon = cat.icon;
             return (
-              <motion.button
+              <button
                 key={cat.id}
                 onClick={() => {
                   setSelectedCategory(cat.id);
                   setExpandedId(cat.defaultFaq);
                 }}
-                whileTap={{ scale: 0.96 }}
-                className={`relative flex-1 py-2.5 sm:py-3 rounded-lg text-[10px] sm:text-xs font-bold transition-colors flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer z-10 ${
+                className={`relative flex-1 py-2.5 sm:py-3 rounded-xl text-[10px] sm:text-xs font-bold transition-colors duration-200 flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer z-10 ${
                   isActive ? 'text-white' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 {isActive && (
                   <motion.div
                     layoutId="faqTabPill"
-                    className="absolute inset-0 bg-brand-blue rounded-lg shadow-md -z-10"
-                    transition={{ type: "spring", stiffness: 450, damping: 30 }}
+                    className="absolute inset-0 bg-gradient-to-r from-sky-500/90 to-blue-600/90 border border-sky-400/50 rounded-xl shadow-lg shadow-sky-500/20 -z-10"
+                    transition={{ type: "spring", stiffness: 450, damping: 32 }}
                   />
                 )}
-                <Icon className="w-3.5 h-3.5 sm:w-4 h-4 relative z-10" />
-                <span className="relative z-10">{cat.label}</span>
-              </motion.button>
+                <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 relative z-10 transition-transform duration-200 ${isActive ? 'scale-110 text-white' : 'text-slate-400'}`} />
+                <span className="relative z-10 truncate">{cat.label}</span>
+              </button>
             );
           })}
         </div>
 
         {/* Accordions List Container with Category Switching Animation */}
-        <div className="bg-[#1D212B] p-4 sm:p-6 md:p-8 rounded-2xl border border-[#262B37] shadow-xl relative z-10 text-left overflow-hidden min-h-[220px]">
+        <div className="liquid-glass-card p-4 sm:p-6 md:p-8 rounded-3xl border border-white/15 shadow-2xl relative z-10 text-left overflow-hidden min-h-[220px]">
           <AnimatePresence mode="wait">
             <motion.div
               key={selectedCategory}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
             >
               {selectedCategory === 'drivers' ? (
@@ -146,9 +145,16 @@ export default function FAQ() {
         </div>
 
         {/* Support Banner */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-10">
           <p className="text-xs text-slate-400 font-light">
-            Ainda tem dúvidas? <a href="mailto:contacto@vroomapp.pt" className="font-semibold text-brand-blue hover:text-white cursor-pointer hover:underline">Entre em contacto com o nosso suporte português</a>. Resposta em menos de 2 horas.
+            Ainda tem dúvidas?{' '}
+            <button 
+              onClick={onOpenSupport} 
+              className="font-semibold text-brand-blue hover:text-white cursor-pointer hover:underline inline-flex items-center gap-1"
+            >
+              Entre em contacto com o nosso suporte português
+            </button>
+            . Resposta em menos de 2 horas.
           </p>
         </div>
 
@@ -156,4 +162,5 @@ export default function FAQ() {
     </section>
   );
 }
+
 

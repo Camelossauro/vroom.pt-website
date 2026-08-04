@@ -111,10 +111,10 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
         
         {/* Section Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.3 }}
           className="text-center max-w-3xl mx-auto mb-6 sm:mb-20"
         >
           <span className="box-decoration-clone leading-loose text-xs font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-3 py-1 rounded-full">
@@ -257,10 +257,10 @@ export default function PlatformOverview({ onOpenPortal, onScrollToSection }: Pl
           {pillars.map((pillar, pIdx) => (
             <motion.div
               key={pillar.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.5, delay: pIdx * 0.12 }}
+              viewport={{ once: true, amount: 0.05 }}
+              transition={{ duration: 0.3 }}
               className={`bg-[#1D212B] rounded-2xl border border-[#262B37] p-6 lg:p-8 shadow-sm transition-all duration-300 flex flex-col justify-between ${pillar.colorTheme}`}
               id={`overview-pillar-${pillar.id}`}
             >

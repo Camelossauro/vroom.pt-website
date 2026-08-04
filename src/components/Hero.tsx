@@ -15,28 +15,34 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
       {/* Premium dark grid pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-85" />
 
-      {/* Subtle orbs */}
+      {/* Subtle orbs & electric blue glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-b from-brand-blue/15 via-sky-500/5 to-transparent rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute top-1/4 -left-32 w-96 h-96 bg-brand-blue/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-1/3 -right-32 w-96 h-96 bg-brand-red/5 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* Subtle background watermark text */}
+      <div className="absolute top-12 left-1/2 -translate-x-1/2 text-[8rem] sm:text-[14rem] lg:text-[18rem] font-display font-extrabold tracking-tighter text-white/[0.02] pointer-events-none select-none uppercase z-0 whitespace-nowrap leading-none">
+        MOTORSPORT
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           
           {/* Left Column - Copy & CTAs */}
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.05 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
             className="lg:col-span-6 flex flex-col items-start text-left"
           >
             
             {/* Main Headline */}
             <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 6 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
               className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.1] mb-6 sm:mb-6"
             >
               O <span className="text-brand-blue">Motorsport</span> <br className="hidden sm:block" />
@@ -45,10 +51,10 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
 
             {/* Supportive Paragraph */}
             <motion.p 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 6 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
               className="text-slate-400 text-base sm:text-lg font-light leading-relaxed mb-8 sm:mb-8 max-w-xl"
             >
               Unimos todo o automobilismo português numa plataforma única. 
@@ -57,67 +63,62 @@ export default function Hero({ onOpenPortal, onScrollToSection }: HeroProps) {
 
             {/* Action Buttons */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 6 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
               className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto mb-8 sm:mb-10"
             >
               <motion.button
-                whileHover={{ scale: 1.04, y: -2 }}
-                whileTap={{ scale: 0.96 }}
-                transition={{ type: "spring", stiffness: 420, damping: 25 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 180, damping: 25 }}
                 onClick={() => onOpenPortal('register')}
-                className="relative group overflow-hidden flex items-center justify-center gap-2 px-6 py-4 sm:py-3.5 bg-brand-blue hover:bg-brand-blue-hover text-white font-semibold rounded-xl text-sm sm:text-base cursor-pointer shadow-lg shadow-brand-blue/25 hover:shadow-brand-blue/40 transition-all"
+                className="liquid-glass-button group flex items-center justify-center gap-2 px-6 py-4 sm:py-3.5 text-white font-semibold rounded-xl text-sm sm:text-base cursor-pointer"
               >
-                {/* Subtle shine sweep on hover */}
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
-                <UserPlus className="w-4 h-4 text-white group-hover:rotate-12 transition-transform duration-300" />
+                <UserPlus className="w-4 h-4 text-white group-hover:rotate-12 transition-transform duration-500" />
                 <span>Registo de Organização</span>
               </motion.button>
               
               <motion.button
-                whileHover={{ scale: 1.04, y: -2 }}
-                whileTap={{ scale: 0.96 }}
-                transition={{ type: "spring", stiffness: 420, damping: 25 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 180, damping: 25 }}
                 onClick={() => onScrollToSection('events')}
-                className="group flex items-center justify-center gap-2.5 px-6 py-4 sm:py-3.5 bg-slate-900/60 hover:bg-[#262B37] text-white border border-[#262B37] hover:border-slate-500 font-semibold rounded-xl text-sm sm:text-base cursor-pointer transition-all shadow-md"
+                className="group flex items-center justify-center gap-2.5 px-6 py-4 sm:py-3.5 bg-white/[0.05] hover:bg-white/[0.12] text-white border border-white/20 font-semibold rounded-xl text-sm sm:text-base cursor-pointer backdrop-blur-xl transition-all duration-500 shadow-[0_8px_20px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.25)]"
               >
                 <span>Explorar Provas</span>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
+                <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-white group-hover:translate-x-1 transition-all duration-500" />
               </motion.button>
             </motion.div>
 
-            {/* Mini Trust Badges - Balanced for mobile */}
+            {/* Mini Trust Badges - Liquid glass pill style */}
             <motion.div 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex flex-wrap items-center gap-x-5 gap-y-3 pt-6 sm:pt-6 border-t border-[#262B37] w-full"
+              className="flex flex-wrap items-center gap-x-3 gap-y-2.5 pt-6 sm:pt-6 border-t border-white/10 w-full"
             >
-              <div className="flex items-center gap-2">
-                <BadgeCheck className="w-4 h-4 sm:w-5 h-5 text-brand-blue" />
-                <span className="text-xs sm:text-xs font-semibold text-slate-300">Oficial</span>
+              <div className="liquid-glass-pill px-3 py-1.5 rounded-full flex items-center gap-2">
+                <BadgeCheck className="w-4 h-4 text-sky-400" />
+                <span className="text-xs font-semibold text-slate-200">Oficial</span>
               </div>
-              <div className="flex items-center gap-2">
-                <BellRing className="w-4 h-4 sm:w-5 h-5 text-brand-blue" />
-                <span className="text-xs sm:text-xs font-semibold text-slate-300">Tempo Real</span>
+              <div className="liquid-glass-pill px-3 py-1.5 rounded-full flex items-center gap-2">
+                <BellRing className="w-4 h-4 text-sky-400" />
+                <span className="text-xs font-semibold text-slate-200">Tempo Real</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Smartphone className="w-4 h-4 sm:w-5 h-5 text-slate-400" />
-                <span className="text-xs sm:text-xs font-semibold text-slate-300">Mobile First</span>
-              </div>
+
             </motion.div>
 
           </motion.div>
 
           {/* Right Column - Interactive 3D Stack / Composition */}
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95, y: 30 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.05 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
             className="lg:col-span-6 relative mt-12 lg:mt-0 flex justify-center"
           >
                   {/* Main Composition Container - Expanded width and clear spacing */}

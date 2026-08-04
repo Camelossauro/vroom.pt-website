@@ -68,6 +68,47 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
+  // Support Inquiry Proxy Route to Xano DB
+  app.post("/api/support", async (req, res) => {
+    try {
+      const xanoUrl = process.env.VITE_XANO_SUPPORT_URL || process.env.XANO_SUPPORT_URL || "https://x8ki-letl-twmt.n7.xano.io/api:K0oaEctT/mensagens";
+
+      console.log(`[Support API] Forwarding support message to Xano: ${xanoUrl}`);
+
+      const xanoRes = await fetch(xanoUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(req.body)
+      });
+
+      const responseText = await xanoRes.text();
+      let responseData;
+      try {
+        responseData = JSON.parse(responseText);
+      } catch {
+        responseData = { text: responseText };
+      }
+
+      if (!xanoRes.ok) {
+        console.error(`[Support API] Xano returned HTTP ${xanoRes.status}:`, responseData);
+        return res.status(xanoRes.status).json({
+          error: "Erro na resposta do servidor Xano.",
+          status: xanoRes.status,
+          details: responseData
+        });
+      }
+
+      console.log("[Support API] Successfully created record in Xano:", responseData);
+      return res.json({ success: true, data: responseData });
+    } catch (err: any) {
+      console.error("[Support API] Server error while forwarding to Xano:", err);
+      return res.status(500).json({ error: "Erro interno ao comunicar com o serviço de suporte Xano.", details: err.message });
+    }
+  });
+
   // Events API Endpoint
   app.get("/api/events", async (req, res) => {
     try {

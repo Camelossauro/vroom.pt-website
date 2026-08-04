@@ -177,7 +177,7 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
         )}
 
         {/* Main Glassmorphic Auth Card */}
-        <div className="bg-gradient-to-b from-[#141822] via-[#10131B] to-[#0D0F15] rounded-2xl sm:rounded-3xl border border-[#262B37] p-6 sm:p-10 shadow-2xl relative">
+        <div className="liquid-glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-2xl relative">
           
           {/* LOGGED IN ORGANIZER VIEW */}
           {currentUser ? (

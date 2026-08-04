@@ -144,10 +144,10 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
         
         {/* Section Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.3 }}
           className="text-center max-w-3xl mx-auto mb-8 sm:mb-20"
         >
           <span className="box-decoration-clone leading-loose text-xs font-montserrat font-bold text-brand-red tracking-widest uppercase bg-brand-red/10 px-2.5 py-1 rounded-full">
@@ -240,25 +240,25 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
             {steps.map((step, idx) => (
               <motion.div 
                 key={idx}
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45, delay: idx * 0.1 }}
-                className="bg-[#1D212B] rounded-xl border border-[#262B37] p-4 sm:p-6 relative flex flex-col justify-between hover:border-slate-700 transition-colors"
+                viewport={{ once: true, amount: 0.05 }}
+                transition={{ duration: 0.3 }}
+                className="liquid-glass-card rounded-2xl p-4 sm:p-6 relative flex flex-col justify-between"
               >
                 <div>
                   <div className="flex justify-between items-start mb-4">
-                    <div className="p-2 sm:p-3 bg-[#0F1115] rounded-xl border border-[#262B37]">
-                      {cloneElement(step.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-brand-blue' })}
+                    <div className="p-2 sm:p-3 bg-white/[0.08] backdrop-blur-md rounded-xl border border-white/15">
+                      {cloneElement(step.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-sky-400' })}
                     </div>
-                    <span className="text-xl sm:text-2xl font-bold font-mono text-slate-700/50">{step.num}</span>
+                    <span className="text-xl sm:text-2xl font-bold font-mono text-slate-500">{step.num}</span>
                   </div>
                   <h4 className="font-display font-bold text-white text-[14px] sm:text-base mb-1.5 text-left">{step.title}</h4>
-                  <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-light text-left">{step.description}</p>
+                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-light text-left">{step.description}</p>
                 </div>
                 {idx < 3 && (
                   <div className="hidden lg:block absolute top-1/2 -right-3.5 transform -translate-y-1/2 z-20">
-                    <span className="text-brand-red font-bold text-lg">→</span>
+                    <span className="text-brand-red font-bold text-lg drop-shadow-[0_0_8px_rgba(225,6,0,0.8)]">→</span>
                   </div>
                 )}
               </motion.div>
@@ -347,17 +347,17 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
             {features.map((feat, idx) => (
               <motion.div 
                 key={idx}
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45, delay: idx * 0.08 }}
-                className="bg-[#1D212B] rounded-xl border border-[#262B37] p-4 sm:p-6 shadow-xs hover:border-slate-700 transition-all duration-300 "
+                viewport={{ once: true, amount: 0.05 }}
+                transition={{ duration: 0.3 }}
+                className="liquid-glass-card rounded-2xl p-4 sm:p-6"
               >
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#0F1115] flex items-center justify-center mb-4 border border-[#262B37]">
-                  {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-brand-blue' })}
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/[0.08] backdrop-blur-md flex items-center justify-center mb-4 border border-white/15">
+                  {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-sky-400' })}
                 </div>
                 <h3 className="font-display font-bold text-white text-[14px] sm:text-base mb-1.5 text-left">{feat.title}</h3>
-                <p className="text-slate-400 text-xs sm:text-sm font-light leading-relaxed text-left">{feat.description}</p>
+                <p className="text-slate-300 text-xs sm:text-sm font-light leading-relaxed text-left">{feat.description}</p>
               </motion.div>
             ))}
           </div>
@@ -365,54 +365,54 @@ export default function OrganizationsSection({ onOpenPortal }: OrganizationsSect
 
         {/* BOTTOM CALL TO ACTION PANEL (Encouraging mobile installation/access) */}
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.55, delay: 0.15 }}
-          className="bg-[#1D212B] rounded-xl border border-[#262B37] p-5 sm:p-8 md:p-12 shadow-xl relative overflow-hidden"
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.3 }}
+          className="liquid-glass rounded-2xl p-5 sm:p-8 md:p-12 relative overflow-hidden"
         >
           {/* Subtle decoration */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-brand-red/5 rounded-full" />
+          <div className="absolute top-0 right-0 w-48 h-48 bg-brand-red/10 rounded-full blur-3xl pointer-events-none" />
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center relative z-10">
             {/* Left text */}
             <div className="lg:col-span-7 space-y-4 text-left">
               <div className="flex items-center gap-2">
                 <span className="flex h-2 w-2 relative">
-                  <span className=" absolute inline-flex h-full w-full rounded-full bg-brand-red opacity-75"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-red opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-red"></span>
                 </span>
-                <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">PRESENÇA TOTALMENTE GRATUITA</span>
+                <span className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">PRESENÇA TOTALMENTE GRATUITA</span>
               </div>
               
               <h3 className="font-display font-bold text-xl sm:text-3xl text-white tracking-tight leading-tight">
                 Inicie a sua Jornada no Vroom.pt
               </h3>
               
-              <p className="text-slate-400 text-sm sm:text-sm font-light leading-relaxed max-w-xl">
+              <p className="text-slate-300 text-sm sm:text-sm font-light leading-relaxed max-w-xl">
                 O acesso e criação de conta no Vroom.pt é totalmente gratuito para organizadores oficiais de provas de desporto motorizado nacional. 
                 A publicação de eventos é 100% gratuita. Os clubes validados podem gerir conteúdos, carregar horários, interagir com fãs e enviar notificações cruciais sem qualquer custo.
               </p>
 
               <div className="space-y-2 pt-2">
-                <div className="flex items-center gap-2 text-sm text-slate-300">
-                  <CheckCircle className="w-4 h-4 text-brand-red flex-shrink-0" />
+                <div className="flex items-center gap-2 text-sm text-slate-200">
+                  <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                   <span>Obtenha o Selo Azul de Organização Verificada</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-slate-300">
-                  <CheckCircle className="w-4 h-4 text-brand-red flex-shrink-0" />
+                <div className="flex items-center gap-2 text-sm text-slate-200">
+                  <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                   <span>Proteção ativa contra spam e perfis clonados</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-slate-300">
-                  <CheckCircle className="w-4 h-4 text-brand-red flex-shrink-0" />
+                <div className="flex items-center gap-2 text-sm text-slate-200">
+                  <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                   <span>Gestão completa e publicação de provas efetuada na Mobile App</span>
                 </div>
               </div>
             </div>
 
             {/* Right button action wrapper */}
-            <div className="lg:col-span-5 flex flex-col justify-center gap-4 bg-[#171A21] border border-[#262B37] p-4 sm:p-6 rounded-xl">
-              <span className="text-xs font-mono font-bold text-slate-400 text-center uppercase tracking-widest block mb-1">
+            <div className="lg:col-span-5 flex flex-col justify-center gap-4 bg-white/[0.05] backdrop-blur-xl border border-white/15 p-4 sm:p-6 rounded-2xl shadow-inner">
+              <span className="text-xs font-mono font-bold text-slate-300 text-center uppercase tracking-widest block mb-1">
                 INICIAR VERIFICAÇÃO OFICIAL
               </span>
               

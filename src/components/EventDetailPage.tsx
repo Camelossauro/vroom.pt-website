@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { 
   ArrowLeft, CalendarDays, MapPin, ShieldCheck, 
   Eye, Heart, Navigation, ExternalLink, Sparkles, Image as ImageIcon,
-  Flag, Gauge, Share2, Phone, Mail, Instagram, Facebook, Globe, Globe2, Check, Smartphone, X
+  Flag, Gauge, Share2, Phone, Mail, Instagram, Facebook, Globe, Globe2, Check, Smartphone, X,
+  ZoomIn, ChevronLeft, ChevronRight, Maximize2
 } from 'lucide-react';
 import { DatabaseEvent } from '../types';
 import { getEventImage } from '../lib/utils';
@@ -18,6 +19,7 @@ interface EventDetailPageProps {
 export default function EventDetailPage({ event: initialEvent, eventId: initialEventId, onClose }: EventDetailPageProps) {
   const [eventData, setEventData] = useState<DatabaseEvent | null>(initialEvent || null);
   const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [lightboxImageUrl, setLightboxImageUrl] = useState<string | null>(null);
   const [copiedShare, setCopiedShare] = useState<boolean>(false);
   const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(!initialEvent);
@@ -54,17 +56,12 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
     };
   }, [targetEventId]);
 
-  // Bloqueio de scroll na página enquanto os detalhes do evento estão abertos
+  // Allow smooth internal scroll inside fixed overlay
   useEffect(() => {
-    const originalBodyOverflow = document.body.style.overflow;
-    const originalDocOverflow = document.documentElement.style.overflow;
-
     document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
 
     return () => {
-      document.body.style.overflow = originalBodyOverflow;
-      document.documentElement.style.overflow = originalDocOverflow;
+      document.body.style.overflow = '';
     };
   }, []);
 
@@ -132,6 +129,7 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
   );
 
   const isPremium = currentEvent.plano_destaque === 'premium';
+  const isCompeticao = currentEvent.natureza?.toLowerCase().includes('competi') || currentEvent.modalidade?.toLowerCase().includes('competi');
   const hasCoordinates = typeof currentEvent.latitude === 'number' && typeof currentEvent.longitude === 'number' && currentEvent.latitude !== 0;
 
   // Joined public profile if available
@@ -150,8 +148,45 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
   const viewsCount = currentEvent.views_count ?? 1;
   const likesCount = currentEvent.likes_count ?? 0;
 
+  // Build list of all available images for full-screen lightbox gallery
+  const allImages = [
+    activeImage || dynamicImage,
+    ...(Array.isArray(currentEvent.imagens_extra) ? currentEvent.imagens_extra : []),
+    ...(organizerLogo ? [organizerLogo] : [])
+  ].filter(Boolean) as string[];
+
+  // Keyboard navigation for Lightbox
+  useEffect(() => {
+    if (!lightboxImageUrl) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setLightboxImageUrl(null);
+      } else if (e.key === 'ArrowLeft') {
+        const currentIdx = allImages.indexOf(lightboxImageUrl);
+        if (currentIdx !== -1) {
+          const prevIdx = (currentIdx - 1 + allImages.length) % allImages.length;
+          setLightboxImageUrl(allImages[prevIdx]);
+        }
+      } else if (e.key === 'ArrowRight') {
+        const currentIdx = allImages.indexOf(lightboxImageUrl);
+        if (currentIdx !== -1) {
+          const nextIdx = (currentIdx + 1) % allImages.length;
+          setLightboxImageUrl(allImages[nextIdx]);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxImageUrl, allImages]);
+
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#0D0D0F] text-[#E2E2E6] font-sans antialiased selection:bg-brand-blue selection:text-white">
+    <div 
+      data-lenis-prevent
+      data-lenis-prevent-wheel
+      className="fixed inset-0 z-50 overflow-y-auto bg-[#0D0D0F] text-[#E2E2E6] font-sans antialiased selection:bg-brand-blue selection:text-white"
+    >
       {/* Top Bar Header */}
       <div className="sticky top-0 z-30 bg-[#0D0D0F]/90 backdrop-blur-md border-b border-[#262B37] px-4 py-3.5 sm:px-6">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
@@ -192,14 +227,28 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
       </div>
 
       {/* Hero Banner Section */}
-      <div className="relative h-64 sm:h-96 w-full overflow-hidden bg-[#141418]">
+      <div 
+        onClick={() => {
+          if (!isCompeticao) {
+            setLightboxImageUrl(activeImage || dynamicImage);
+          }
+        }}
+        className={`relative h-64 sm:h-96 w-full overflow-hidden bg-[#141418] ${isCompeticao ? 'cursor-default' : 'cursor-pointer'} group`}
+      >
         <img 
           src={activeImage || dynamicImage} 
           alt={currentEvent.nome}
-          className="w-full h-full object-cover transition-all duration-500"
+          className={`w-full h-full object-cover transition-all duration-500 ${isCompeticao ? 'scale-100' : 'group-hover:scale-102'}`}
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0F] via-[#0D0D0F]/40 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0F] via-[#0D0D0F]/40 to-black/60 group-hover:bg-black/20 transition-colors" />
+
+        {!isCompeticao && (
+          <div className="absolute top-4 right-4 z-20 bg-black/60 hover:bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xl border border-white/20 flex items-center gap-2 text-xs font-semibold shadow-lg">
+            <ZoomIn className="w-4 h-4 text-brand-blue" />
+            <span className="hidden sm:inline">Ver Imagem em Tamanho Real</span>
+          </div>
+        )}
 
         <div className="absolute bottom-6 left-4 right-4 sm:left-8 sm:right-8 max-w-5xl mx-auto z-10">
           <div className="flex flex-wrap items-center gap-2 mb-2 sm:mb-3">
@@ -320,7 +369,7 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
             </div>
           )}
 
-          {currentEvent.ambito && (
+          {currentEvent.ambito && currentEvent.ambito !== '.' && (
             <div className="flex items-start gap-3.5">
               <div className="p-3 bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-xl shrink-0 shadow-sm">
                 <Globe2 className="w-5 h-5" />
@@ -482,15 +531,17 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
               <ImageIcon className="w-5 h-5 text-brand-blue" />
               Galeria da Prova
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {currentEvent.imagens_extra.map((imgUrl, idx) => (
                 <div 
                   key={idx} 
-                  onClick={() => setActiveImage(imgUrl)}
-                  className="h-32 sm:h-40 rounded-xl overflow-hidden border border-[#262B37] hover:border-brand-blue cursor-pointer transition-all duration-300 group relative"
+                  onClick={() => setLightboxImageUrl(imgUrl)}
+                  className="h-32 sm:h-44 rounded-xl overflow-hidden border border-[#262B37] hover:border-brand-blue cursor-pointer transition-all duration-300 group relative"
                 >
-                  <img src={imgUrl} alt={`Foto ${idx + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform" referrerPolicy="no-referrer" />
-                  <div className="absolute inset-0 bg-black/30 group-hover:bg-transparent transition-colors" />
+                  <img src={imgUrl} alt={`Foto ${idx + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                    <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-200 drop-shadow-md" />
+                  </div>
                 </div>
               ))}
             </div>
@@ -507,8 +558,8 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
               <h4 className="font-bold text-xl sm:text-2xl text-white">
                 Acompanhe corridas e eventos no seu telemóvel
               </h4>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                Descarregue a aplicação gratuita para receber itinerários GPS, notificações em tempo real e avisos da organização.
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-normal">
+                Descarregue a aplicação gratuita para receber notificações em tempo real e avisos da organização.
               </p>
             </div>
 
@@ -616,6 +667,74 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Lightbox Modal for Large Image View */}
+      {lightboxImageUrl && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-2 sm:p-6 animate-in fade-in duration-200 select-none"
+          onClick={() => setLightboxImageUrl(null)}
+        >
+          {/* Top Bar Controls */}
+          <div className="absolute top-4 left-4 right-4 flex items-center justify-between text-white z-20">
+            <span className="text-xs sm:text-sm font-mono text-slate-300 bg-black/60 px-3.5 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm">
+              {allImages.indexOf(lightboxImageUrl) + 1} / {allImages.length}
+            </span>
+
+            <button 
+              onClick={() => setLightboxImageUrl(null)}
+              className="flex items-center gap-2 bg-black/60 hover:bg-black/90 text-white px-3.5 py-2 rounded-xl border border-white/20 transition-all cursor-pointer shadow-lg active:scale-95"
+            >
+              <X className="w-5 h-5 text-white" />
+              <span className="hidden sm:inline text-xs font-bold">Fechar (Esc)</span>
+            </button>
+          </div>
+
+          {/* Previous Image Button */}
+          {allImages.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const currentIdx = allImages.indexOf(lightboxImageUrl);
+                const prevIdx = (currentIdx - 1 + allImages.length) % allImages.length;
+                setLightboxImageUrl(allImages[prevIdx]);
+              }}
+              className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-brand-blue text-white p-3.5 rounded-2xl border border-white/20 transition-all cursor-pointer z-20 shadow-2xl active:scale-90"
+              title="Imagem anterior"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          )}
+
+          {/* Main Large Image Container */}
+          <div 
+            className="relative max-w-[95vw] max-h-[90vh] flex items-center justify-center overflow-hidden rounded-2xl border border-white/15 shadow-2xl bg-black/40"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img 
+              src={lightboxImageUrl} 
+              alt="Imagem do Evento em Tamanho Real" 
+              className="max-w-[95vw] max-h-[90vh] object-contain rounded-xl shadow-2xl"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+
+          {/* Next Image Button */}
+          {allImages.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const currentIdx = allImages.indexOf(lightboxImageUrl);
+                const nextIdx = (currentIdx + 1) % allImages.length;
+                setLightboxImageUrl(allImages[nextIdx]);
+              }}
+              className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-brand-blue text-white p-3.5 rounded-2xl border border-white/20 transition-all cursor-pointer z-20 shadow-2xl active:scale-90"
+              title="Próxima imagem"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          )}
         </div>
       )}
     </div>

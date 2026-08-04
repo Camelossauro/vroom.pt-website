@@ -107,36 +107,43 @@ export default function MobileAppShowcase() {
   const currentFeatureObj = features.find(f => f.id === activeFeature) || features[0];
 
   return (
-    <section id="app" className="py-10 sm:py-30 bg-[#0F1115] relative border-b border-[#262B37] overflow-hidden">
-      <div className="absolute top-1/2 left-0 w-72 h-72 bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none" />
+    <section id="app" className="py-16 sm:py-32 bg-[#0A0C10] relative border-b border-[#262B37] overflow-hidden select-none">
+      {/* Radiant Electric Blue Radial Glow Backdrop (Inspired by high-impact app showcase design) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-brand-blue/20 via-sky-500/10 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+
+      {/* Massive Background Typography Watermark ("VROOM.PT") matching reference aesthetic */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10rem] sm:text-[18rem] lg:text-[24rem] font-display font-extrabold tracking-tighter text-blue-500/[0.035] pointer-events-none select-none uppercase z-0 whitespace-nowrap leading-none">
+        VROOM.PT
+      </div>
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Section Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.5 }}
-          className="text-center max-w-3xl mx-auto mb-6 sm:mb-20"
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.3 }}
+          className="text-center max-w-3xl mx-auto mb-8 sm:mb-20"
         >
-          <span className="box-decoration-clone leading-loose text-xs font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-2.5 py-0.5 rounded-lg sm:rounded-xl">
-            Para os Adeptos
+          <span className="box-decoration-clone leading-loose text-xs font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/15 px-3 py-1 rounded-xl border border-brand-blue/30 shadow-sm shadow-brand-blue/20">
+            Aplicação Oficial Motorsport
           </span>
-          <h2 className="font-display font-bold text-xl sm:text-4xl lg:text-5xl text-white tracking-tight mt-3 mb-3 sm:mb-6 leading-tight">
+          <h2 className="font-display font-bold text-2xl sm:text-5xl lg:text-6xl text-white tracking-tight mt-4 mb-3 sm:mb-6 leading-tight">
             A sua dose de adrenalina organizada
           </h2>
           <p className="text-slate-400 text-sm sm:text-lg font-light leading-relaxed">
-            O ecossistema Vroom.pt traz para o seu smartphone a aplicação de motorsport mais avançada do país.
+            O ecossistema Vroom.pt traz para o seu smartphone a aplicação de automobilismo e desporto motorizado mais completa de Portugal.
           </p>
         </motion.div>
 
         {/* Interactive App Showcase Grid */}
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.3 }}
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center"
         >
           
@@ -248,28 +255,28 @@ export default function MobileAppShowcase() {
                     }}
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`relative w-full text-left p-3 sm:p-5 rounded-xl border transition-all duration-300 flex gap-3 sm:gap-4 cursor-pointer overflow-hidden ${
+                    className={`relative w-full text-left p-3 sm:p-5 rounded-2xl transition-all duration-300 flex gap-3 sm:gap-4 cursor-pointer overflow-hidden ${
                       isActive 
-                        ? 'bg-[#1D212B] border-slate-700 shadow-lg' 
-                        : 'bg-[#171A21] border-[#262B37] hover:border-slate-700 hover:bg-[#1D212B]'
+                        ? 'liquid-glass-card border-sky-400/50 shadow-2xl scale-[1.01]' 
+                        : 'bg-white/[0.03] backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-white/[0.07]'
                     }`}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="desktopActiveFeatureIndicator"
-                        className="absolute left-0 top-0 bottom-0 w-1 bg-brand-blue"
+                        className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-sky-400 to-brand-blue shadow-[0_0_12px_rgba(2,91,197,1)]"
                         transition={{ type: "spring", stiffness: 450, damping: 30 }}
                       />
                     )}
-                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl flex-shrink-0 flex items-center justify-center bg-[#0F1115] relative z-10">
-                      {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-brand-blue' })}
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex-shrink-0 flex items-center justify-center bg-white/[0.08] backdrop-blur-md border border-white/15 relative z-10">
+                      {cloneElement(feat.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-sky-400' })}
                     </div>
                     <div className="relative z-10">
                       <h4 className="font-semibold text-white text-[13px] sm:text-base flex items-center gap-2">
                         {feat.title}
-                        {isActive && <span className="h-1.5 w-1.5 bg-brand-blue rounded-full animate-pulse" />}
+                        {isActive && <span className="h-2 w-2 bg-sky-400 rounded-full animate-ping" />}
                       </h4>
-                      <p className="text-xs sm:text-sm text-slate-400 font-light mt-0.5 leading-tight sm:leading-relaxed">{feat.desc}</p>
+                      <p className="text-xs sm:text-sm text-slate-300 font-light mt-0.5 leading-tight sm:leading-relaxed">{feat.desc}</p>
                     </div>
                   </motion.button>
                 );
@@ -319,11 +326,11 @@ export default function MobileAppShowcase() {
           {/* Right: Immersive smartphone simulator */}
           <div className="lg:col-span-7 flex justify-center lg:justify-end relative">
             
-            {/* Phone Shadow / Glow */}
-            <div className="absolute inset-x-12 bottom-0 top-12 bg-brand-blue/5 rounded-[50px] blur-3xl pointer-events-none -z-10" />
+            {/* Phone Radial Shadow / Vibrant Blue Glow */}
+            <div className="absolute -inset-10 bg-gradient-to-tr from-brand-blue/30 via-sky-500/20 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
 
             {/* Smartphone body */}
-            <div className="w-[260px] h-[510px] sm:w-[310px] sm:h-[610px] bg-slate-950 rounded-[36px] sm:rounded-[44px] p-2 sm:p-3 shadow-2xl border-[6px] sm:border-[8px] border-[#262B37] relative flex flex-col ring-1 ring-white/10">
+            <div className="w-[260px] h-[510px] sm:w-[310px] sm:h-[610px] bg-slate-950 rounded-[36px] sm:rounded-[44px] p-2 sm:p-3 shadow-[0_20px_60px_rgba(0,0,0,0.8)] border-[6px] sm:border-[8px] border-[#262B37] relative flex flex-col ring-1 ring-white/10">
               
               {/* Phone Speaker & Dynamic Island */}
               <div className="absolute top-5 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-full z-40 flex items-center justify-between px-4 shadow-sm border border-white/5">

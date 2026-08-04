@@ -79,10 +79,10 @@ export default function WhyVroom() {
         
         {/* Section Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.3 }}
           className="text-center max-w-3xl mx-auto mb-6 sm:mb-20"
         >
           <span className="text-[10px] font-montserrat font-bold text-slate-400 tracking-widest uppercase">
@@ -175,20 +175,20 @@ export default function WhyVroom() {
           {benefits.map((benefit, idx) => (
             <motion.div 
               key={idx}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.45, delay: idx * 0.08 }}
-              className="border border-[#262B37] bg-[#1D212B] p-4 sm:p-6 rounded-xl hover:border-slate-700 transition-all duration-300 flex flex-col items-start gap-3 sm:gap-4 text-left"
+              viewport={{ once: true, amount: 0.05 }}
+              transition={{ duration: 0.3 }}
+              className="liquid-glass-card p-4 sm:p-6 rounded-2xl flex flex-col items-start gap-3 sm:gap-4 text-left"
             >
-              <div className="p-2 sm:p-3 bg-[#0F1115] rounded-lg sm:rounded-xl border border-[#262B37]">
-                {cloneElement(benefit.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-brand-blue' })}
+              <div className="p-2 sm:p-3 bg-white/[0.08] backdrop-blur-md rounded-xl border border-white/15">
+                {cloneElement(benefit.icon as ReactElement, { className: 'w-4 h-4 sm:w-5 h-5 text-sky-400' })}
               </div>
               <div>
                 <h4 className="font-semibold text-white text-[14px] sm:text-base mb-1.5 leading-tight">
                   {benefit.title}
                 </h4>
-                <p className="text-[10px] sm:text-xs text-slate-400 font-light leading-tight sm:leading-relaxed">
+                <p className="text-[10px] sm:text-xs text-slate-300 font-light leading-tight sm:leading-relaxed">
                   {benefit.desc}
                 </p>
               </div>

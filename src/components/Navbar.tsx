@@ -1,7 +1,7 @@
 import React, { useState, useEffect, MouseEvent } from 'react';
 import { 
   Menu, X, ChevronRight, Sparkles, Smartphone, UserPlus, Lock, 
-  ShieldCheck, Home, Layers, Calendar, Building2, Flag, HelpCircle, ArrowRight
+  ShieldCheck, Home, Layers, Calendar, Building2, Flag, HelpCircle, ArrowRight, MessageSquare
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 // @ts-ignore
@@ -10,10 +10,11 @@ import { authService, OrganizerProfile } from '../services/authService';
 
 interface NavbarProps {
   onOpenPortal: (mode: 'login' | 'register' | 'dashboard') => void;
+  onOpenSupport?: () => void;
   activeSection: string;
 }
 
-export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
+export default function Navbar({ onOpenPortal, onOpenSupport, activeSection }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [currentUser, setCurrentUser] = useState<OrganizerProfile | null>(null);
@@ -88,22 +89,18 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
   return (
     <nav
       id="main-navbar"
-      className={`fixed top-0 left-0 right-0 z-50 py-3.5 sm:py-4 transition-all duration-300 ${
-        isOpen
-          ? 'bg-[#0E1117] border-b border-[#262B37] shadow-xl'
-          : isScrolled
-          ? 'bg-[#0D0F14]/95 backdrop-blur-md shadow-lg shadow-black/20'
-          : 'bg-gradient-to-b from-black/80 via-black/40 to-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 py-3 sm:py-4 transition-all duration-700 ease-out bg-transparent ${
+        isOpen ? 'bg-[#0E1117]/90 backdrop-blur-2xl border-b border-white/10 shadow-2xl' : ''
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between relative z-50">
         {/* Logo */}
         <a href="#home" onClick={(e) => handleLinkClick(e, '#home')} className="flex items-center gap-2 group">
-          <div className="text-white group-hover:text-brand-blue transition-colors flex items-center">
+          <div className="p-1 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md group-hover:border-brand-blue/50 transition-all shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
             <img 
               src={vroomLogoImg} 
               alt="Vroom.pt Logo" 
-              className="w-7 h-7 sm:w-8 h-8 object-contain transition-transform duration-300 rounded-xl shadow-md"
+              className="w-7 h-7 sm:w-8 sm:h-8 object-contain transition-transform duration-300 rounded-xl"
               referrerPolicy="no-referrer"
             />
           </div>
@@ -112,8 +109,8 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
           </span>
         </a>
 
-        {/* Desktop Links */}
-        <div className="hidden lg:flex items-center gap-7">
+        {/* Desktop Links - Floating Liquid Glass Pill */}
+        <div className="hidden lg:flex items-center gap-6 px-5 py-2 rounded-full bg-white/[0.04] backdrop-blur-xl border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.37),inset_0_1px_1px_0_rgba(255,255,255,0.2)]">
           {navLinks.map((link) => {
             const isLinkActive = activeSection === link.href.slice(1);
             return (
@@ -122,7 +119,7 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
                 href={link.href}
                 onClick={(e) => handleLinkClick(e, link.href)}
                 className={`text-xs xl:text-sm font-semibold transition-all hover:text-white relative py-1 flex items-center gap-1.5 ${
-                  isLinkActive ? 'text-white font-bold' : 'text-slate-400'
+                  isLinkActive ? 'text-white font-bold' : 'text-slate-300 hover:text-white'
                 }`}
               >
                 {link.name}
@@ -130,7 +127,7 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
                   <motion.span 
                     layoutId="activeNavIndicator"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-blue rounded-full shadow-[0_0_8px_rgba(2,91,197,0.8)]" 
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-sky-400 via-brand-blue to-blue-600 rounded-full shadow-[0_0_12px_rgba(2,91,197,1)]" 
                   />
                 )}
               </a>
@@ -139,12 +136,33 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
         </div>
 
         {/* Action Buttons (Desktop) */}
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-3">
+          {onOpenSupport && (
+            <AnimatePresence>
+              {!isScrolled && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9, x: 10 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, x: 10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <button
+                    onClick={onOpenSupport}
+                    className="flex items-center gap-1.5 px-3.5 py-2 bg-sky-500/10 hover:bg-sky-500/20 border border-sky-400/30 text-sky-300 font-bold text-xs rounded-xl transition-all cursor-pointer shadow-sm hover:shadow-sky-500/20 active:scale-95"
+                  >
+                    <MessageSquare className="w-4 h-4 text-sky-400" />
+                    <span>Apoio</span>
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
+
           {currentUser ? (
             currentUser.role === 'admin' ? (
               <button
                 onClick={() => onOpenPortal('register')}
-                className="flex items-center gap-1.5 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-black font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md cursor-pointer animate-pulse"
+                className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black font-bold text-xs sm:text-sm rounded-xl transition-all shadow-[0_4px_20px_rgba(245,158,11,0.4),inset_0_1px_1px_rgba(255,255,255,0.5)] cursor-pointer animate-pulse"
               >
                 <Sparkles className="w-4 h-4 fill-black" />
                 Painel Admin
@@ -152,7 +170,7 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
             ) : currentUser.role === 'unauthorized' ? (
               <button
                 onClick={() => onOpenPortal('register')}
-                className="flex items-center gap-1.5 px-4 py-2 bg-yellow-500/10 border border-yellow-500/40 hover:bg-yellow-500/20 text-yellow-300 font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md cursor-pointer"
+                className="flex items-center gap-1.5 px-4 py-2 bg-yellow-500/15 border border-yellow-500/40 hover:bg-yellow-500/25 text-yellow-300 font-bold text-xs sm:text-sm rounded-xl transition-all backdrop-blur-md shadow-md cursor-pointer"
               >
                 <Lock className="w-4 h-4 text-yellow-400" />
                 Pendente de Verificação
@@ -160,7 +178,7 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
             ) : (
               <button
                 onClick={() => onOpenPortal('register')}
-                className="flex items-center gap-1.5 px-4.5 py-2 bg-[#025bc5] hover:bg-blue-600 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md cursor-pointer"
+                className="liquid-glass-button flex items-center gap-1.5 px-4.5 py-2 text-white font-bold text-xs sm:text-sm rounded-xl transition-all cursor-pointer"
               >
                 <ShieldCheck className="w-4 h-4 text-emerald-300" />
                 Painel Organizador
@@ -170,7 +188,7 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
             <button
               onClick={() => onOpenPortal('register')}
               id="nav-signup-btn"
-              className="flex items-center gap-2 px-5 py-2.5 bg-brand-blue hover:bg-blue-600 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md shadow-brand-blue/20 cursor-pointer"
+              className="liquid-glass-button flex items-center gap-2 px-5 py-2 text-white font-bold text-xs sm:text-sm rounded-xl cursor-pointer"
             >
               <UserPlus className="w-4 h-4" />
               Portal de Membro
@@ -260,6 +278,27 @@ export default function Navbar({ onOpenPortal, activeSection }: NavbarProps) {
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </motion.div>
+
+                {onOpenSupport && (
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      onOpenSupport();
+                    }}
+                    className="w-full p-3 bg-gradient-to-r from-sky-500/20 to-blue-600/20 border border-sky-400/30 rounded-2xl flex items-center justify-between text-left transition-all hover:bg-sky-500/30 active:scale-98 cursor-pointer shadow-lg shadow-sky-500/10"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-sky-500/30 border border-sky-400/40 text-sky-300 rounded-xl">
+                        <MessageSquare className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-white">Apoio</h4>
+                        <p className="text-[11px] text-sky-200/70 font-light">Envie-nos dúvidas ou mensagens</p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-sky-400" />
+                  </button>
+                )}
 
                 {/* Navigation Grid / List */}
                 <div className="space-y-1">

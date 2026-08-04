@@ -6,7 +6,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { fetchEvents } from '../services/eventService';
 import { DatabaseEvent } from '../types';
-import { getEventImage } from '../lib/utils';
+import { getEventImage, getEventColorTheme } from '../lib/utils';
 
 interface EventDiscoveryProps {
   onEventSelect: (event: DatabaseEvent) => void;
@@ -175,10 +175,10 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
         
         {/* Section Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.3 }}
           className="text-center max-w-3xl mx-auto mb-8 sm:mb-14"
         >
           <span className="box-decoration-clone leading-loose text-xs sm:text-sm font-montserrat font-bold text-brand-blue tracking-widest uppercase bg-brand-blue/10 px-3 py-1 rounded-xl">
@@ -195,82 +195,132 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
         {/* DEDICATED PLANO DESTAQUE / PREMIUM SHOWCASE SECTION */}
         {!loading && showcaseEvents.length > 0 && (
           <motion.div 
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true, amount: 0.05 }}
+            transition={{ duration: 0.3 }}
             className="mb-12 sm:mb-16"
           >
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <h3 className="text-lg sm:text-2xl font-display font-bold text-white tracking-tight">
                 Eventos em Destaque
               </h3>
-              <span className="text-xs text-amber-400 font-mono font-medium hidden sm:inline-block bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
-                ⭐ Promoção Oficial de Organização
-              </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
               {showcaseEvents.slice(0, 3).map((ev) => {
                 const dynamicImage = getEventImage(ev.id, ev.modalidade || ev.natureza, ev.local, ev.imagem_evento, ev.veiculo_alvo);
-                const { isHappening } = getEventTimeStatus(ev.data_inicio, ev.data_fim);
+                const isPremium = ev.plano_destaque === 'premium' || true; // Showcase items are featured
+                const theme = getEventColorTheme(ev.cor, ev.modalidade, ev.natureza, isPremium);
+                const { isHappening, daysToStart } = getEventTimeStatus(ev.data_inicio, ev.data_fim);
+                const startDateObj = ev.data_inicio ? new Date(ev.data_inicio) : null;
+                const dayNum = startDateObj ? startDateObj.getDate().toString().padStart(2, '0') : 'TBD';
+                const monthStr = startDateObj ? startDateObj.toLocaleDateString('pt-PT', { month: 'short' }).toUpperCase().replace('.', '') : '---';
 
                 return (
-                  <div
+                  <div 
                     key={`featured-${ev.id}`}
                     onClick={() => onEventSelect(ev)}
-                    className="group relative bg-gradient-to-b from-[#1C202B] to-[#14171F] rounded-2xl border border-amber-500/30 hover:border-amber-400/80 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer flex flex-col justify-between"
+                    className={`group relative rounded-3xl transition-all duration-300 ease-out overflow-hidden cursor-pointer flex flex-col h-full border-0 ${
+                      isPremium 
+                        ? 'bg-gradient-to-b from-amber-500/10 via-[#131622]/95 to-[#0E1119] shadow-xl' 
+                        : 'liquid-glass-card'
+                    }`}
+                    style={{
+                      boxShadow: isPremium
+                        ? `0 14px 40px rgba(0, 0, 0, 0.4)`
+                        : `0 8px 28px rgba(0, 0, 0, 0.4)`
+                    }}
+                    id={`featured-card-${ev.id}`}
                   >
-                    {/* Top Accent line */}
-                    <div className="h-1 w-full bg-gradient-to-r from-amber-500 via-amber-300 to-amber-600" />
-
-                    <div className="relative h-44 sm:h-52 w-full overflow-hidden bg-[#12151C]">
+                    {/* Image Container with Ambient Overlays */}
+                    <div className="h-48 sm:h-56 w-full relative overflow-hidden bg-[#12151C]">
                       <img 
                         src={dynamicImage} 
                         alt={ev.nome} 
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-full object-cover"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#14171F] via-transparent to-black/50" />
-
-                      <div className="absolute top-3 left-3 flex gap-2 items-center flex-wrap">
-                        <span className="bg-amber-500/90 text-black px-2.5 py-1 rounded-lg text-xs font-mono font-bold tracking-wider uppercase shadow-lg flex items-center gap-1">
-                          <Sparkles className="w-3 h-3 fill-black" /> DESTAQUE
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#11141D] via-transparent to-black/40" />
+                      
+                      {/* Floating Badges (Left) */}
+                      <div className="absolute top-3.5 left-3.5 flex flex-col items-start gap-1.5 z-10">
+                        <span 
+                          className="px-3 py-1 rounded-xl text-[10px] font-mono font-black tracking-wider uppercase flex items-center gap-1.5 shadow-xl backdrop-blur-md border"
+                          style={{
+                            backgroundColor: `rgba(${theme.rgb}, 0.3)`,
+                            color: theme.hex,
+                            borderColor: `rgba(${theme.rgb}, 0.5)`
+                          }}
+                        >
+                          PREMIUM
                         </span>
                         {ev.modalidade && (
-                          <span className="bg-black/70 backdrop-blur-md text-white px-2 py-0.5 rounded-md text-[11px] font-mono font-bold uppercase">
+                          <span 
+                            className="bg-black/75 backdrop-blur-xl border text-white px-3 py-1 rounded-xl text-[11px] font-mono font-bold tracking-wider uppercase shadow-xl flex items-center gap-1.5"
+                            style={{ borderColor: `rgba(${theme.rgb}, 0.45)` }}
+                          >
+                            <span className="w-2 h-2 rounded-full shadow-sm" style={{ backgroundColor: theme.hex }} />
                             {ev.modalidade}
                           </span>
                         )}
                       </div>
 
-                      {isHappening && (
-                        <span className="absolute bottom-3 left-3 text-xs font-bold uppercase px-2 py-0.5 rounded bg-red-600 text-white flex items-center gap-1">
-                          <Radio className="w-3 h-3" /> LIVE
+                      {/* Date Ticket Chip (Top Right) */}
+                      <div 
+                        className="absolute top-3.5 right-3.5 z-10 flex flex-col items-center justify-center bg-black/80 backdrop-blur-2xl border border-white/20 text-white rounded-2xl px-3 py-1.5 min-w-[54px] shadow-2xl transition-colors"
+                      >
+                        <span className="text-base font-extrabold font-mono leading-none text-white">{dayNum}</span>
+                        <span className="text-[10px] font-mono font-bold tracking-widest uppercase leading-tight mt-0.5 text-slate-400">
+                          {monthStr}
                         </span>
-                      )}
-                    </div>
-
-                    <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                      <div>
-                        <span className="text-[11px] font-mono text-amber-400 uppercase tracking-widest block mb-1">
-                          {ev.organizadora_default || 'Organizador Oficial'}
-                        </span>
-                        <h4 className="font-display font-bold text-lg sm:text-xl text-white group-hover:text-amber-300 transition-colors leading-snug line-clamp-2">
-                          {ev.nome}
-                        </h4>
-                        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mt-2 line-clamp-2 font-light">
-                          {ev.descricao || ev.local || 'Sem descrição.'}
-                        </p>
                       </div>
 
-                      <div className="pt-3 border-t border-amber-500/10 flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-xs text-slate-300 font-medium">
-                          <Calendar className="w-4 h-4 text-amber-400" />
+                      {/* Live or Countdown Status Badge (Bottom Left) */}
+                      <div className="absolute bottom-3 left-3.5 z-10 flex items-center gap-2">
+                        {isHappening ? (
+                          <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-xl bg-red-600 text-white border border-red-400 flex items-center gap-1.5 shadow-2xl">
+                            <Radio className="w-3.5 h-3.5" /> EM DIRETO
+                          </span>
+                        ) : daysToStart !== null && daysToStart > 0 && daysToStart <= 14 ? (
+                          <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-3 py-1 rounded-xl bg-black/70 backdrop-blur-md text-slate-300 border border-white/15 flex items-center gap-1 shadow-lg">
+                            <Clock className="w-3 h-3 text-sky-400/70" /> FALTAM {daysToStart} {daysToStart === 1 ? 'DIA' : 'DIAS'}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+
+                    {/* Event Content & Info */}
+                    <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4 relative z-10">
+                      <div className="space-y-2.5">
+                        {/* Organizer Verified Pill */}
+                        <div className="flex items-center gap-1.5 text-xs text-slate-400 font-mono">
+                          <ShieldCheck className="w-3.5 h-3.5 flex-shrink-0 text-sky-400/60" />
+                          <span className="truncate font-medium text-slate-300">{ev.organizadora_default || 'Organizador Registado'}</span>
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="font-display font-bold text-base sm:text-xl text-white transition-colors duration-300 leading-snug line-clamp-2">
+                          {ev.nome}
+                        </h3>
+
+                        {/* Location */}
+                        <div className="flex items-center gap-1.5 text-slate-400 text-xs sm:text-sm font-light">
+                          <MapPin className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                          <span className="truncate">{ev.local || 'Localização a definir'}</span>
+                        </div>
+                      </div>
+
+                      {/* Metadata Row & CTA */}
+                      <div className="pt-4 border-t border-white/10 flex items-center justify-between mt-auto">
+                        <div className="flex items-center gap-2 text-xs text-slate-300 font-medium font-mono">
+                          <Calendar className="w-3.5 h-3.5 text-sky-400/60" />
                           <span>{ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-PT', {day:'numeric', month:'short', year:'numeric'}) : 'TBD'}</span>
                         </div>
-                        <span className="text-xs font-bold text-amber-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                          Ver Detalhes <ChevronRight className="w-4 h-4" />
+                        <span 
+                          className="text-xs font-bold flex items-center gap-1 px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.06] text-slate-300 shadow-md"
+                        >
+                          Ver Prova <ChevronRight className="w-4 h-4" />
                         </span>
                       </div>
                     </div>
@@ -281,22 +331,22 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
           </motion.div>
         )}
 
-        {/* Filters and Search Bar - Clean & Intuitive */}
+        {/* Filters and Search Bar - Liquid Glass Theme */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="bg-[#171A21] border border-[#262B37] rounded-2xl p-4 sm:p-6 mb-8 sm:mb-12 shadow-sm"
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.3 }}
+          className="liquid-glass rounded-2xl p-4 sm:p-6 mb-8 sm:mb-12 relative z-50 overflow-visible"
         >
           <div className="flex flex-col md:flex-row gap-3 sm:gap-4 items-center justify-between mb-3">
             {/* Search Input */}
             <div className="relative w-full md:w-96">
-              <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-500" />
+              <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
               <input 
                 type="text"
                 placeholder="Pesquisar por nome ou cidade..."
-                className="w-full bg-[#1D212B] border border-[#262B37] rounded-xl py-3 pl-10 pr-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-blue transition-colors"
+                className="w-full liquid-glass-input rounded-xl py-3 pl-10 pr-3 text-sm text-white placeholder-slate-400 focus:outline-none transition-all"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -307,19 +357,19 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
               <div className="relative flex-1 md:w-48">
                 <button
                   onClick={() => setNaturezaDropdownOpen(!naturezaDropdownOpen)}
-                  className="w-full flex items-center justify-between px-4 py-3 bg-[#1D212B] border border-[#262B37] rounded-xl text-xs sm:text-sm text-white hover:border-slate-500 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 bg-white/[0.06] backdrop-blur-md border border-white/15 rounded-xl text-xs sm:text-sm text-white hover:border-white/30 transition-all shadow-inner cursor-pointer"
                 >
                   <span className="font-semibold truncate">{naturezaCategory === 'Todos' ? 'Tipo: Todos' : naturezaCategory}</span>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-300" />
                 </button>
                 
                 {naturezaDropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-[#1D212B] border border-[#262B37] rounded-xl shadow-2xl overflow-hidden z-20">
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-[#12151D]/95 backdrop-blur-2xl border border-white/20 rounded-xl shadow-2xl overflow-hidden z-50">
                     {NATUREZA_CATEGORIES.map(cat => (
                       <button
                         key={cat}
                         onClick={() => handleNaturezaSelect(cat)}
-                        className={`w-full text-left px-4 py-3 text-sm hover:bg-brand-blue/10 transition-colors ${
+                        className={`w-full text-left px-4 py-3 text-sm hover:bg-brand-blue/20 transition-colors cursor-pointer ${
                           naturezaCategory === cat ? 'text-brand-blue font-bold' : 'text-slate-300'
                         }`}
                       >
@@ -334,19 +384,19 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
               <div className="relative flex-1 md:w-48">
                 <button
                   onClick={() => setMainDropdownOpen(!mainDropdownOpen)}
-                  className="w-full flex items-center justify-between px-4 py-3 bg-[#1D212B] border border-[#262B37] rounded-xl text-xs sm:text-sm text-white hover:border-slate-500 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 bg-white/[0.06] backdrop-blur-md border border-white/15 rounded-xl text-xs sm:text-sm text-white hover:border-white/30 transition-all shadow-inner cursor-pointer"
                 >
                   <span className="font-semibold truncate">{mainCategory === 'Todos' ? 'Veículo: Todos' : mainCategory}</span>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-300" />
                 </button>
                 
                 {mainDropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-[#1D212B] border border-[#262B37] rounded-xl shadow-2xl overflow-hidden z-20">
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-[#12151D]/95 backdrop-blur-2xl border border-white/20 rounded-xl shadow-2xl overflow-hidden z-50">
                     {MAIN_CATEGORIES.map(cat => (
                       <button
                         key={cat}
                         onClick={() => handleMainCategorySelect(cat)}
-                        className={`w-full text-left px-4 py-3 text-sm hover:bg-brand-blue/10 transition-colors ${
+                        className={`w-full text-left px-4 py-3 text-sm hover:bg-brand-blue/20 transition-colors cursor-pointer ${
                           mainCategory === cat ? 'text-brand-blue font-bold' : 'text-slate-300'
                         }`}
                       >
@@ -361,13 +411,13 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
 
           {/* Sub Categories Chips */}
           {mainCategory !== 'Todos' && SUB_CATEGORIES[mainCategory] && (
-            <div className="flex flex-wrap gap-1.5 pt-3 border-t border-[#262B37]">
+            <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/10">
               <button
                 onClick={() => setSubCategory('Todos')}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   subCategory === 'Todos'
-                    ? 'bg-brand-blue text-white' 
-                    : 'bg-[#1D212B] border border-[#262B37] text-slate-400 hover:text-white'
+                    ? 'liquid-glass-button text-white' 
+                    : 'liquid-glass-pill text-slate-300 hover:text-white'
                 }`}
               >
                 Todas as Modalidades
@@ -376,10 +426,10 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
                 <button
                   key={subCat}
                   onClick={() => setSubCategory(subCat)}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     subCategory === subCat 
-                      ? 'bg-brand-blue text-white' 
-                      : 'bg-[#1D212B] border border-[#262B37] text-slate-400 hover:text-white'
+                      ? 'liquid-glass-button text-white' 
+                      : 'liquid-glass-pill text-slate-300 hover:text-white'
                   }`}
                 >
                   {subCat}
@@ -400,84 +450,130 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
         {/* Event Cards Grid */}
         {!loading && (
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true, amount: 0.05 }}
+            transition={{ duration: 0.3 }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {filteredEvents.slice(0, visibleCount).map((ev) => {
-                const { isHappening } = getEventTimeStatus(ev.data_inicio, ev.data_fim);
+                const { isHappening, daysToStart } = getEventTimeStatus(ev.data_inicio, ev.data_fim);
                 const dynamicImage = getEventImage(ev.id, ev.modalidade || ev.natureza, ev.local, ev.imagem_evento, ev.veiculo_alvo);
                 const isPremium = ev.plano_destaque === 'premium';
+                const isCompeticao = ev.natureza?.toLowerCase().includes('competi') || ev.modalidade?.toLowerCase().includes('competi');
+                const theme = getEventColorTheme(ev.cor, ev.modalidade, ev.natureza, isPremium);
+
+                // Format date ticket chip
+                const startDateObj = ev.data_inicio ? new Date(ev.data_inicio) : null;
+                const dayNum = startDateObj ? startDateObj.getDate().toString().padStart(2, '0') : 'TBD';
+                const monthStr = startDateObj ? startDateObj.toLocaleDateString('pt-PT', { month: 'short' }).toUpperCase().replace('.', '') : '---';
 
                 return (
                   <div 
                     key={ev.id}
                     onClick={() => onEventSelect(ev)}
-                    className={`group rounded-xl border shadow-sm transition-all duration-300 overflow-hidden cursor-pointer flex flex-col h-full ${
+                    className={`group relative rounded-3xl transition-all duration-300 ease-out overflow-hidden cursor-pointer flex flex-col h-full border-0 ${
                       isPremium 
-                        ? 'bg-[#1C202B] border-amber-500/40 hover:border-amber-400/80 shadow-amber-900/10' 
-                        : 'bg-[#1D212B] border-[#262B37] hover:border-slate-600'
+                        ? 'bg-gradient-to-b from-amber-500/10 via-[#131622]/95 to-[#0E1119] shadow-xl' 
+                        : 'liquid-glass-card'
                     }`}
+                    style={{
+                      boxShadow: isPremium
+                        ? `0 14px 40px rgba(0, 0, 0, 0.4)`
+                        : `0 8px 28px rgba(0, 0, 0, 0.4)`
+                    }}
                     id={`event-card-${ev.id}`}
                   >
-                    {/* Event Image */}
-                    <div className="h-44 sm:h-48 w-full relative overflow-hidden bg-[#171A21]">
+
+                    {/* Image Container with Ambient Overlays */}
+                    <div className="h-48 sm:h-56 w-full relative overflow-hidden bg-[#12151C]">
                       <img 
                         src={dynamicImage} 
                         alt={ev.nome} 
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-full object-cover"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#1D212B] via-transparent to-black/40" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#11141D] via-transparent to-black/40" />
                       
-                      {/* Badges */}
-                      <div className="absolute top-3 left-3 flex gap-2 items-center flex-wrap">
+                      {/* Floating Badges (Left) */}
+                      <div className="absolute top-3.5 left-3.5 flex flex-col items-start gap-1.5 z-10">
                         {isPremium && (
-                          <span className="bg-amber-500/90 text-black px-2 py-0.5 rounded text-[11px] font-mono font-bold tracking-wider uppercase flex items-center gap-1 shadow-md">
-                            <Sparkles className="w-3 h-3 fill-black" /> DESTAQUE
+                          <span 
+                            className="px-3 py-1 rounded-xl text-[10px] font-mono font-black tracking-wider uppercase flex items-center gap-1.5 shadow-xl backdrop-blur-md border"
+                            style={{
+                              backgroundColor: `rgba(${theme.rgb}, 0.3)`,
+                              color: theme.hex,
+                              borderColor: `rgba(${theme.rgb}, 0.5)`
+                            }}
+                          >
+                            PREMIUM
                           </span>
                         )}
                         {ev.modalidade && (
-                          <span className="bg-brand-blue/90 backdrop-blur-md text-white px-2.5 py-1 rounded-lg text-xs font-mono font-bold tracking-wider uppercase shadow-md">
+                          <span 
+                            className="bg-black/75 backdrop-blur-xl border text-white px-3 py-1 rounded-xl text-[11px] font-mono font-bold tracking-wider uppercase shadow-xl flex items-center gap-1.5"
+                            style={{ borderColor: `rgba(${theme.rgb}, 0.45)` }}
+                          >
+                            <span className="w-2 h-2 rounded-full shadow-sm" style={{ backgroundColor: theme.hex }} />
                             {ev.modalidade}
                           </span>
                         )}
                       </div>
 
-                      {/* Status Badges */}
-                      <div className="absolute bottom-3 left-3">
-                        {isHappening && (
-                          <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-red-600 text-white border border-red-400 flex items-center gap-1 shadow-xl">
-                            <Radio className="w-3 h-3 animate-pulse" /> LIVE NOW
+                      {/* Date Ticket Chip (Top Right) */}
+                      <div 
+                        className="absolute top-3.5 right-3.5 z-10 flex flex-col items-center justify-center bg-black/80 backdrop-blur-2xl border border-white/20 text-white rounded-2xl px-3 py-1.5 min-w-[54px] shadow-2xl transition-colors"
+                      >
+                        <span className="text-base font-extrabold font-mono leading-none text-white">{dayNum}</span>
+                        <span className="text-[10px] font-mono font-bold tracking-widest uppercase leading-tight mt-0.5 text-slate-400">
+                          {monthStr}
+                        </span>
+                      </div>
+
+                      {/* Live or Countdown Status Badge (Bottom Left) */}
+                      <div className="absolute bottom-3 left-3.5 z-10 flex items-center gap-2">
+                        {isHappening ? (
+                          <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-xl bg-red-600 text-white border border-red-400 flex items-center gap-1.5 shadow-2xl">
+                            <Radio className="w-3.5 h-3.5" /> EM DIRETO
                           </span>
-                        )}
+                        ) : daysToStart !== null && daysToStart > 0 && daysToStart <= 14 ? (
+                          <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-3 py-1 rounded-xl bg-black/70 backdrop-blur-md text-slate-300 border border-white/15 flex items-center gap-1 shadow-lg">
+                            <Clock className="w-3 h-3 text-sky-400/70" /> FALTAM {daysToStart} {daysToStart === 1 ? 'DIA' : 'DIAS'}
+                          </span>
+                        ) : null}
                       </div>
                     </div>
 
-                    {/* Event Info */}
-                    <div className="p-5 flex-1 flex flex-col justify-between">
-                      <div className="space-y-2">
-                        <span className="text-xs text-slate-400 font-mono block">
-                          {ev.organizadora_default || 'Organizador Registado'}
-                        </span>
-                        <h3 className="font-display font-bold text-base sm:text-lg text-white group-hover:text-brand-blue transition-colors leading-tight line-clamp-2">
+                    {/* Event Content & Info */}
+                    <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4 relative z-10">
+                      <div className="space-y-2.5">
+                        {/* Organizer Verified Pill */}
+                        <div className="flex items-center gap-1.5 text-xs text-slate-400 font-mono">
+                          <ShieldCheck className="w-3.5 h-3.5 flex-shrink-0 text-sky-400/60" />
+                          <span className="truncate font-medium text-slate-300">{ev.organizadora_default || 'Organizador Registado'}</span>
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="font-display font-bold text-base sm:text-xl text-white transition-colors duration-300 leading-snug line-clamp-2">
                           {ev.nome}
                         </h3>
 
-                        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-light line-clamp-2">
-                          {ev.local || 'Localização a definir'}
-                        </p>
+                        {/* Location */}
+                        <div className="flex items-center gap-1.5 text-slate-400 text-xs sm:text-sm font-light">
+                          <MapPin className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                          <span className="truncate">{ev.local || 'Localização a definir'}</span>
+                        </div>
                       </div>
 
-                      {/* Metadata Row */}
-                      <div className="mt-5 pt-3 border-t border-[#262B37] flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-xs text-slate-300 font-medium">
-                          <Calendar className="w-3.5 h-3.5 text-brand-blue" />
-                          <span>{ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-PT', {day:'numeric', month:'short'}) : 'TBD'}</span>
+                      {/* Metadata Row & CTA */}
+                      <div className="pt-4 border-t border-white/10 flex items-center justify-between mt-auto">
+                        <div className="flex items-center gap-2 text-xs text-slate-300 font-medium font-mono">
+                          <Calendar className="w-3.5 h-3.5 text-sky-400/60" />
+                          <span>{ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-PT', {day:'numeric', month:'short', year:'numeric'}) : 'TBD'}</span>
                         </div>
-                        <span className="text-xs font-bold text-brand-blue flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                        <span 
+                          className="text-xs font-bold flex items-center gap-1 px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.06] text-slate-300 shadow-md"
+                        >
                           Ver Prova <ChevronRight className="w-4 h-4" />
                         </span>
                       </div>
