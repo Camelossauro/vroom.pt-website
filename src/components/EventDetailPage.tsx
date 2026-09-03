@@ -253,8 +253,11 @@ export default function EventDetailPage({ event: initialEvent, eventId: initialE
         <div className="absolute bottom-6 left-4 right-4 sm:left-8 sm:right-8 max-w-5xl mx-auto z-10">
           <div className="flex flex-wrap items-center gap-2 mb-2 sm:mb-3">
             {isPremium && (
-              <span className="bg-amber-500 text-black px-3 py-0.5 rounded-md text-[11px] font-mono font-bold uppercase shadow-md flex items-center gap-1">
-                <Sparkles className="w-3 h-3 fill-black" /> DESTAQUE PREMIO
+              <span 
+                className="px-3 py-1 rounded-xl text-[11px] font-mono font-bold uppercase shadow-md flex items-center gap-1.5 text-white"
+                style={{ backgroundColor: '#b59d1d' }}
+              >
+                <Sparkles className="w-3 h-3 fill-white" /> EVENTO PREMIUM
               </span>
             )}
             {currentEvent.modalidade && (

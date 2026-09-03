@@ -143,15 +143,8 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
           className="relative w-full max-w-xl bg-[#121520] border border-white/15 rounded-3xl shadow-2xl overflow-hidden z-10 my-auto max-h-[90vh] flex flex-col"
         >
           {/* Header */}
-          <div className="p-4 sm:p-6 border-b border-white/10 relative bg-gradient-to-r from-sky-500/10 via-transparent to-blue-600/10 flex-shrink-0">
-            <button
-              onClick={resetForm}
-              className="absolute top-4 right-4 sm:top-5 sm:right-5 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-3">
+          <div className="p-4 sm:p-6 border-b border-white/10 relative bg-gradient-to-r from-sky-500/10 via-transparent to-blue-600/10 flex-shrink-0 flex items-start justify-between gap-3">
+            <div className="flex items-center gap-3 pr-8">
               <div className="p-2.5 rounded-2xl bg-sky-500/20 border border-sky-400/30 text-sky-400 flex-shrink-0">
                 <MessageSquare className="w-5 h-5" />
               </div>
@@ -164,6 +157,13 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
                 </p>
               </div>
             </div>
+
+            <button
+              onClick={resetForm}
+              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer flex-shrink-0"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
           {/* Modal Body */}
@@ -221,50 +221,54 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
                   </button>
                 </div>
 
-                {/* User Type & Category Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-300 mb-1">
-                      Perfil
-                    </label>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      {userTypeOptions.map((opt) => {
-                        const Icon = opt.icon;
-                        const isSelected = userType === opt.id;
-                        return (
-                          <button
-                            type="button"
-                            key={opt.id}
-                            onClick={() => setUserType(opt.id as any)}
-                            className={`p-2 rounded-xl border text-center transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                              isSelected
-                                ? 'bg-sky-500/20 border-sky-400 text-white shadow-sm'
-                                : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:bg-white/[0.06]'
-                            }`}
-                          >
-                            <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-sky-400' : 'text-slate-400'}`} />
-                            <span className="text-xs font-medium">{opt.label}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
+                {/* User Type */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                    Perfil
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {userTypeOptions.map((opt) => {
+                      const Icon = opt.icon;
+                      const isSelected = userType === opt.id;
+                      return (
+                        <button
+                          type="button"
+                          key={opt.id}
+                          onClick={() => setUserType(opt.id as any)}
+                          className={`p-2.5 rounded-xl border text-center transition-all flex flex-col sm:flex-row items-center justify-center gap-1.5 cursor-pointer ${
+                            isSelected
+                              ? 'bg-sky-500/20 border-sky-400 text-white shadow-sm'
+                              : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:bg-white/[0.06]'
+                          }`}
+                        >
+                          <Icon className={`w-4 h-4 ${isSelected ? 'text-sky-400' : 'text-slate-400'}`} />
+                          <span className="text-xs font-medium">{opt.label}</span>
+                        </button>
+                      );
+                    })}
                   </div>
+                </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-300 mb-1">
-                      Assunto
-                    </label>
+                {/* Category */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                    Assunto
+                  </label>
+                  <div className="relative">
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
-                      className="w-full h-[74px] bg-[#181C28] border border-white/15 rounded-2xl px-3 text-xs sm:text-sm text-white focus:outline-none focus:border-sky-400 transition-colors cursor-pointer"
+                      className="w-full h-11 bg-[#181C28] border border-white/15 rounded-2xl px-3.5 text-xs sm:text-sm text-white focus:outline-none focus:border-sky-400 transition-colors cursor-pointer appearance-none"
                     >
                       {categories.map((cat) => (
-                        <option key={cat} value={cat} className="bg-[#181C28] text-white">
+                        <option key={cat} value={cat} className="bg-[#181C28] text-white py-2">
                           {cat}
                         </option>
                       ))}
                     </select>
+                    <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-xs">
+                      ▼
+                    </div>
                   </div>
                 </div>
 

@@ -4,6 +4,7 @@ import {
   Lock, User, Trash2, Edit3, LogOut, ArrowRight, Calendar, Building2, Eye, EyeOff,
   Bell, Shield, KeyRound, AlertTriangle, Check
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 // @ts-ignore
 import vroomLogoImg from '../assets/images/vroom_logo_1784301043513.jpg';
 import { authService, OrganizerProfile } from '../services/authService';
@@ -48,6 +49,22 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
 
   const handleOrgSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!orgName.trim()) {
+      setToastMessage({ text: 'Por favor, indique o nome da sua organização.', type: 'error' });
+      return;
+    }
+    if (!orgEmail.trim()) {
+      setToastMessage({ text: 'Por favor, indique o e-mail oficial da organização.', type: 'error' });
+      return;
+    }
+    if (!orgPassword) {
+      setToastMessage({ text: 'Por favor, defina uma palavra-passe segura para a conta.', type: 'error' });
+      return;
+    }
+    if (!orgConfirmPassword) {
+      setToastMessage({ text: 'Por favor, confirme a sua palavra-passe.', type: 'error' });
+      return;
+    }
     if (orgPassword.length < 8) { 
       setToastMessage({ text: 'A palavra-passe deve ter no mínimo 8 caracteres.', type: 'error' }); 
       return; 
@@ -58,7 +75,7 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
       return;
     }
     if (orgPassword !== orgConfirmPassword) { 
-      setToastMessage({ text: 'As palavras-passe não coincidem.', type: 'error' }); 
+      setToastMessage({ text: 'As palavras-passe introduzidas não coincidem.', type: 'error' }); 
       return; 
     }
     setLoading(true);
@@ -67,7 +84,7 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
       setLoading(false);
       setIsRegisteredNotice(true);
       setCurrentUser(response.profile);
-      setToastMessage({ text: 'Conta criada com sucesso! Bem-vindo ao portal.', type: 'success' });
+      setToastMessage({ text: 'Conta criada com sucesso! Bem-vindo ao portal Vroom.pt.', type: 'success' });
     } catch (err: any) { 
       setLoading(false); 
       setToastMessage({ text: `Erro no registo: ${err.message}`, type: 'error' }); 
@@ -76,14 +93,22 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
 
   const handleLoginSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!loginEmail.trim()) {
+      setToastMessage({ text: 'Por favor, insira o e-mail associado à sua conta para iniciar sessão.', type: 'error' });
+      return;
+    }
+    if (!loginPassword) {
+      setToastMessage({ text: 'Por favor, insira a sua palavra-passe para continuar.', type: 'error' });
+      return;
+    }
     setLoading(true);
     try {
       const response = await authService.login(loginEmail, loginPassword);
       if (response.success && response.profile) {
         setCurrentUser(response.profile);
-        setToastMessage({ text: 'Sessão iniciada com sucesso!', type: 'success' });
+        setToastMessage({ text: 'Sessão iniciada com sucesso! Bem-vindo ao painel.', type: 'success' });
       } else { 
-        setToastMessage({ text: response.message || 'Credenciais inválidas.', type: 'error' }); 
+        setToastMessage({ text: response.message || 'Credenciais inválidas. Verifique os dados introduzidos.', type: 'error' }); 
       }
     } catch (err: any) { 
       setToastMessage({ text: `Erro ao entrar: ${err.message}`, type: 'error' }); 
@@ -153,31 +178,44 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
         </div>
 
         {/* Floating Toast Message */}
-        {toastMessage && (
-          <div className={`mb-6 p-4 rounded-2xl border backdrop-blur-md shadow-2xl flex items-center justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-200 ${
-            toastMessage.type === 'error' 
-              ? 'bg-red-500/10 border-red-500/30 text-red-300' 
-              : toastMessage.type === 'success'
-                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
-                : 'bg-brand-blue/10 border-brand-blue/30 text-blue-200'
-          }`}>
-            <div className="flex items-center gap-3 text-xs sm:text-sm">
-              {toastMessage.type === 'error' && <AlertTriangle className="w-5 h-5 text-red-400 shrink-0" />}
-              {toastMessage.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
-              {toastMessage.type === 'info' && <Sparkles className="w-5 h-5 text-brand-blue shrink-0 animate-pulse" />}
-              <span className="font-medium leading-snug">{toastMessage.text}</span>
-            </div>
-            <button 
-              onClick={() => setToastMessage(null)} 
-              className="p-1 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer text-xs font-bold"
+        <AnimatePresence>
+          {toastMessage && (
+            <motion.div 
+              initial={{ opacity: 0, y: -12, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.98 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              className={`mb-6 p-4 rounded-2xl border backdrop-blur-md shadow-2xl flex items-center justify-between gap-3 ${
+                toastMessage.type === 'error' 
+                  ? 'bg-red-500/10 border-red-500/30 text-red-300' 
+                  : toastMessage.type === 'success'
+                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                    : 'bg-brand-blue/10 border-brand-blue/30 text-blue-200'
+              }`}
             >
-              ✕
-            </button>
-          </div>
-        )}
+              <div className="flex items-center gap-3 text-xs sm:text-sm">
+                {toastMessage.type === 'error' && <AlertTriangle className="w-5 h-5 text-red-400 shrink-0" />}
+                {toastMessage.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
+                {toastMessage.type === 'info' && <Sparkles className="w-5 h-5 text-brand-blue shrink-0 animate-pulse" />}
+                <span className="font-medium leading-snug">{toastMessage.text}</span>
+              </div>
+              <button 
+                onClick={() => setToastMessage(null)} 
+                className="p-1 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer text-xs font-bold"
+              >
+                ✕
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Main Glassmorphic Auth Card */}
-        <div className="liquid-glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-2xl relative">
+        <motion.div 
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+          className="liquid-glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-2xl relative"
+        >
           
           {/* LOGGED IN ORGANIZER VIEW */}
           {currentUser ? (
@@ -448,7 +486,6 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
                           <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                           <input 
                             type="email" 
-                            required
                             placeholder="exemplo@organizacao.pt"
                             className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-4 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                             value={loginEmail}
@@ -466,7 +503,6 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
                           <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                           <input 
                             type={showLoginPasswordText ? "text" : "password"} 
-                            required
                             placeholder="••••••••"
                             className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-10 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                             value={loginPassword}
@@ -512,7 +548,6 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
                             <Building2 className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                             <input 
                               type="text" 
-                              required
                               placeholder="ex: Clube Automóvel de..."
                               className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-4 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                               value={orgName}
@@ -529,7 +564,6 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
                             <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                             <input 
                               type="email" 
-                              required
                               placeholder="contacto@clube.pt"
                               className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-4 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                               value={orgEmail}
@@ -549,7 +583,6 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
                             <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                             <input 
                               type={showOrgPasswordText ? "text" : "password"} 
-                              required
                               placeholder="Mínimo 8 caracteres"
                               className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-10 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                               value={orgPassword}
@@ -573,7 +606,6 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
                             <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                             <input 
                               type={showOrgPasswordText ? "text" : "password"} 
-                              required
                               placeholder="Repita a palavra-passe"
                               className="w-full bg-[#0D0F15] border border-[#262B37] focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 rounded-xl pl-10 pr-4 py-3 text-xs sm:text-sm text-white placeholder:text-slate-600 outline-none transition-all"
                               value={orgConfirmPassword}
@@ -603,7 +635,7 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
               )}
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

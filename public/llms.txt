@@ -1,0 +1,13 @@
+# Vroom.pt - Motorsport Hub Portugal
+
+> Vroom.pt is the ultimate digital platform for Portuguese motorsport, connecting fans, drivers, and organizers with real-time events, news, rankings, and event discovery.
+
+## Key Sections & Features
+- Event Discovery: Find ralis, hillclimbs (rampas), track days, karting, and off-road events across Portugal.
+- Live Telemetry & Timing Integration: Real-time event updates and official community alerts.
+- Driver & Team Ecosystem: Profiles, vehicle showcases, and management tools.
+- Organizer Portal: Tools to publish and manage motorsport events seamlessly.
+
+## URLs
+- Homepage: https://vroom.pt/
+- App Deeplink: https://vroom.pt/deeplink.html

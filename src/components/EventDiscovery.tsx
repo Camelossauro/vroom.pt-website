@@ -246,14 +246,13 @@ export default function EventDiscovery({ onEventSelect }: EventDiscoveryProps) {
                       {/* Floating Badges (Left) */}
                       <div className="absolute top-3.5 left-3.5 flex flex-col items-start gap-1.5 z-10">
                         <span 
-                          className="px-3 py-1 rounded-xl text-[10px] font-mono font-black tracking-wider uppercase flex items-center gap-1.5 shadow-xl backdrop-blur-md border"
+                          className="px-3.5 py-1 rounded-xl text-[10px] font-mono font-bold tracking-wider uppercase flex items-center gap-1.5 shadow-xl text-white border"
                           style={{
-                            backgroundColor: `rgba(${theme.rgb}, 0.3)`,
-                            color: theme.hex,
-                            borderColor: `rgba(${theme.rgb}, 0.5)`
+                            backgroundColor: '#b59d1d',
+                            borderColor: '#b59d1d'
                           }}
                         >
-                          PREMIUM
+                          EVENTO PREMIUM
                         </span>
                         {ev.modalidade && (
                           <span 
