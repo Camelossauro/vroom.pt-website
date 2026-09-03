@@ -231,15 +231,22 @@ export default function PortalPage({ onClose, initialTab = 'fan' }: PortalPagePr
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className={`px-3 py-1 rounded-full text-xs font-mono font-bold border ${
-                    currentUser.role === 'admin'
-                      ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-                      : currentUser.role === 'unauthorized'
-                        ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-300'
-                        : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                  }`}>
-                    {currentUser.role === 'admin' ? 'Administrador' : currentUser.role === 'unauthorized' ? 'Pendente' : 'Organização Verificada'}
-                  </span>
+                  {(() => {
+                    const r = String(currentUser.role || '').toLowerCase();
+                    const isAdmin = r === 'admin';
+                    const isAuthorized = r === 'authorized' || r === 'approved' || r === 'active';
+                    return (
+                      <span className={`px-3 py-1 rounded-full text-xs font-mono font-bold border ${
+                        isAdmin
+                          ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+                          : isAuthorized
+                            ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                            : 'bg-yellow-500/10 border-yellow-500/30 text-yellow-300'
+                      }`}>
+                        {isAdmin ? 'Administrador' : isAuthorized ? 'Organização Verificada' : 'Pendente'}
+                      </span>
+                    );
+                  })()}
                   <button 
                     onClick={handleLogout} 
                     className="p-2 bg-[#1A1E29] hover:bg-red-500/20 text-slate-400 hover:text-red-400 rounded-xl transition-all border border-[#262B37] cursor-pointer"

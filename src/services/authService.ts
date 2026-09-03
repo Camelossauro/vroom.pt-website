@@ -22,8 +22,13 @@ const CURRENT_USER_KEY = 'vroom_sim_current_user';
 
 // Setup initial simulated data if not exists
 const initializeSimulationDB = () => {
-  const existing = localStorage.getItem(PROFILES_KEY);
-  if (!existing || existing === 'undefined') {
+  try {
+    const existing = localStorage.getItem(PROFILES_KEY);
+    if (!existing || existing === 'undefined' || existing === 'null') {
+      throw new Error('Reset profiles');
+    }
+    JSON.parse(existing);
+  } catch (e) {
     const initialProfiles: OrganizerProfile[] = [
       {
         id: 'admin-1',
@@ -186,7 +191,14 @@ export const authService = {
     const userJson = localStorage.getItem(CURRENT_USER_KEY);
     if (!userJson || userJson === 'undefined' || userJson === 'null') return null;
     try {
-      return JSON.parse(userJson) as OrganizerProfile;
+      const profile = JSON.parse(userJson) as OrganizerProfile;
+      if (profile && profile.role) {
+        const r = String(profile.role).toLowerCase().trim();
+        if (r === 'authorized' || r === 'approved' || r === 'active' || r === 'true' || r === 'verified') {
+          profile.role = 'authorized';
+        }
+      }
+      return profile;
     } catch (e) {
       console.error('Failed to parse current user:', e);
       return null;
@@ -199,7 +211,7 @@ export const authService = {
     if (isReal) {
       console.log(`Sending real Supabase profiles query: id=eq.${userId}`);
       try {
-        const response = await fetch(`${supabaseUrl}/rest/v1/profiles?id=eq.${userId}&select=id,full_name,logo_url,siteOficial,email_contacto,telefone,instagram_url,facebook_url,biografia,sede_localizacao,regiao,role,account_deletion_requested,has_transactions,created_at`, {
+        const response = await fetch(`${supabaseUrl}/rest/v1/profiles?id=eq.${userId}&select=*`, {
           method: 'GET',
           headers: {
             'apikey': supabaseAnonKey,
@@ -210,8 +222,28 @@ export const authService = {
         if (response.ok) {
           try {
             const profiles = await response.json();
+            console.log('Supabase profile query result:', profiles);
             if (profiles && Array.isArray(profiles) && profiles.length > 0) {
               const rawProfile = profiles[0];
+              const rawRole = String(rawProfile.role || rawProfile.org_status || rawProfile.status || '').toLowerCase().trim();
+              console.log('Detected raw role from DB:', rawRole, 'rawProfile:', rawProfile);
+              
+              let resolvedRole: UserRole = 'unauthorized';
+              if (
+                rawRole === 'authorized' || 
+                rawRole === 'approved' || 
+                rawRole === 'active' || 
+                rawRole === 'true' || 
+                rawRole === 'verified' || 
+                rawProfile.verified === true || 
+                rawProfile.org_status === 'authorized' ||
+                rawProfile.role === 'authorized'
+              ) {
+                resolvedRole = 'authorized';
+              } else if (rawRole === 'admin') {
+                resolvedRole = 'admin';
+              }
+
               const updatedProfile: OrganizerProfile = {
                 id: rawProfile.id,
                 nome: rawProfile.full_name || rawProfile.nome || 'Organização Vroom',
@@ -219,7 +251,7 @@ export const authService = {
                 regiao: rawProfile.regiao || 'Geral',
                 telefone: rawProfile.telefone || '',
                 instagram: rawProfile.instagram || '',
-                role: (rawProfile.role as UserRole) || 'unauthorized',
+                role: resolvedRole,
                 account_deletion_requested: !!rawProfile.account_deletion_requested,
                 has_transactions: !!rawProfile.has_transactions,
                 created_at: rawProfile.created_at,
