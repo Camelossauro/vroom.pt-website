@@ -21,11 +21,14 @@ export default function DeeplinkPage({ onClose, onOpenEvent }: DeeplinkPageProps
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('eventoID') || params.get('id');
-    const route = params.get('rota') || 'Encontros_Corridas_Geral';
+    const route = params.get('rota') || (id ? 'Encontros_Corridas_Geral' : 'Pagina_inicio');
+
+    if (route) {
+      setRota(route);
+    }
 
     if (id) {
       setEventoID(id);
-      setRota(route);
 
       // Fetch event info from Supabase if available for rich context preview
       async function fetchEventDetails() {
@@ -46,21 +49,21 @@ export default function DeeplinkPage({ onClose, onOpenEvent }: DeeplinkPageProps
         }
       }
       fetchEventDetails();
-
-      // Trigger automatic deep link redirection on mobile devices after short delay
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      if (isMobile) {
-        const deepLinkUrl = getNativeDeepLink(id, route);
-        setTimeout(() => {
-          window.location.href = deepLinkUrl;
-        }, 500);
-      }
     } else {
       setLoading(false);
     }
+
+    // Trigger automatic deep link redirection on mobile devices after short delay
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) {
+      const deepLinkUrl = getNativeDeepLink(id, route, window.location.search);
+      setTimeout(() => {
+        window.location.href = deepLinkUrl;
+      }, 500);
+    }
   }, []);
 
-  const nativeDeepLink = eventoID ? getNativeDeepLink(eventoID, rota) : '#';
+  const nativeDeepLink = getNativeDeepLink(eventoID, rota, window.location.search);
   const webEventUrl = eventoID ? `/evento.html?id=${eventoID}` : '/';
 
   const handleCopyLink = () => {
@@ -123,19 +126,70 @@ export default function DeeplinkPage({ onClose, onOpenEvent }: DeeplinkPageProps
             </div>
           ) : !eventoID ? (
             <div className="py-8 space-y-4">
-              <div className="w-16 h-16 bg-red-500/10 border border-red-500/30 rounded-2xl flex items-center justify-center mx-auto text-red-500">
+              <div className="w-16 h-16 bg-brand-blue/10 border border-brand-blue/30 rounded-2xl flex items-center justify-center mx-auto text-brand-blue">
                 <Smartphone className="w-8 h-8" />
               </div>
-              <h2 className="text-xl font-bold text-white">ID do evento não encontrado</h2>
+              <h2 className="text-xl font-bold text-white">Bem-vindo ao Vroom.pt</h2>
               <p className="text-xs text-slate-400 leading-relaxed max-w-sm mx-auto">
-                O link fornecido não contém um identificador válido de evento. Por favor verifique o endereço e tente novamente.
+                Aceda à aplicação oficial Vroom.pt para explorar o desporto motorizado em Portugal.
               </p>
-              <a 
-                href="/" 
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-blue hover:bg-blue-600 text-white font-bold text-xs rounded-xl transition-all shadow-md"
-              >
-                Explorar Calendário de Eventos
-              </a>
+
+              <div className="space-y-3 pt-2">
+                <a
+                  id="deepLinkBtn"
+                  href={nativeDeepLink}
+                  className="w-full py-3.5 px-6 bg-brand-blue hover:bg-blue-600 active:scale-98 text-white font-bold text-sm sm:text-base rounded-xl transition-all duration-200 flex items-center justify-center gap-2.5 shadow-lg shadow-brand-blue/25 cursor-pointer"
+                >
+                  <Smartphone className="w-5 h-5" />
+                  <span>Abrir na App</span>
+                </a>
+
+                <a
+                  href="/"
+                  className="w-full py-3.5 px-6 bg-[#12151D] hover:bg-[#1D212B] active:scale-98 text-slate-200 border border-[#262B37] font-semibold text-sm rounded-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <span>🌐 Continuar no Website</span>
+                </a>
+              </div>
+
+              {/* Store Section Divider */}
+              <div className="relative py-2">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-[#262B37]" />
+                </div>
+                <div className="relative flex justify-center text-[10px] uppercase font-mono tracking-wider">
+                  <span className="bg-[#171A21] px-3 text-slate-400">Instalar App Oficial</span>
+                </div>
+              </div>
+
+              {/* Store Links */}
+              <div className="flex items-center justify-center gap-3">
+                <a 
+                  href={LINK_IOS}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-transform hover:scale-105 inline-flex items-center justify-center h-[42px] w-[140px] rounded-xl bg-black border border-[#262B37] overflow-hidden relative shadow-md"
+                >
+                  <img 
+                    src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/pt-pt" 
+                    alt="Descarregar na App Store" 
+                    className="absolute h-[118%] w-auto max-w-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" 
+                  />
+                </a>
+
+                <a 
+                  href={LINK_ANDROID}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-transform hover:scale-105 inline-flex items-center justify-center h-[42px] w-[140px] rounded-xl bg-black border border-[#262B37] overflow-hidden relative shadow-md"
+                >
+                  <img 
+                    src="https://play.google.com/intl/en_us/badges/static/images/badges/pt_badge_web_generic.png" 
+                    alt="Disponível no Google Play" 
+                    className="absolute h-[142%] w-auto max-w-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" 
+                  />
+                </a>
+              </div>
             </div>
           ) : (
             <>
